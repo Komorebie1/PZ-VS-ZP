@@ -14,3 +14,7 @@ BLUE = (0, 0, 255)
 BackGroundPath = "./images/background/background1.jpg"
 SunBackPath = "./images/sunback/SunBack.png"
 ZombiePath = ("./images/Zombies/Zombie", 22)
+PeaShooterPath = ("./images/Peashooter/Peashooter", 13)
+SunFlowerPath = ("./images/SunFlower/SunFlower", 13)
+WallNutPath = ("./images/WallNut/WallNut", 13)
+PeaNormalPath = "images/Bullets/Pea/PeaNormal.png"
