@@ -26,11 +26,11 @@ class Zombie(pygame.sprite.Sprite):
         self.image_idx = 0
         self.image = self.image_list[self.image_idx]
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)
+        self.rect.center = (WIDTH, HEIGHT / 2)
         self.speed = (-5, 0)
-        self.convert()
+        # self.convert()
 
-    def update(self):
+    def update(self, *args, **kwargs) -> None:
         self.image = self.image_list[self.image_idx]
 
         self.image_idx += 1

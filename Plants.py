@@ -1,6 +1,8 @@
 import pygame
 from config import GREEN, WIDTH, HEIGHT
 from Bullet import Bullet
+from Sun import Sun
+import random
 
 class Plants(pygame.sprite.Sprite):
     '''
@@ -27,11 +29,13 @@ class Plants(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = position
 
-    def update(self) -> None:
+    def update(self, *args, **kwargs) -> None:
+        self.image_idx = args[0] % len(self.image_list)
         self.image = self.image_list[self.image_idx]
-        self.image_idx += 1
-        if self.image_idx == len(self.image_list):
-            self.image_idx = 0
+        # self.rect = self.image.get_rect()
+    
+    def getrect(self):  
+        return self.rect
 
     def convert(self) -> None:
         for i in range(len(self.image_list)):
@@ -41,19 +45,21 @@ class PeaShooter(Plants):
     def __init__(self, image_path, image_nums, position):
         Plants.__init__(self, image_path, image_nums, position)
 
-    def update(self, all_sprites) -> None:
-        super().update()
+    def update(self, *args, **kwargs) -> None:
+        super().update(*args, **kwargs)
         if self.image_idx == 0:
             bullet = Bullet(self.rect)
-            all_sprites.add(bullet)
-            pygame.display.flip()
+            args[1].add(bullet)
             
 
 class SunFlower(Plants):
     def __init__(self, image_path, image_nums, position):
         Plants.__init__(self, image_path, image_nums, position)
+    
+    def produce_sun(self):
+        sun = Sun(self.rect)
+        return sun
 
 class WallNut(Plants):
     def __init__(self, image_path, image_nums, position):
         Plants.__init__(self, image_path, image_nums, position)
-

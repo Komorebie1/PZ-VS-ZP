@@ -9,7 +9,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.left, self.rect.top = rect[0] + 45, rect[1]
         self.speed = 5
 
-    def update(self):
+    def update(self, *args, **kwargs):
         self.rect.left += self.speed
         if self.rect.left > config.WIDTH:
             self.kill()

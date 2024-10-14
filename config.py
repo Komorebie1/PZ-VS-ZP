@@ -18,3 +18,4 @@ PeaShooterPath = ("./images/Peashooter/Peashooter", 13)
 SunFlowerPath = ("./images/SunFlower/SunFlower", 13)
 WallNutPath = ("./images/WallNut/WallNut", 13)
 PeaNormalPath = "images/Bullets/Pea/PeaNormal.png"
+SunPath = ("./images/Sun/Sun", 17)
