@@ -360,6 +360,14 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_GARLIC := "card_garlic",
                 50,
                 7500),
+            (MACHINEGUNNER := "MachineGunner",
+                CARD_MACHINEGUNNER := "card_machinegunner",
+                50,
+                100),
+            (TWINSUNFLOWER := "TwinSunFlower",
+                CARD_TWINSUNFLOWER := "card_twinsunflower",
+                50,
+                1000),
             # 应当保证这3个在一般模式下不可选的特殊植物恒在最后
             (WALLNUTBOWLING := "WallNutBowling",
                 CARD_WALLNUT := "card_wallnut",
@@ -710,7 +718,7 @@ SOUNDS = (  # 程序交互等
 
 # 记录本地存储文件初始值
 INIT_USERDATA = {   
-                LEVEL_NUM:              1,
+                LEVEL_NUM:              14,
                 LITTLEGAME_NUM:         1,
                 LEVEL_COMPLETIONS:      0,
                 LITTLEGAME_COMPLETIONS: 0,
