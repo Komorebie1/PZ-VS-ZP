@@ -862,6 +862,8 @@ class Level(tool.State):
         match self.plant_name:
             case c.SUNFLOWER:
                 new_plant = plant.SunFlower(x, y, self.sun_group)
+            case c.TWINSUNFLOWER:
+                new_plant = plant.TwinSunFlower(x, y, self.sun_group)
             case c.PEASHOOTER:
                 new_plant = plant.PeaShooter(x, y, self.bullet_groups[map_y])
             case c.SNOWPEASHOOTER:
