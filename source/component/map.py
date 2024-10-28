@@ -379,6 +379,17 @@ LEVEL_MAP_DATA = (
                             c.CONEHEAD_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
     c.NUM_FLAGS:4
 },
+# 第14关 多人模式
+{
+    c.BACKGROUND_TYPE: 0,
+    c.GAME_TITLE: "多人模式",
+    c.SHOVEL: 1,
+    c.INIT_SUN_NAME: 10000,
+    c.SPAWN_ZOMBIES: c.SPAWN_ZOMBIES_AUTO,
+    c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
+                            c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    c.NUM_FLAGS:3,
+}
 )
 
 
