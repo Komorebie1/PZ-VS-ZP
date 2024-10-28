@@ -874,6 +874,8 @@ class Level(tool.State):
                 new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y, self.map.background_type)
             case c.REPEATERPEA:
                 new_plant = plant.RepeaterPea(x, y, self.bullet_groups[map_y])
+            case c.MACHINEGUNNER:
+                new_plant = plant.MachineGunner(x, y, self.bullet_groups[map_y])
             case c.CHOMPER:
                 new_plant = plant.Chomper(x, y)
             case c.PUFFSHROOM:

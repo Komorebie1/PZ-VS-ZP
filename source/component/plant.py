@@ -453,6 +453,53 @@ class RepeaterPea(Plant):
         self.state = c.ATTACK
         if self.shoot_timer != 0:
             self.shoot_timer = self.current_time - 700
+            
+class MachineGunner(Plant):
+    def __init__(self, x, y, bullet_group):
+        Plant.__init__(self, x, y, c.MACHINEGUNNER, c.PLANT_HEALTH, bullet_group)
+        self.shoot_timer = 0
+
+        # 是否发射第一颗
+        self.first_shot = False
+        self.second_shot = False
+        self.third_shot = False
+
+    def attacking(self):
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif (self.current_time - self.shoot_timer >= 1400):
+            self.first_shot = True
+            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            self.shoot_timer = self.current_time
+            # 播放发射音效
+            c.SOUND_SHOOT.play()
+        elif self.first_shot and (self.current_time - self.shoot_timer) > 100:
+            self.first_shot = False
+            self.second_shot = True
+            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            # 播放发射音效
+            c.SOUND_SHOOT.play()
+        elif self.second_shot and (self.current_time - self.shoot_timer) > 200:
+            self.second_shot = False
+            self.third_shot = True
+            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            # 播放发射音效
+            c.SOUND_SHOOT.play()
+        elif self.third_shot and (self.current_time - self.shoot_timer) > 300:
+            self.third_shot = False
+            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            # 播放发射音效
+            c.SOUND_SHOOT.play()
+
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
+
 
 class ThreePeaShooter(Plant):
     def __init__(self, x, y, bullet_groups, map_y, background_type):
