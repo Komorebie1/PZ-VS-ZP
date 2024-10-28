@@ -363,11 +363,11 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (MACHINEGUNNER := "MachineGunner",
                 CARD_MACHINEGUNNER := "card_machinegunner",
                 50,
-                22500),
+                100),
             (TWINSUNFLOWER := "TwinSunFlower",
                 CARD_TWINSUNFLOWER := "card_twinsunflower",
                 50,
-                22500),
+                1000),
             # 应当保证这3个在一般模式下不可选的特殊植物恒在最后
             (WALLNUTBOWLING := "WallNutBowling",
                 CARD_WALLNUT := "card_wallnut",
