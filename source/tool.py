@@ -156,7 +156,7 @@ class Control():
             self.clock.tick(self.fps)
 
 def get_image(  sheet:pg.Surface, x:int, y:int, width:int, height:int,
-                colorkey:tuple[int]=c.BLACK, scale:int=1) -> pg.Surface:
+                colorkey:tuple[int]=c.BLACK, scale:int=1, left = True) -> pg.Surface:
         # 不保留alpha通道的图片导入
         image = pg.Surface([width, height])
         rect = image.get_rect()
@@ -167,6 +167,8 @@ def get_image(  sheet:pg.Surface, x:int, y:int, width:int, height:int,
         image = pg.transform.scale(image,
                                    (int(rect.width*scale),
                                     int(rect.height*scale)))
+        if not left:
+            image = pg.transform.flip(image, True, False)
         return image
 
 def get_image_alpha(sheet:pg.Surface, x:int, y:int, width:int, height:int,
