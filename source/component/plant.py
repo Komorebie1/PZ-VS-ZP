@@ -175,6 +175,52 @@ class Fume(pg.sprite.Sprite):
 
         for frame in frame_list:
             frames.append(tool.get_image(frame, x, y, width, height))
+            
+class GloomFume(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.name = c.GLOOM_FUME
+        self.timer = 0
+        self.frame_index = 0
+        self.load_images()
+        self.frame_num = len(self.frames)
+        self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def load_images(self):
+        self.fly_frames = []
+
+        fly_name = self.name
+
+        self.loadFrames(self.fly_frames, fly_name)
+
+        self.frames = self.fly_frames
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+    def update(self, game_info):
+        self.current_time = game_info[c.CURRENT_TIME]
+        if self.current_time - self.timer >= 100:
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                self.frame_index = self.frame_num - 1
+                self.kill()
+            self.timer = self.current_time
+        self.image = self.frames[self.frame_index]
+
+    def loadFrames(self, frames, name):
+        frame_list = tool.GFX[name]
+        x, y = 0, 0
+        rect = frame_list[0].get_rect()
+        width, height = rect.w, rect.h
+
+        for frame in frame_list:
+            frames.append(tool.get_image(frame, x, y, width, height))
+
 
 # 杨桃的子弹
 class StarBullet(Bullet):
@@ -1850,6 +1896,124 @@ class FumeShroom(Plant):
             self.image.set_alpha(192)
         else:
             self.image.set_alpha(255)
+
+
+class GloomShroom(Plant):
+    def __init__(self, x, y,map_y ,bullet_group, zombie_group):
+        Plant.__init__(self, x, y, c.GLOOMSHROOM, c.PLANT_HEALTH, bullet_group)
+        self.attack_radius = 240 # 设置多嘴喷菇的攻击半径
+        self.shoot_timer = 0
+        self.show_attack_frames = True
+        self.zombie_group = zombie_group
+        self.map_y = map_y
+        print(map_y)
+
+    def loadImages(self, name, scale):
+        self.idle_frames = []
+        self.sleep_frames = []
+        self.attack_frames = []
+
+        idle_name = name
+        sleep_name = name + "Sleep"
+        attack_name = name + "Attack"
+
+        frame_list = [self.idle_frames, self.sleep_frames, self.attack_frames]
+        name_list = [idle_name, sleep_name, attack_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.idle_frames
+
+    def canAttack(self, zombie):
+        # 检查僵尸是否在多嘴喷菇的攻击范围内
+        
+    # 计算多嘴喷菇与僵尸之间的距离
+        distance = ((self.rect.centerx - zombie.rect.centerx) ** 2 + 
+                    (self.rect.centery - zombie.rect.centery) ** 2) ** 0.5
+        
+        # 检查距离是否在攻击半径范围内
+        if distance <= self.attack_radius:
+            return True
+        return False
+        # if (self.rect.x - self.attack_radius <= zombie.rect.right
+        #     and self.rect.x + self.attack_radius >= zombie.rect.x
+        #     and self.rect.y + self.attack_radius >= zombie.rect.y
+        #     and self.rect.y - self.attack_radius <= zombie.rect.y
+        #     and zombie.rect.left <= c.SCREEN_WIDTH + 10):
+        #     return True
+        # return False
+
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
+            
+    def idling(self):
+        for i in [self.map_y-1,self.map_y,self.map_y+1]:
+            if i == -1 or i == 5:
+                continue
+            for target_zombie in self.zombie_group[i]:
+                # print(target_zombie.rect.centerx,target_zombie.rect.centery)
+                if self.canAttack(target_zombie):
+                    self.setAttack()
+                    return 
+                
+    def canhasoneAttack(self):
+        for i in [self.map_y-1,self.map_y,self.map_y+1]:
+            if i == -1 or i == 5:
+                continue
+            for target_zombie in self.zombie_group[i]:
+                # print(target_zombie.rect.centerx,target_zombie.rect.centery)
+                if self.canAttack(target_zombie):
+                    return True
+        return False
+        
+    def attacking(self):
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif self.current_time - self.shoot_timer >= 1100:
+            # 提前切换到攻击状态
+            if self.show_attack_frames:
+                self.show_attack_frames = False
+                self.changeFrames(self.attack_frames)
+        # print((self.rect.x, self.rect.y))
+        # 攻击间隔时间，符合原版多嘴喷菇
+        if self.current_time - self.shoot_timer >= 1400:
+            self.bullet_group.add(GloomFume(self.rect.centerx-106, self.rect.centery-96))
+            # 模拟多个伤害范围而不实际生成子弹
+            for i in [self.map_y-1,self.map_y,self.map_y+1]:
+                if i == -1 or i == 5:
+                    continue
+                for target_zombie in self.zombie_group[i]:
+                    if self.canAttack(target_zombie):
+                        target_zombie.setDamage(c.BULLET_DAMAGE_NORMAL*3, damage_type=c.ZOMBIE_RANGE_DAMAGE)
+            self.shoot_timer = self.current_time
+            self.show_attack_frames = True
+            # 播放发射音效
+            # c.SOUND_GLOOM.play()
+
+    def animation(self):
+        if (self.current_time - self.animate_timer) > self.animate_interval:
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                if self.frames == self.attack_frames:
+                    self.changeFrames(self.idle_frames)
+                else:
+                    self.frame_index = 0
+            self.animate_timer = self.current_time
+
+        self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
+
+        if (self.current_time - self.highlight_time < 100):
+            self.image.set_alpha(150)
+        elif (self.current_time - self.hit_timer < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)
+
+
 
 
 class IceFrozenPlot(Plant):
