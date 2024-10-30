@@ -198,6 +198,13 @@ class Map():
         if self.isValid(map_x, map_y) and self.isAvailable(map_x, map_y, plant_name):
             pos = self.getMapGridPos(map_x, map_y)
         return pos
+    
+    def checkZombieToPlace(self, x:int, y:int) -> tuple[int, int]:
+        pos = None
+        map_x, map_y = self.getMapIndex(x, y)
+        if self.isValid(map_x, map_y):
+            pos = self.getMapGridPos(map_x, map_y)
+        return pos
 
 # 保存具体关卡地图信息常数
 # 冒险模式地图

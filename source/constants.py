@@ -209,6 +209,7 @@ MOVEBAR_BACKGROUND = "MoveBackground"
 PANEL_BACKGROUND = "PanelBackground"
 START_BUTTON = "StartButton"
 CARD_POOL = "card_pool"
+ZOMBIE_CARD_BAR = "ZombieCardBar"
 
 # 关于植物栏的像素设置
 PANEL_Y_START = 87
@@ -217,8 +218,9 @@ PANEL_Y_INTERNAL = 69
 PANEL_X_INTERNAL = 53
 BAR_CARD_X_INTERNAL = 51
 
-# 植物卡片信息索引
+# 植物、僵尸卡片信息索引
 PLANT_NAME_INDEX = 0
+ZOMBIE_NAME_INDEX = 0
 CARD_INDEX = 1
 SUN_INDEX = 2
 FROZEN_TIME_INDEX = 3
@@ -392,6 +394,22 @@ PLANT_CARD_INDEX = {item[PLANT_NAME_INDEX]: index for (index, item) in enumerate
 
 # 指定了哪些卡可选（排除坚果保龄球特殊植物）
 CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
+
+# 僵尸卡片信息汇总（包括僵尸名称, 卡片名称, 阳光, 冷却时间）
+ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间)
+    (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 0),
+    (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 0),
+    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 0),
+    (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 0),
+    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 0),
+    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 0),
+)
+
+# 僵尸卡片信息索引
+ZOMBIE_CARD_INDEX = {item[0]: index for (index, item) in enumerate(ZOMBIE_CARD_INFO)}
+
+ZOMBIE_CARD_LIST = [ZOMBIE_CARD_INDEX[item] for item in ZOMBIE_CARD_INDEX]
+
 
 
 # 植物集体属性集合

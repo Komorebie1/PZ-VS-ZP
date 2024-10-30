@@ -37,11 +37,12 @@ class Car(pg.sprite.Sprite):
 
 # 豌豆及孢子类普通子弹
 class Bullet(pg.sprite.Sprite):
-    def __init__(   self, x:int, start_y:int, dest_y:int, name:str, damage:int,
+    def __init__(   self, x:int, start_y:int, dest_y:int, name:str, damage:int,left:bool=True,
                     effect:str=None, passed_torchwood_x:int=None,
                     damage_type:str=c.ZOMBIE_DEAFULT_DAMAGE):
         pg.sprite.Sprite.__init__(self)
 
+        self.left = left
         self.name = name
         self.frames = []
         self.frame_index = 0
@@ -54,7 +55,7 @@ class Bullet(pg.sprite.Sprite):
         self.rect.y = start_y
         self.dest_y = dest_y
         self.y_vel = 15 if (dest_y > start_y) else -15
-        self.x_vel = 10
+        self.x_vel = 10 if left else -10
         self.damage = damage
         self.damage_type = damage_type
         self.effect = effect
@@ -75,7 +76,7 @@ class Bullet(pg.sprite.Sprite):
             width, height = rect.w, rect.h
 
         for frame in frame_list:
-            frames.append(tool.get_image(frame, x, y, width, height))
+            frames.append(tool.get_image(frame, x, y, width, height, left=self.left))
 
     def load_images(self):
         self.fly_frames = []
@@ -270,11 +271,12 @@ class StarBullet(Bullet):
 
 
 class Plant(pg.sprite.Sprite):
-    def __init__(self, x, y, name, health, bullet_group, scale=1):
+    def __init__(self, x, y, name, health, bullet_group, scale=1, left = True):
         pg.sprite.Sprite.__init__(self)
 
         self.frames = []
         self.frame_index = 0
+        self.left = left  # 是否在左侧
         self.loadImages(name, scale)
         self.frame_num = len(self.frames)
         self.image = self.frames[self.frame_index]
@@ -295,6 +297,9 @@ class Plant(pg.sprite.Sprite):
 
         self.attack_check = c.CHECK_ATTACK_ALWAYS
 
+    def get_direction(self):  # 获取植物的朝向（用于控制子弹方向等）
+        return 1 if self.left else -1
+
     def loadFrames(self, frames, name, scale=1, color=c.BLACK):
         frame_list = tool.GFX[name]
         if name in c.PLANT_RECT:
@@ -306,7 +311,7 @@ class Plant(pg.sprite.Sprite):
             width, height = rect.w, rect.h
 
         for frame in frame_list:
-            frames.append(tool.get_image(frame, x, y, width, height, color, scale))
+            frames.append(tool.get_image(frame, x, y, width, height, color, scale, self.left))
 
     def loadImages(self, name, scale):
         self.loadFrames(self.frames, name, scale)
@@ -446,7 +451,7 @@ class SunFlower(Plant):
         elif (self.current_time - self.sun_timer) > c.FLOWER_SUN_INTERVAL:
             self.sun_group.add(
                 Sun(    self.rect.centerx, self.rect.bottom,
-                        self.rect.right, self.rect.bottom + self.rect.h // 2))
+                        self.rect.right, self.rect.bottom + self.get_direction() * self.rect.h // 2))
             self.sun_timer = self.current_time
 
 class TwinSunFlower(Plant):
@@ -462,10 +467,10 @@ class TwinSunFlower(Plant):
         elif (self.current_time - self.sun_timer) > c.FLOWER_SUN_INTERVAL:
             self.sun_group.add(
                 Sun(    self.rect.centerx, self.rect.bottom,
-                        self.rect.right, self.rect.bottom + self.rect.h // 2))
+                        self.rect.right, self.rect.bottom + self.get_direction() * self.rect.h // 2))
             self.sun_group.add(
                 Sun(    self.rect.centerx, self.rect.bottom,
-                        self.rect.left, self.rect.bottom + self.rect.h // 2))
+                        self.rect.left, self.rect.bottom + self.get_direction() * self.rect.h // 2))
             self.sun_timer = self.current_time
 
 class PeaShooter(Plant):
@@ -478,7 +483,7 @@ class PeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
@@ -502,14 +507,14 @@ class RepeaterPea(Plant):
         elif (self.current_time - self.shoot_timer >= 1400):
             self.first_shot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
         elif self.first_shot and (self.current_time - self.shoot_timer) > 100:
             self.first_shot = False
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             # 播放发射音效
             c.SOUND_SHOOT.play()
 
@@ -534,7 +539,7 @@ class MachineGunner(Plant):
         elif (self.current_time - self.shoot_timer >= 1400):
             self.first_shot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
@@ -542,20 +547,20 @@ class MachineGunner(Plant):
             self.first_shot = False
             self.second_shot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             # 播放发射音效
             c.SOUND_SHOOT.play()
         elif self.second_shot and (self.current_time - self.shoot_timer) > 200:
             self.second_shot = False
             self.third_shot = True
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             # 播放发射音效
             c.SOUND_SHOOT.play()
         elif self.third_shot and (self.current_time - self.shoot_timer) > 300:
             self.third_shot = False
             self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             # 播放发射音效
             c.SOUND_SHOOT.play()
 
@@ -591,7 +596,7 @@ class ThreePeaShooter(Plant):
                 else:
                     dest_y = self.rect.y + (i - 1) * c.GRID_Y_SIZE + offset_y
                 self.bullet_groups[tmp_y].add(Bullet(self.rect.right  - 15, self.rect.y, dest_y,
-                                                     c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                                                     c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
@@ -611,7 +616,7 @@ class SnowPeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
             self.bullet_group.add(Bullet(self.rect.right  - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, effect=c.BULLET_EFFECT_ICE))
+                                         c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, self.left, effect=c.BULLET_EFFECT_ICE))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
