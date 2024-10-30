@@ -10,7 +10,7 @@ class Zombie(pg.sprite.Sprite):
                     body_health=c.NORMAL_HEALTH,    losthead_health=c.LOSTHEAD_HEALTH,
                     damage=c.ZOMBIE_ATTACK_DAMAGE,  can_swim=False):
         pg.sprite.Sprite.__init__(self)
-
+        self.current_time = 0
         self.name = name
         self.frames = []
         self.frame_index = 0

@@ -27,8 +27,8 @@ def getCardPool(data):
     return card_pool
 
 class Card():
-    def __init__(self, x:int, y:int, index:int, scale:float=0.5, not_recommend=0):
-        self.info = c.PLANT_CARD_INFO[index]
+    def __init__(self, x:int, y:int, index:int, scale:float=0.5, not_recommend=0, info = c.PLANT_CARD_INFO):
+        self.info = info[index]
         self.loadFrame(self.info[c.CARD_INDEX], scale)
         self.rect = self.orig_image.get_rect()
         self.rect.x = x
@@ -228,6 +228,110 @@ class MenuBar():
         surface.blit(self.image, self.rect)
         for card in self.card_list:
             card.draw(surface)
+
+class ZombieBar():
+    def __init__(self):
+        self.card_index_list = c.ZOMBIE_CARD_LIST
+        self.loadFrame(c.ZOMBIE_CARD_BAR)
+        self.rect = self.image.get_rect()
+        self.rect.x = 700
+        self.rect.y = 0
+        self.sun_value = 0
+        
+        # self.sun_value = sun_value
+        self.card_offset_x = 706
+        self.showCard = None
+        self.setupCards()
+
+    def loadFrame(self, name):
+        frame = tool.GFX[name]
+        rect = frame.get_rect()
+        frame_rect = (rect.x, rect.y, rect.w, rect.h)
+
+        self.image = tool.get_image(tool.GFX[name], *frame_rect, c.WHITE, 1)
+
+    def updateCard(self):
+        self.showCard = random.choice(self.card_list)
+
+    def update(self, current_time):
+        self.current_time = current_time
+        # for card in self.card_list:
+        #     card.update(self.sun_value, self.current_time)
+        # self.updateCard()
+        self.showCard.update(self.sun_value, self.current_time)
+
+    def createImage(self, x, y, num):
+        if num == 1:
+            return
+        img = self.image
+        rect = self.image.get_rect()
+        width = rect.w
+        height = rect.h
+        self.image = pg.Surface((width * num, height)).convert()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        for i in range(num):
+            x = i * width
+            self.image.blit(img, (x,0))
+        self.image.set_colorkey(c.BLACK)
+    
+    def setupCards(self):
+        self.card_list = []
+        x = self.card_offset_x
+        y = 8
+        for index in self.card_index_list:
+            # x += c.BAR_CARD_X_INTERNAL
+            self.card_list.append(Card(x, y, index, info=c.ZOMBIE_CARD_INFO))
+        self.updateCard()
+
+    def checkCardClick(self, mouse_pos):
+        result = None
+        if self.showCard.checkMouseClick(mouse_pos):
+            if self.showCard.canClick(self.sun_value, self.current_time):
+                result = (c.ZOMBIE_CARD_INFO[self.showCard.index][c.PLANT_NAME_INDEX], self.showCard)
+            else:
+                # 播放无法使用该卡片的警告音
+                c.SOUND_CANNOT_CHOOSE_WARNING.play()
+        return result
+    
+    def checkMenuBarClick(self, mouse_pos):
+        x, y = mouse_pos
+        if (self.rect.x <= x <= self.rect.right and
+            self.rect.y <= y <= self.rect.bottom):
+            return True
+        return False
+
+    # def decreaseSunValue(self, value):
+    #     self.sun_value -= value
+
+    # def increaseSunValue(self, value):
+    #     self.sun_value += value
+    #     if self.sun_value > 9990:
+    #         self.sun_value = 9990
+
+    def setCardFrozenTime(self, zombie_name):
+        # for card in self.card_list:
+        #     if c.PLANT_CARD_INFO[card.index][c.PLANT_NAME_INDEX] == plant_name:
+        #         card.setFrozenTime(self.current_time)
+        #         break
+        pass
+
+    # def drawSunValue(self):
+    #     self.value_image = getSunValueImage(self.sun_value)
+    #     self.value_rect = self.value_image.get_rect()
+    #     self.value_rect.x = 21
+    #     self.value_rect.y = self.rect.bottom - 24
+        
+    #     self.image.blit(self.value_image, self.value_rect)
+
+    def draw(self, surface):
+        # self.drawSunValue()
+        surface.blit(self.image, self.rect)
+        if self.showCard:
+            self.showCard.draw(surface)
+        # for card in self.card_list:
+        #     card.draw(surface)
 
 # 关卡模式选植物的界面
 class Panel():

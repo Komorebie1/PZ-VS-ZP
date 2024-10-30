@@ -322,6 +322,8 @@ class Level(tool.State):
         elif self.state == c.PLAY:
             self.play(mouse_pos, mouse_click)
 
+        # print(self.plant_name, self.zombie_name)
+
         self.draw(surface)
 
     def gameTime(self, current_time):
@@ -391,12 +393,16 @@ class Level(tool.State):
         else:
             self.menubar = menubar.MoveBar(card_list)
 
+        self.zombiebar = menubar.ZombieBar()
+
         # 是否拖住植物或者铲子
         self.drag_plant = False
         self.drag_shovel = False
+        self.drag_zombie = False
 
         self.hint_image = None
         self.hint_plant = False
+        self.hint_zombie = False
 
         # 用种下植物的名称与位置元组判断是否需要刷新僵尸的攻击对象
         # 种植植物后应当刷新僵尸的攻击对象，当然，默认初始时不用刷新
@@ -706,7 +712,7 @@ class Level(tool.State):
         # 检查有没有捡到阳光
         clicked_sun = False
         clicked_cards_or_map = False
-        if not self.drag_plant and not self.drag_shovel and mouse_pos and mouse_click[0]:
+        if not self.drag_plant and not self.drag_shovel and not self.drag_zombie and mouse_pos and mouse_click[0]:
             for sun in self.sun_group:
                 if sun.checkCollision(*mouse_pos):
                     self.menubar.increaseSunValue(sun.sun_value)
@@ -715,14 +721,24 @@ class Level(tool.State):
                     c.SOUND_COLLECT_SUN.play()
 
         # 拖动植物或者铲子
-        if not self.drag_plant and mouse_pos and mouse_click[0] and not clicked_sun:
+        if not self.drag_plant and not self.drag_zombie and mouse_pos and mouse_click[0] and not clicked_sun:
             self.click_result = self.menubar.checkCardClick(mouse_pos)
             if self.click_result:
+                print(0)
                 self.setupMouseImage(self.click_result[0], self.click_result[1])
                 self.click_result[1].clicked = True
                 clicked_cards_or_map = True
                 # 播放音效
                 c.SOUND_CLICK_CARD.play()
+            else:
+                self.click_result = self.zombiebar.checkCardClick(mouse_pos)
+                if self.click_result:
+                    print(1)
+                    self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False)
+                    self.click_result[1].clicked = True
+                    clicked_cards_or_map = True
+                    # 播放音效
+                    c.SOUND_CLICK_CARD.play()
         elif self.drag_plant:
             if mouse_click[1]:
                 self.removeMouseImage()
@@ -739,6 +755,19 @@ class Level(tool.State):
         elif self.drag_shovel:
             if mouse_click[1]:
                 self.removeMouseImagePlus()
+        elif self.drag_zombie:
+            if mouse_click[1]:
+                self.removeMouseImagePlus()
+                clicked_cards_or_map = True
+                self.click_result[1].clicked = False
+            elif mouse_click[0]:
+                if self.zombiebar.checkMenuBarClick(mouse_pos):
+                    self.click_result[1].clicked = False
+                    self.removeMouseImagePlus()
+                else:
+                    self.addZombie()
+            elif mouse_pos is None:
+                self.setupHintImage(is_plant=False)
 
         # 检查是否点击菜单
         if mouse_click[0] and (not clicked_sun) and (not clicked_cards_or_map):
@@ -763,6 +792,7 @@ class Level(tool.State):
                 car.update(self.game_info)
 
         self.menubar.update(self.current_time)
+        self.zombiebar.update(self.current_time)
 
 
         # 检查碰撞
@@ -843,6 +873,10 @@ class Level(tool.State):
     def canSeedPlant(self, plant_name):
         x, y = pg.mouse.get_pos()
         return self.map.checkPlantToSeed(x, y, plant_name)
+    
+    def canPlaceZombie(self):
+        x, y = pg.mouse.get_pos()
+        return self.map.checkZombieToPlace(x, y)
 
     # 种植物
     def addPlant(self):
@@ -954,12 +988,67 @@ class Level(tool.State):
         self.removeMouseImage()
 
         # print(self.new_plant_and_positon)
-
+        print(self.plant_name)
         # 播放种植音效
         c.SOUND_PLANT.play()
 
-    def setupHintImage(self):
-        pos = self.canSeedPlant(self.plant_name)
+    def addZombie(self):
+        pos = self.canPlaceZombie()
+        if pos is None:
+            return
+        
+        self.click_result[1].clicked = False
+        
+        if self.hint_image is None:
+            self.setupHintImage(is_plant=False)
+        
+        x, y = self.hint_rect.centerx, self.hint_rect.bottom
+        map_x, map_y = self.map.getMapIndex(x, y)
+
+        match self.zombie_name:
+            case c.NORMAL_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.NormalZombie(x, y, self.head_group))
+            case c.CONEHEAD_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.ConeHeadZombie(x, y, self.head_group))
+            case c.BUCKETHEAD_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.BucketHeadZombie(x, y, self.head_group))
+            case c.FLAG_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.FlagZombie(x, y, self.head_group))
+            case c.NEWSPAPER_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.NewspaperZombie(x, y, self.head_group))
+            case c.FOOTBALL_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.FootballZombie(x, y, self.head_group))
+            case c.DUCKY_TUBE_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(x, y, self.head_group))
+            case c.CONEHEAD_DUCKY_TUBE_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(x, y, self.head_group))
+            case c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(x, y, self.head_group))
+            case c.SCREEN_DOOR_ZOMBIE:
+                self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(x, y, self.head_group))
+            case c.POLE_VAULTING_ZOMBIE:
+                # 本来撑杆跳生成位置不同，对齐左端可认为修正了一部分（看作移动了70），只需要相对修改即可
+                self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(x, y, self.head_group))
+            case c.ZOMBONI:
+                # 冰车僵尸生成位置不同
+                self.zombie_groups[map_y].add(zombie.Zomboni(x, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
+            case c.SNORKELZOMBIE:
+                # 潜水僵尸生成位置不同
+                self.zombie_groups[map_y].add(zombie.SnorkelZombie(x, y, self.head_group))
+        
+        self.zombiebar.updateCard()
+        self.removeMouseImage()
+
+        print(self.zombie_name)
+        # 播放种植音效
+        c.SOUND_PLANT.play()
+        
+
+    def setupHintImage(self, is_plant=True):
+        if is_plant:
+            pos = self.canSeedPlant(self.plant_name)
+        else:
+            pos = self.canPlaceZombie()
         if pos and self.mouse_image:
             if (self.hint_image and pos[0] == self.hint_rect.x and
                 pos[1] == self.hint_rect.y):
@@ -972,7 +1061,7 @@ class Level(tool.State):
             self.hint_image = image
             self.hint_rect = image.get_rect()
             # 花盆、睡莲图片应当下移一些
-            if self.plant_name in {c.LILYPAD, "花盆（未实现）", c.TANGLEKLEP}:
+            if is_plant and self.plant_name in {c.LILYPAD, "花盆（未实现）", c.TANGLEKLEP}:
                 self.hint_rect.centerx = pos[0]
                 self.hint_rect.bottom = pos[1] + 25
             else:
@@ -982,24 +1071,33 @@ class Level(tool.State):
         else:
             self.hint_plant = False
 
-    def setupMouseImage(self, plant_name, select_plant, colorkey=c.BLACK):
-        frame_list = tool.GFX[plant_name]
-        if plant_name in c.PLANT_RECT:
-            data = c.PLANT_RECT[plant_name]
+    def setupMouseImage(self, name, select, colorkey=c.BLACK, is_plant=True):
+        frame_list = tool.GFX[name]
+        if name in c.PLANT_RECT:
+            data = c.PLANT_RECT[name]
             x, y, width, height = data["x"], data["y"], data["width"], data["height"]
         else:
             x, y = 0, 0
             rect = frame_list[0].get_rect()
             width, height = rect.w, rect.h
+        if name is "NewspaperZombie":
+            self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey=c.WHITE)
+        else:
+            self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey=colorkey)
 
-        self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey, 1)
         self.mouse_rect = self.mouse_image.get_rect()
-        self.drag_plant = True
-        self.plant_name = plant_name
-        self.select_plant = select_plant
+        if is_plant:
+            self.drag_plant = True
+            self.plant_name = name
+            self.select_plant = select
+        else :
+            self.drag_zombie = True
+            self.zombie_name = name
+            self.select_zombie = select
 
     def removeMouseImage(self):
         self.drag_plant = False
+        self.drag_zombie = False
         self.mouse_image = None
         self.hint_image = None
         self.hint_plant = False
@@ -1568,6 +1666,7 @@ class Level(tool.State):
             surface.blit(self.little_menu, self.little_menu_rect)
 
             self.menubar.draw(surface)
+            self.zombiebar.draw(surface)
             for i in range(self.map_y_len):
                 self.plant_groups[i].draw(surface)
                 self.zombie_groups[i].draw(surface)
@@ -1579,7 +1678,7 @@ class Level(tool.State):
             self.head_group.draw(surface)
             self.sun_group.draw(surface)
 
-            if self.drag_plant:
+            if self.drag_plant or self.drag_zombie:
                 self.drawMouseShow(surface)
 
             if self.has_shovel and self.drag_shovel:
