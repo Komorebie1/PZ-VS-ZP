@@ -891,11 +891,15 @@ class Level(tool.State):
             self.setupHintImage()
         x, y = self.hint_rect.centerx, self.hint_rect.bottom
         map_x, map_y = self.map.getMapIndex(x, y)
-
+        print(self.plant_name)
+        print(c.GLOOMSHROOM)
+        print(self.plant_name==c.GLOOMSHROOM)
         # 新植物也需要在这里声明
         match self.plant_name:
             case c.SUNFLOWER:
                 new_plant = plant.SunFlower(x, y, self.sun_group)
+            case c.GLOOMSHROOM:
+                new_plant = plant.GloomShroom(x,y,map_y,self.bullet_groups[map_y],self.zombie_groups)
             case c.TWINSUNFLOWER:
                 new_plant = plant.TwinSunFlower(x, y, self.sun_group)
             case c.PEASHOOTER:
@@ -1111,7 +1115,7 @@ class Level(tool.State):
     def checkBulletCollisions(self):
         for i in range(self.map_y_len):
             for bullet in self.bullet_groups[i]:
-                if bullet.name == c.FUME:
+                if bullet.name == c.FUME or c.GLOOM_FUME:
                     continue
                 collided_func = pg.sprite.collide_mask
                 if bullet.state == c.FLY:
@@ -1421,7 +1425,7 @@ class Level(tool.State):
                     break
             if target_plant.state == c.IDLE and can_attack:
                 target_plant.setAttack(self.zombie_groups[i])
-            elif target_plant.state == c.ATTACK and not can_attack:
+            elif target_plant.state == c.ATTACK and not can_attack and target_plant.name != c.GLOOMSHROOM:
                 target_plant.setIdle()
         elif target_plant.name == c.SCAREDYSHROOM:
             need_cry = False
@@ -1493,7 +1497,9 @@ class Level(tool.State):
                         break
             if target_plant.state == c.IDLE and can_attack:
                 target_plant.setAttack()
-            elif (target_plant.state == c.ATTACK and (not can_attack)):
+            elif (target_plant.state == c.ATTACK and (not can_attack)) and target_plant.name != c.GLOOMSHROOM:
+                target_plant.setIdle()
+            elif target_plant.name == c.GLOOMSHROOM and target_plant.canhasoneAttack() == False:
                 target_plant.setIdle()
 
     def checkPlants(self):

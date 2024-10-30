@@ -357,7 +357,7 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (COFFEEBEAN := "CoffeeBean",
                 CARD_COFFEEBEAN := "card_coffeebean",
                 75,
-                7500),
+                7),#7500
             (GARLIC := "Garlic",
                 CARD_GARLIC := "card_garlic",
                 50,
@@ -370,6 +370,10 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_TWINSUNFLOWER := "card_twinsunflower",
                 50,
                 1000),
+            (GLOOMSHROOM := "GloomShroom",
+                CARD_GLOOMSHROOM := "card_gloomshroom",
+                50,
+                1),
             # 应当保证这3个在一般模式下不可选的特殊植物恒在最后
             (WALLNUTBOWLING := "WallNutBowling",
                 CARD_WALLNUT := "card_wallnut",
@@ -464,6 +468,7 @@ CAN_SLEEP_PLANTS = {
     FUMESHROOM, HYPNOSHROOM,
     SCAREDYSHROOM, ICESHROOM,
     DOOMSHROOM, SEASHROOM,
+    GLOOMSHROOM
 }
 
 # 选卡不推荐选择理由
@@ -504,6 +509,8 @@ BULLET_FIREBALL = "Fireball"
 BULLET_MUSHROOM = "BulletMushRoom"
 BULLET_SEASHROOM = "BulletSeaShroom"
 FUME = "Fume"
+GLOOM_FUME= "GloomFume"
+
 # 子弹伤害
 BULLET_DAMAGE_NORMAL = 20
 BULLET_DAMAGE_FIREBALL_BODY = 27 # 这是火球本体的伤害，注意不是40，本体(27) + 溅射(13)才是40
