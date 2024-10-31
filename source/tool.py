@@ -127,6 +127,8 @@ class Control():
         self.state_name = self.state.next
         persist = self.state.cleanup()
         self.state = self.state_dict[self.state_name]
+        if self.state_name == c.LEVEL:
+            pg.display.set_mode(c.LEVEL_SCREEN_SIZE)
         self.state.startup(self.current_time, persist)
 
     def event_loop(self):

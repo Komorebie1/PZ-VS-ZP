@@ -84,10 +84,10 @@ class Level(tool.State):
         self.background_type = img_index
         self.background = tool.GFX[c.BACKGROUND_NAME][img_index]
         self.bg_rect = self.background.get_rect()
-
+        print(self.bg_rect)
         self.level = pg.Surface((self.bg_rect.w, self.bg_rect.h)).convert()
         self.viewport = tool.SCREEN.get_rect(bottom=self.bg_rect.bottom)
-        self.viewport.x += c.BACKGROUND_OFFSET_X
+        self.viewport.x += c.BACKGROUND_OFFSET_X if img_index != 9 else 0
 
 
     def setupGroups(self):
@@ -312,7 +312,10 @@ class Level(tool.State):
         self.cars = []
         for i in range(self.map_y_len):
             y = self.map.getMapGridPos(0, i)[1]
-            self.cars.append(plant.Car(-45, y+20, i))
+            if self.background_type == c.BACKGROUND_BIG:
+                self.cars.append(plant.Car(-45 + 220, y+20, i))
+            else:
+                self.cars.append(plant.Car(-45, y+20, i))
 
     # 更新函数每帧被调用，将鼠标事件传入给状态处理函数
     def update(self, surface, current_time, mouse_pos, mouse_click):
@@ -419,7 +422,7 @@ class Level(tool.State):
         self.setupGroups()
         if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
             self.setupZombies()
-        else:
+        elif self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
             # 僵尸波数数据及僵尸生成数据
             self.wave_num = 0   # 还未出现僵尸时定义为0
             self.wave_time = 0
@@ -436,6 +439,12 @@ class Level(tool.State):
                 self.createWaves(   useable_zombies=self.map_data[c.INCLUDED_ZOMBIES],
                                     num_flags=self.map_data[c.NUM_FLAGS],
                                     survival_rounds=0)
+        else: 
+            self.wave_num = 0   # 还未出现僵尸时定义为0
+            self.wave_time = 0
+            self.wave_zombies = []
+            self.zombie_num = 0
+            pass
         self.setupCars()
 
         # 地图有铲子才添加铲子
@@ -487,7 +496,7 @@ class Level(tool.State):
         frame_rect = (0, 0, 108, 31)
         self.little_menu = tool.get_image_alpha(tool.GFX[c.LITTLE_MENU], *frame_rect, c.BLACK, 1.1)
         self.little_menu_rect = self.little_menu.get_rect()
-        self.little_menu_rect.x = 690
+        self.little_menu_rect.x = c.LEVEL_SCREEN_WIDTH - 110
         self.little_menu_rect.y = 0 
 
         # 弹出的菜单框
@@ -678,13 +687,17 @@ class Level(tool.State):
                 if  data[0] <= (self.current_time - self.zombie_start_time):
                     self.createZombie(data[1], data[2])
                     self.zombie_list.remove(data)
-        else:
+        elif self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
             # 新僵尸生成方式
             self.refreshWaves(self.current_time)
             for i in self.wave_zombies:
                 self.createZombie(i)
             else:
                 self.wave_zombies = []
+        else:
+            # 无僵尸生成
+            pass
+            
 
 
         for i in range(self.map_y_len):
@@ -724,7 +737,6 @@ class Level(tool.State):
         if not self.drag_plant and not self.drag_zombie and mouse_pos and mouse_click[0] and not clicked_sun:
             self.click_result = self.menubar.checkCardClick(mouse_pos)
             if self.click_result:
-                print(0)
                 self.setupMouseImage(self.click_result[0], self.click_result[1])
                 self.click_result[1].clicked = True
                 clicked_cards_or_map = True
@@ -733,7 +745,6 @@ class Level(tool.State):
             else:
                 self.click_result = self.zombiebar.checkCardClick(mouse_pos)
                 if self.click_result:
-                    print(1)
                     self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False)
                     self.click_result[1].clicked = True
                     clicked_cards_or_map = True
@@ -892,8 +903,7 @@ class Level(tool.State):
         x, y = self.hint_rect.centerx, self.hint_rect.bottom
         map_x, map_y = self.map.getMapIndex(x, y)
         print(self.plant_name)
-        print(c.GLOOMSHROOM)
-        print(self.plant_name==c.GLOOMSHROOM)
+
         # 新植物也需要在这里声明
         match self.plant_name:
             case c.SUNFLOWER:

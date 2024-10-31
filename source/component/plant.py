@@ -101,7 +101,7 @@ class Bullet(pg.sprite.Sprite):
                 if self.y_vel * (self.dest_y - self.rect.y) < 0:
                     self.rect.y = self.dest_y
             self.rect.x += self.x_vel
-            if self.rect.x >= c.SCREEN_WIDTH + 20:
+            if self.rect.x >= c.LEVEL_SCREEN_WIDTH + 20:
                 self.kill()
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
@@ -251,7 +251,7 @@ class StarBullet(Bullet):
             else:
                 self.rect.x -= 10
             self.handleMapYPosition()
-            if ((self.rect.x > c.SCREEN_WIDTH + 20) or (self.rect.right < -20)
+            if ((self.rect.x > c.LEVEL_SCREEN_WIDTH + 20) or (self.rect.right < -20)
                 or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
         elif self.state == c.EXPLODE:
@@ -372,7 +372,7 @@ class Plant(pg.sprite.Sprite):
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
         if (self.state != c.SLEEP and zombie.state != c.DIE and
-            self.rect.x <= zombie.rect.right and zombie.rect.x <= c.SCREEN_WIDTH - 24):
+            self.rect.x <= zombie.rect.right and zombie.rect.x <= c.LEVEL_SCREEN_WIDTH - 24):
             return True
         return False
 
@@ -821,7 +821,7 @@ class PuffShroom(Plant):
             return False
         if (self.rect.x <= zombie.rect.right
         and (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x)
-        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -1281,7 +1281,7 @@ class WallNutBowling(Plant):
             self.handleMapYPosition()
             if self.shouldChangeDirection():
                 self.changeDirection(-1)
-            if self.init_rect.x > c.SCREEN_WIDTH + 25:
+            if self.init_rect.x > c.LEVEL_SCREEN_WIDTH + 25:
                 self.health = 0
             self.move_timer += self.move_interval
 
@@ -1363,7 +1363,7 @@ class RedWallNutBowling(Plant):
         elif (self.current_time - self.move_timer) >= self.move_interval:
             self.rotate_degree = (self.rotate_degree - 30) % 360
             self.init_rect.x += self.vel_x
-            if self.init_rect.x > c.SCREEN_WIDTH + 25:
+            if self.init_rect.x > c.LEVEL_SCREEN_WIDTH + 25:
                 self.health = 0
             self.move_timer += self.move_interval
 
@@ -1441,12 +1441,12 @@ class StarFruit(Plant):
             # f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
             # 注意实际上为射线
             elif (-100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70
-            and (zombie.rect.left <= c.SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x)):
+            and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x)):
                 return True
             # 斜向下，理想直线方程为：f(zombie.rect.x) = zombie.rect.x + self.rect.y - self.rect.right - 15
             # 注意实际上为射线
             elif (abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70
-            and (zombie.rect.left <= c.SCREEN_WIDTH)
+            and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH)
             and (zombie.rect.x >= self.rect.x)):
                 return True
             elif zombie.rect.left <= self.rect.x <= zombie.rect.right:
@@ -1560,7 +1560,7 @@ class SeaShroom(Plant):
             return False
         if (self.rect.x <= zombie.rect.right
         and (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x)
-        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -1854,7 +1854,7 @@ class FumeShroom(Plant):
             return False
         if (self.rect.x <= zombie.rect.right
         and (self.rect.x + c.GRID_X_SIZE * 5 >= zombie.rect.x)
-        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -2104,7 +2104,7 @@ class GiantWallNut(Plant):
         elif (self.current_time - self.move_timer) >= self.move_interval:
             self.rotate_degree = (self.rotate_degree - 30) % 360
             self.init_rect.x += self.vel_x
-            if self.init_rect.x > c.SCREEN_WIDTH:
+            if self.init_rect.x > c.LEVEL_SCREEN_WIDTH:
                 self.health = 0
             self.move_timer += self.move_interval
 
