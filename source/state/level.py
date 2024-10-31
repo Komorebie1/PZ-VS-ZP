@@ -1115,7 +1115,7 @@ class Level(tool.State):
     def checkBulletCollisions(self):
         for i in range(self.map_y_len):
             for bullet in self.bullet_groups[i]:
-                if bullet.name == c.FUME or c.GLOOM_FUME:
+                if bullet.name == c.FUME or bullet.name == c.GLOOM_FUME:
                     continue
                 collided_func = pg.sprite.collide_mask
                 if bullet.state == c.FLY:
