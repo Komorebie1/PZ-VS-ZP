@@ -724,7 +724,6 @@ class Level(tool.State):
         if not self.drag_plant and not self.drag_zombie and mouse_pos and mouse_click[0] and not clicked_sun:
             self.click_result = self.menubar.checkCardClick(mouse_pos)
             if self.click_result:
-                print(0)
                 self.setupMouseImage(self.click_result[0], self.click_result[1])
                 self.click_result[1].clicked = True
                 clicked_cards_or_map = True
@@ -733,7 +732,6 @@ class Level(tool.State):
             else:
                 self.click_result = self.zombiebar.checkCardClick(mouse_pos)
                 if self.click_result:
-                    print(1)
                     self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False)
                     self.click_result[1].clicked = True
                     clicked_cards_or_map = True
@@ -892,8 +890,7 @@ class Level(tool.State):
         x, y = self.hint_rect.centerx, self.hint_rect.bottom
         map_x, map_y = self.map.getMapIndex(x, y)
         print(self.plant_name)
-        print(c.GLOOMSHROOM)
-        print(self.plant_name==c.GLOOMSHROOM)
+
         # 新植物也需要在这里声明
         match self.plant_name:
             case c.SUNFLOWER:
