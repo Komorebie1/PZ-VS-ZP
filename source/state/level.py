@@ -757,13 +757,13 @@ class Level(tool.State):
                 self.removeMouseImagePlus()
         elif self.drag_zombie:
             if mouse_click[1]:
-                self.removeMouseImagePlus()
+                self.removeMouseImage()
                 clicked_cards_or_map = True
                 self.click_result[1].clicked = False
             elif mouse_click[0]:
                 if self.zombiebar.checkMenuBarClick(mouse_pos):
                     self.click_result[1].clicked = False
-                    self.removeMouseImagePlus()
+                    self.removeMouseImage()
                 else:
                     self.addZombie()
             elif mouse_pos is None:
@@ -1084,7 +1084,7 @@ class Level(tool.State):
             x, y = 0, 0
             rect = frame_list[0].get_rect()
             width, height = rect.w, rect.h
-        if name is "NewspaperZombie":
+        if name is "NewspaperZombie":  # 特殊处理白色边框的
             self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey=c.WHITE)
         else:
             self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey=colorkey)
