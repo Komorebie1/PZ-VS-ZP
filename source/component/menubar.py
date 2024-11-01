@@ -251,7 +251,8 @@ class ZombieBar():
         self.image = tool.get_image(tool.GFX[name], *frame_rect, c.WHITE, 1)
 
     def updateCard(self):
-        self.showCard = random.choice(self.card_list)
+        # self.showCard = random.choice(self.card_list)
+        self.showCard = self.card_list[-1] # 测试冰车
 
     def update(self, current_time):
         self.current_time = current_time

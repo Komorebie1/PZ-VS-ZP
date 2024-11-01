@@ -341,6 +341,10 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_SPIKEWEED := "card_spikeweed",
                 100,
                 7500),
+            (SPIKEROCK := "Spikerock",
+                CARD_SPIKEROCK := "card_spikerock",
+                100,
+                70),
             (TORCHWOOD := "TorchWood",
                 CARD_TORCHWOOD := "card_torchwood",
                 175,
@@ -410,6 +414,7 @@ ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间)
     (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 0),
     (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 0),
     (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 0),
+    (FOOTBALL_ZOMBIE := "Zomboni", CARD_FOOTBALLZOMBIE := "card_zomboni", 0, 0),
 )
 
 # 僵尸卡片信息索引
@@ -440,7 +445,7 @@ CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
                 # 非植物对象
                 NON_PLANT_OBJECTS |
                 # 地刺类
-                {SPIKEWEED, }
+                {SPIKEWEED,SPIKEROCK}
 )
 
 # 死亡时不触发音效的对象

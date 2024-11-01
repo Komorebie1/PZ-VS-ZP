@@ -936,6 +936,8 @@ class Level(tool.State):
                 new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT])
             case c.SPIKEWEED:
                 new_plant = plant.Spikeweed(x, y)
+            case c.SPIKEROCK:
+                new_plant = plant.Spikerock(x, y)
             case c.JALAPENO:
                 new_plant = plant.Jalapeno(x, y)
             case c.SCAREDYSHROOM:
@@ -1427,7 +1429,7 @@ class Level(tool.State):
                 if target_plant.canAttack(zombie):
                     target_plant.setAttack(zombie, self.zombie_groups[i])
                     break
-        elif target_plant.name == c.SPIKEWEED:
+        elif target_plant.name == c.SPIKEWEED or target_plant.name == c.SPIKEROCK:
             can_attack = False
             for zombie in self.zombie_groups[i]:
                 if target_plant.canAttack(zombie):

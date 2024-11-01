@@ -1108,7 +1108,7 @@ class Zomboni(Zombie):
             # 行进时碾压
             for plant in self.plant_group:
                 # 地刺和地刺王不用检验
-                if ((plant.name not in {c.SPIKEWEED})
+                if ((plant.name not in {c.SPIKEWEED,c.SPIKEROCK})
                 and (self.rect.centerx <= plant.rect.right <= self.rect.right)):
                     # 扣除生命值为可能的最大有限生命值
                     plant.health -= 8000
