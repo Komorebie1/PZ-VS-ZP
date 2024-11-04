@@ -8,8 +8,9 @@ class Zombie(pg.sprite.Sprite):
     def __init__(   self, x, y, name, head_group=None,
                     helmet_health=0,                helmet_type2_health=0,
                     body_health=c.NORMAL_HEALTH,    losthead_health=c.LOSTHEAD_HEALTH,
-                    damage=c.ZOMBIE_ATTACK_DAMAGE,  can_swim=False):
+                    damage=c.ZOMBIE_ATTACK_DAMAGE,  can_swim=False, left=True):
         pg.sprite.Sprite.__init__(self)
+        self.left = left
         self.current_time = 0
         self.name = name
         self.frames = []
@@ -58,6 +59,9 @@ class Zombie(pg.sprite.Sprite):
         self.losthead_timer = 0
         self.is_hypno = False  # the zombie is hypo and attack other zombies when it ate a HypnoShroom
 
+    def getDirection(self):
+        return 1 if self.left else -1
+
     def loadFrames(self, frames, name, colorkey=c.BLACK):
         frame_list = tool.GFX[name]
         rect = frame_list[0].get_rect()
@@ -68,7 +72,7 @@ class Zombie(pg.sprite.Sprite):
         else:
             x = 0
         for frame in frame_list:
-            frames.append(tool.get_image(frame, x, 0, width, height, colorkey))
+            frames.append(tool.get_image(frame, x, 0, width, height, colorkey, left=self.left))
 
     def update(self, game_info):
         self.current_time = game_info[c.CURRENT_TIME]
@@ -245,7 +249,7 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.attack_frames)
             self.helmet_type2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
-                self.speed = 2.65
+                self.speed = 2.65 * self.direction
                 self.walk_animate_interval = 300
         if (((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()))
             and (not self.losthead)):

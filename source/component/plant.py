@@ -23,7 +23,7 @@ class Car(pg.sprite.Sprite):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.WALK:
             self.rect.x += 5
-        if self.rect.x > c.SCREEN_WIDTH + 25:
+        if self.rect.x > c.LEVEL_SCREEN_WIDTH + 25 - 250:
             self.dead = True
 
     def setWalk(self):
@@ -369,11 +369,18 @@ class Plant(pg.sprite.Sprite):
             self.image.set_alpha(255)
 
     def canAttack(self, zombie):
-        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
-            return False
-        if (self.state != c.SLEEP and zombie.state != c.DIE and
-            self.rect.x <= zombie.rect.right and zombie.rect.x <= c.LEVEL_SCREEN_WIDTH - 24):
-            return True
+        if self.left:
+            if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+                return False
+            if (self.state != c.SLEEP and zombie.state != c.DIE and
+                self.rect.x <= zombie.rect.right and zombie.rect.x <= c.LEVEL_SCREEN_WIDTH - 24):
+                return True
+        else:
+            if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+                return False
+            if (self.state != c.SLEEP and zombie.state != c.DIE and
+                self.rect.right >= zombie.rect.x and zombie.rect.x >= 0):
+                return True
         return False
 
     def setAttack(self):
@@ -439,8 +446,8 @@ class Sun(Plant):
 
 
 class SunFlower(Plant):
-    def __init__(self, x, y, sun_group):
-        Plant.__init__(self, x, y, c.SUNFLOWER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, sun_group, left=True):
+        Plant.__init__(self, x, y, c.SUNFLOWER, c.PLANT_HEALTH, None, left=left)
         self.sun_timer = 0
         self.sun_group = sun_group
         self.attack_check = c.CHECK_ATTACK_NEVER
@@ -455,8 +462,8 @@ class SunFlower(Plant):
             self.sun_timer = self.current_time
 
 class TwinSunFlower(Plant):
-    def __init__(self, x, y, sun_group):
-        Plant.__init__(self, x, y, c.TWINSUNFLOWER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, sun_group, left=True):
+        Plant.__init__(self, x, y, c.TWINSUNFLOWER, c.PLANT_HEALTH, None, left=left)
         self.sun_timer = 0
         self.sun_group = sun_group
         self.attack_check = c.CHECK_ATTACK_NEVER
@@ -474,15 +481,16 @@ class TwinSunFlower(Plant):
             self.sun_timer = self.current_time
 
 class PeaShooter(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.PEASHOOTER, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left=True):
+        Plant.__init__(self, x, y, c.PEASHOOTER, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
 
     def attacking(self):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
-        elif (self.current_time - self.shoot_timer) >= 1400:
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
+        elif (self.current_time - self.shoot_timer) >= 1400:      
+            bullet_x = self.rect.right - 15 if self.left else self.rect.left + 15
+            self.bullet_group.add(Bullet(bullet_x, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
@@ -494,8 +502,8 @@ class PeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
 
 class RepeaterPea(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.REPEATERPEA, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.REPEATERPEA, c.PLANT_HEALTH, bullet_group, left = left)
         self.shoot_timer = 0
 
         # 是否发射第一颗
@@ -524,8 +532,8 @@ class RepeaterPea(Plant):
             self.shoot_timer = self.current_time - 700
             
 class MachineGunner(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.MACHINEGUNNER, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.MACHINEGUNNER, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
 
         # 是否发射第一颗
@@ -571,8 +579,8 @@ class MachineGunner(Plant):
 
 
 class ThreePeaShooter(Plant):
-    def __init__(self, x, y, bullet_groups, map_y, background_type):
-        Plant.__init__(self, x, y, c.THREEPEASHOOTER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, bullet_groups, map_y, background_type, left = True):
+        Plant.__init__(self, x, y, c.THREEPEASHOOTER, c.PLANT_HEALTH, None, left=left)
         self.shoot_timer = 0
         self.map_y = map_y
         self.bullet_groups = bullet_groups
@@ -607,8 +615,8 @@ class ThreePeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
 
 class SnowPeaShooter(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.SNOWPEASHOOTER, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.SNOWPEASHOOTER, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
 
     def attacking(self):
@@ -629,8 +637,8 @@ class SnowPeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
 
 class WallNut(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.WALLNUT, c.WALLNUT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.WALLNUT, c.WALLNUT_HEALTH, None, left=left)
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
@@ -656,8 +664,8 @@ class WallNut(Plant):
 
 
 class CherryBomb(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.CHERRYBOMB, c.INF, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.CHERRYBOMB, c.INF, None, left=left)
         self.state = c.ATTACK
         self.start_boom = False
         self.boomed = False
@@ -707,8 +715,8 @@ class CherryBomb(Plant):
 
 
 class Chomper(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.CHOMPER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.CHOMPER, c.PLANT_HEALTH, None, left=left)
         self.animate_interval = 140
         self.digest_timer = 0
         self.digest_interval = 15000
@@ -787,8 +795,8 @@ class Chomper(Plant):
 
 
 class PuffShroom(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.PUFFSHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.PUFFSHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
 
     def loadImages(self, name, scale):
@@ -832,8 +840,8 @@ class PuffShroom(Plant):
 
 
 class PotatoMine(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.POTATOMINE, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.POTATOMINE, c.PLANT_HEALTH, None, left=left)
         self.animate_interval = 300
         self.is_init = True
         self.init_timer = 0
@@ -888,8 +896,8 @@ class PotatoMine(Plant):
 
 
 class Squash(Plant):
-    def __init__(self, x, y, map_plant_set):
-        Plant.__init__(self, x, y, c.SQUASH, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, map_plant_set, left = True):
+        Plant.__init__(self, x, y, c.SQUASH, c.PLANT_HEALTH, None, left=left)
         self.orig_pos = (x, y)
         self.aim_timer = 0
         self.start_boom = False # 和灰烬等植物统一变量名，在这里表示倭瓜是否跳起
@@ -958,8 +966,8 @@ class Squash(Plant):
 
 
 class Spikeweed(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None, scale=0.9)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None, scale=0.9, left=left)
         self.animate_interval = 70
         self.attack_timer = 0
 
@@ -1005,9 +1013,9 @@ class Spikeweed(Plant):
             c.SOUND_BULLET_EXPLODE.play()
 
 
-class Jalapeno(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.JALAPENO, c.INF, None)
+class Jalapeno(Plant):  # 火爆辣椒
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.JALAPENO, c.INF, None, left=left)
         self.orig_pos = (x, y)
         self.state = c.ATTACK
         self.start_boom = False
@@ -1061,8 +1069,8 @@ class Jalapeno(Plant):
 
 
 class ScaredyShroom(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.SCAREDYSHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.SCAREDYSHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
         self.cry_x_range = c.GRID_X_SIZE * 1.5
 
@@ -1114,8 +1122,8 @@ class ScaredyShroom(Plant):
 
 
 class SunShroom(Plant):
-    def __init__(self, x, y, sun_group):
-        Plant.__init__(self, x, y, c.SUNSHROOM, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, sun_group, left = True):
+        Plant.__init__(self, x, y, c.SUNSHROOM, c.PLANT_HEALTH, None, left=left)
         self.animate_interval = 140
         self.sun_timer = 0
         self.sun_group = sun_group
@@ -1157,8 +1165,8 @@ class SunShroom(Plant):
 
 
 class IceShroom(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.ICESHROOM, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.ICESHROOM, c.PLANT_HEALTH, None, left=left)
         self.orig_pos = (x, y)
         self.start_boom = False
         self.boomed = False
@@ -1227,8 +1235,8 @@ class IceShroom(Plant):
 
 
 class HypnoShroom(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None, left=left)
         self.animate_interval = 80
         self.zombie_to_hypno = None
         self.attack_check = c.CHECK_ATTACK_NEVER
@@ -1254,8 +1262,8 @@ class HypnoShroom(Plant):
 
 
 class WallNutBowling(Plant):
-    def __init__(self, x, y, map_y, level):
-        Plant.__init__(self, x, y, c.WALLNUTBOWLING, 1, None)
+    def __init__(self, x, y, map_y, level, left = True):
+        Plant.__init__(self, x, y, c.WALLNUTBOWLING, 1, None, left=left)
         self.map_y = map_y
         self.level = level
         self.init_rect = self.rect.copy()
@@ -1331,8 +1339,8 @@ class WallNutBowling(Plant):
 
 
 class RedWallNutBowling(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.REDWALLNUTBOWLING, 1, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.REDWALLNUTBOWLING, 1, None, left=left)
         self.orig_y = y
         self.explode_timer = 0
         self.explode_y_range = 1
@@ -1397,13 +1405,13 @@ class RedWallNutBowling(Plant):
         return (self.rect.centerx, self.orig_y)
 
 class LilyPad(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.LILYPAD, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.LILYPAD, c.PLANT_HEALTH, None, left=left)
         self.attack_check = c.CHECK_ATTACK_NEVER
 
 class TorchWood(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.TORCHWOOD, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.TORCHWOOD, c.PLANT_HEALTH, bullet_group, left=left)
         self.attack_check = c.CHECK_ATTACK_NEVER
 
     def idling(self):
@@ -1424,8 +1432,8 @@ class TorchWood(Plant):
                 i.kill()
 
 class StarFruit(Plant):
-    def __init__(self, x, y, bullet_group, level):
-        Plant.__init__(self, x, y, c.STARFRUIT, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, level, left = True):
+        Plant.__init__(self, x, y, c.STARFRUIT, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
         self.level = level
         self.map_x, self.map_y = self.level.map.getMapIndex(x, y)
@@ -1485,8 +1493,8 @@ class StarFruit(Plant):
 
 
 class CoffeeBean(Plant):
-    def __init__(self, x, y, plant_group, map_content, map, map_x):
-        Plant.__init__(self, x, y, c.COFFEEBEAN, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, plant_group, map_content, map, map_x, left = True):
+        Plant.__init__(self, x, y, c.COFFEEBEAN, c.PLANT_HEALTH, None, left=left)
         self.plant_group = plant_group
         self.map_content = map_content
         self.map = map
@@ -1526,8 +1534,8 @@ class CoffeeBean(Plant):
             
 
 class SeaShroom(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.SEASHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.SEASHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
 
     def loadImages(self, name, scale):
@@ -1571,8 +1579,8 @@ class SeaShroom(Plant):
 
 
 class TallNut(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.TALLNUT, c.TALLNUT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.TALLNUT, c.TALLNUT_HEALTH, None, left=left)
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
@@ -1598,8 +1606,8 @@ class TallNut(Plant):
 
 
 class TangleKlep(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.TANGLEKLEP, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.TANGLEKLEP, c.PLANT_HEALTH, None, left=left)
         self.load_images()
         self.splashing = False
 
@@ -1649,8 +1657,8 @@ class TangleKlep(Plant):
 # 坑形态的毁灭菇同地刺一样不可以被啃食
 # 爆炸时杀死同一格的所有植物
 class DoomShroom(Plant):
-    def __init__(self, x, y, map_plant_set, explode_y_range):
-        Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, map_plant_set, explode_y_range, left = True):
+        Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None, left=left)
         self.map_plant_set = map_plant_set
         self.bomb_timer = 0
         self.explode_y_range = explode_y_range
@@ -1724,10 +1732,10 @@ class DoomShroom(Plant):
 
 # 用于描述毁灭菇的坑
 class Hole(Plant):
-    def __init__(self, x, y, plot_type):
+    def __init__(self, x, y, plot_type, left = True):
         # 指定区域类型这一句必须放在前面，否则加载图片判断将会失败
         self.plot_type = plot_type
-        Plant.__init__(self, x, y, c.HOLE, c.INF, None)
+        Plant.__init__(self, x, y, c.HOLE, c.INF, None, left=left)
         self.timer = 0
         self.shallow = False
         self.attack_check = c.CHECK_ATTACK_NEVER
@@ -1780,8 +1788,8 @@ class Hole(Plant):
 
 
 class Grave(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.GRAVE, c.INF, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.GRAVE, c.INF, None, left=left)
         self.frame_index = random.randint(0, self.frame_num - 1)
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
@@ -1792,8 +1800,8 @@ class Grave(Plant):
 
 
 class GraveBuster(Plant):
-    def __init__(self, x, y, plant_group, map, map_x):
-        Plant.__init__(self, x, y, c.GRAVEBUSTER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, plant_group, map, map_x, left = True):
+        Plant.__init__(self, x, y, c.GRAVEBUSTER, c.PLANT_HEALTH, None, left=left)
         self.map = map
         self.map_x = map_x
         self.plant_group = plant_group
@@ -1826,8 +1834,8 @@ class GraveBuster(Plant):
             self.image.set_alpha(255)
 
 class FumeShroom(Plant):
-    def __init__(self, x, y, bullet_group, zombie_group):
-        Plant.__init__(self, x, y, c.FUMESHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, zombie_group, left = True):
+        Plant.__init__(self, x, y, c.FUMESHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
         self.show_attack_frames = True
         self.zombie_group = zombie_group
@@ -1904,8 +1912,8 @@ class FumeShroom(Plant):
 
 
 class GloomShroom(Plant):
-    def __init__(self, x, y,map_y ,bullet_group, zombie_group):
-        Plant.__init__(self, x, y, c.GLOOMSHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y,map_y ,bullet_group, zombie_group, left = True):
+        Plant.__init__(self, x, y, c.GLOOMSHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.attack_radius = 240 # 设置多嘴喷菇的攻击半径
         self.shoot_timer = 0
         self.show_attack_frames = True
@@ -2022,8 +2030,8 @@ class GloomShroom(Plant):
 
 
 class IceFrozenPlot(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.ICEFROZENPLOT, c.INF, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.ICEFROZENPLOT, c.INF, None, left=left)
         self.timer = 0
         self.attack_check = c.CHECK_ATTACK_NEVER
 
@@ -2035,8 +2043,8 @@ class IceFrozenPlot(Plant):
 
 
 class Garlic(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.GARLIC, c.GARLIC_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.GARLIC, c.GARLIC_HEALTH, None, left=left)
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
@@ -2060,8 +2068,8 @@ class Garlic(Plant):
             self.cracked2 = True
 
 class PumpkinHead(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.PUMPKINHEAD, c.WALLNUT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.PUMPKINHEAD, c.WALLNUT_HEALTH, None, left=left)
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
@@ -2088,8 +2096,8 @@ class PumpkinHead(Plant):
 
 
 class GiantWallNut(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.GIANTWALLNUT, 1, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.GIANTWALLNUT, 1, None, left=left)
         self.init_rect = self.rect.copy()
         self.rotate_degree = 0
         self.animate_interval = 200
