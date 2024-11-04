@@ -943,9 +943,9 @@ class Level(tool.State):
             case c.SQUASH:
                 new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], left=left)
             case c.SPIKEWEED:
-                new_plant = plant.Spikeweed(x, y)
+                new_plant = plant.Spikeweed(x, y, left=left)
             case c.SPIKEROCK:
-                new_plant = plant.Spikerock(x, y)
+                new_plant = plant.Spikerock(x, y, left=left)
             case c.JALAPENO:
                 new_plant = plant.Jalapeno(x, y, left=left)
             case c.SCAREDYSHROOM:
