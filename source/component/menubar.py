@@ -251,7 +251,7 @@ class ZombieBar():
         self.image = tool.get_image(tool.GFX[name], *frame_rect, c.WHITE, 1)
 
     def updateCard(self):
-        print(self.card_list,c.ZOMBIE_WEIGHT_LIST)
+        # print(self.card_list,c.ZOMBIE_WEIGHT_LIST)
         self.showCard = random.choices(self.card_list,weights=c.ZOMBIE_WEIGHT_LIST,k=1)[0]
         # self.showCard = self.card_list[-1] # 测试冰车
 
