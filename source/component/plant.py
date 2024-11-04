@@ -489,7 +489,7 @@ class PeaShooter(Plant):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:      
-            bullet_x = self.rect.right - 15 if not self.left else self.rect.left + 15
+            bullet_x = self.rect.right - 15 if self.left else self.rect.left + 15
             self.bullet_group.add(Bullet(bullet_x, self.rect.y, self.rect.y,
                                          c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
@@ -505,7 +505,7 @@ class RepeaterPea(Plant):
     def __init__(self, x, y, bullet_group, left = True):
         Plant.__init__(self, x, y, c.REPEATERPEA, c.PLANT_HEALTH, bullet_group, left = left)
         self.shoot_timer = 0
-        self.bullet_begin_x = self.rect.left + 15 if left else self.rect.left - 15
+        self.bullet_begin_x = self.rect.left - 15 if not left else self.rect.right - 15
 
         # 是否发射第一颗
         self.first_shot = False
@@ -536,7 +536,7 @@ class MachineGunner(Plant):
     def __init__(self, x, y, bullet_group, left = True):
         Plant.__init__(self, x, y, c.MACHINEGUNNER, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
-        self.bullet_begin_x = self.rect.left + 15 if left else self.rect.left - 15
+        self.bullet_begin_x = self.rect.left - 15 if not left else self.rect.right - 15
         
         # 是否发射第一颗
         self.first_shot = False
@@ -587,7 +587,7 @@ class ThreePeaShooter(Plant):
         self.map_y = map_y
         self.bullet_groups = bullet_groups
         self.background_type = background_type
-        self.bullet_begin_x = self.rect.left + 15 if left else self.rect.left - 15
+        self.bullet_begin_x = self.rect.left - 15 if not left else self.rect.right - 15
 
     def attacking(self):
         if self.shoot_timer == 0:
@@ -621,12 +621,13 @@ class SnowPeaShooter(Plant):
     def __init__(self, x, y, bullet_group, left = True):
         Plant.__init__(self, x, y, c.SNOWPEASHOOTER, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
-        self.bullet_begin_x = self.rect.left + 15 if left else self.rect.left - 15
+        self.bullet_begin_x = self.rect.left - 15 if not left else self.rect.right - 15
 
     def attacking(self):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
+            # print(self.bullet_begin_x-self.rect.left)
             self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y, self.rect.y,
                                          c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, self.left, effect=c.BULLET_EFFECT_ICE))
             self.shoot_timer = self.current_time
@@ -753,11 +754,11 @@ class Chomper(Plant):
             return False
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
-        elif not self.left and (self.state == c.IDLE and zombie.state != c.DIGEST and
+        elif self.left and (self.state == c.IDLE and zombie.state != c.DIGEST and
             self.rect.x <= zombie.rect.centerx and (not zombie.losthead) and
             (self.rect.x + c.GRID_X_SIZE*2.7 >= zombie.rect.centerx)):
             return True
-        elif self.left and (self.state == c.IDLE and zombie.state != c.DIGEST and
+        elif not self.left and (self.state == c.IDLE and zombie.state != c.DIGEST and
             self.rect.right >= zombie.rect.centerx and (not zombie.losthead) and
             (self.rect.right - c.GRID_X_SIZE*2.7 <= zombie.rect.centerx)):
             return True
