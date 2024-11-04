@@ -1011,6 +1011,60 @@ class Spikeweed(Plant):
                 self.health = 0
             # 播放攻击音效，同子弹打击
             c.SOUND_BULLET_EXPLODE.play()
+            
+            
+class Spikerock(Plant):
+    def __init__(self, x, y):
+        Plant.__init__(self, x, y, c.SPIKEROCK, c.PLANT_HEALTH, None, scale=0.9)
+        self.animate_interval = 70
+        self.attack_timer = 0
+        self.solid = 2
+
+    def setIdle(self):
+        self.animate_interval = 70
+        self.state = c.IDLE
+
+    def canAttack(self, zombie):
+        # 地刺能不能扎的判据：
+        # 僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
+        # 暂时不能用碰撞判断，平衡性不好
+        if ((-40 <= zombie.rect.centerx - self.rect.centerx <= 40)
+        or (zombie.rect.left <= self.rect.x <= zombie.rect.right 
+            and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
+            return True
+        return False
+
+    def setAttack(self, zombie_group):
+        self.zombie_group = zombie_group
+        self.animate_interval = 35
+        self.state = c.ATTACK
+        if self.hit_timer != 0:
+            self.hit_timer = self.current_time - 500
+
+    def attacking(self):
+        if self.hit_timer == 0:
+            self.hit_timer = self.current_time - 500
+        elif (self.current_time - self.attack_timer) >= 700:
+            self.attack_timer = self.current_time
+            # 最后再来判断攻击是否要杀死自己
+            killSelf = self.solid == 0
+            for zombie in self.zombie_group:
+                if self.canAttack(zombie):
+                    # 有车的僵尸
+                    if zombie.name in {c.ZOMBONI} and zombie.health != zombie.losthead_health:
+                        zombie.health = zombie.losthead_health
+                        zombie.setDie()
+                        self.solid -= 1
+                        print(self.solid)
+                        killSelf = self.solid == 0
+                    else:
+                        zombie.setDamage(40, damage_type=c.ZOMBIE_COMMON_DAMAGE)
+            if killSelf:
+                self.health = 0
+            # 播放攻击音效，同子弹打击
+            c.SOUND_BULLET_EXPLODE.play()
+
+
 
 
 class Jalapeno(Plant):  # 火爆辣椒
