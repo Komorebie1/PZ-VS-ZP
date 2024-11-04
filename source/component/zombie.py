@@ -206,9 +206,9 @@ class Zombie(pg.sprite.Sprite):
             self.handleGarlicYChange()
             self.walk_timer = self.current_time
             if self.is_hypno:
-                self.rect.x += 1
+                self.rect.x += self.speed * self.getDirection()
             else:
-                self.rect.x -= 1
+                self.rect.x -= self.speed * self.getDirection()
 
     def handleGarlicYChange(self):
         if self.target_y_change < 0:
@@ -519,8 +519,8 @@ class Zombie(pg.sprite.Sprite):
 
 
 class ZombieHead(Zombie):
-    def __init__(self, x, y):
-        Zombie.__init__(self, x, y, c.ZOMBIE_HEAD, 0)
+    def __init__(self, x, y, left = True):
+        Zombie.__init__(self, x, y, c.ZOMBIE_HEAD, 0, left=left)
         self.state = c.DIE
 
     def loadImages(self):
@@ -534,8 +534,8 @@ class ZombieHead(Zombie):
 
 
 class NormalZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.NORMAL_ZOMBIE, head_group)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.NORMAL_ZOMBIE, head_group, left=left)
 
     def loadImages(self):
         self.walk_frames = []
@@ -564,8 +564,8 @@ class NormalZombie(Zombie):
 
 # 路障僵尸
 class ConeHeadZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, head_group, helmet_health=c.CONEHEAD_HEALTH)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.CONEHEAD_ZOMBIE, head_group, helmet_health=c.CONEHEAD_HEALTH, left=left)
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -600,8 +600,8 @@ class ConeHeadZombie(Zombie):
 
 
 class BucketHeadZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.BUCKETHEAD_ZOMBIE, head_group, helmet_health=c.BUCKETHEAD_HEALTH)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.BUCKETHEAD_ZOMBIE, head_group, helmet_health=c.BUCKETHEAD_HEALTH, left=left)
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -636,8 +636,8 @@ class BucketHeadZombie(Zombie):
 
 
 class FlagZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.FLAG_ZOMBIE, head_group)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.FLAG_ZOMBIE, head_group, left=left)
         self.speed = 1.25
 
     def loadImages(self):
@@ -667,8 +667,8 @@ class FlagZombie(Zombie):
 
 
 class NewspaperZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmet_type2_health=c.NEWSPAPER_HEALTH)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmet_type2_health=c.NEWSPAPER_HEALTH, left=left)
         self.speed_up = False
 
     def loadImages(self):
@@ -725,9 +725,9 @@ class NewspaperZombie(Zombie):
             if self.frames == self.lostnewspaper_frames:
                 pass
             elif self.is_hypno:
-                self.rect.x += 1
+                self.rect.x += self.speed * self.getDirection()
             else:
-                self.rect.x -= 1
+                self.rect.x -= self.speed * self.getDirection()
 
     def animation(self):
         if self.state == c.FREEZE:
@@ -761,8 +761,8 @@ class NewspaperZombie(Zombie):
             self.image.set_alpha(192)
 
 class FootballZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.FOOTBALL_ZOMBIE, head_group, helmet_health=c.FOOTBALL_HELMET_HEALTH)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.FOOTBALL_ZOMBIE, head_group, helmet_health=c.FOOTBALL_HELMET_HEALTH, left=left)
         self.speed = 1.88
         self.animate_interval = 50
         self.walk_animate_interval = 50
@@ -802,8 +802,8 @@ class FootballZombie(Zombie):
         self.frames = self.helmet_walk_frames
 
 class DuckyTubeZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.DUCKY_TUBE_ZOMBIE, head_group, can_swim=True)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.DUCKY_TUBE_ZOMBIE, head_group, can_swim=True, left=left)
 
     def loadImages(self):
         self.walk_frames = []
@@ -833,8 +833,8 @@ class DuckyTubeZombie(Zombie):
         self.frames = self.walk_frames
 
 class ConeHeadDuckyTubeZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.CONEHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmet_health=c.CONEHEAD_HEALTH ,can_swim=True)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.CONEHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmet_health=c.CONEHEAD_HEALTH ,can_swim=True, left=left)
         
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -871,8 +871,8 @@ class ConeHeadDuckyTubeZombie(Zombie):
 
 
 class BucketHeadDuckyTubeZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmet_health=c.BUCKETHEAD_HEALTH ,can_swim=True)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE, head_group, helmet_health=c.BUCKETHEAD_HEALTH ,can_swim=True, left=left)
         
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -909,8 +909,8 @@ class BucketHeadDuckyTubeZombie(Zombie):
 
 
 class ScreenDoorZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.SCREEN_DOOR_ZOMBIE, head_group, helmet_type2_health=c.SCREEN_DOOR_HEALTH)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.SCREEN_DOOR_ZOMBIE, head_group, helmet_type2_health=c.SCREEN_DOOR_HEALTH, left=left)
 
     def loadImages(self):
         self.helmet_walk_frames = []
@@ -945,8 +945,8 @@ class ScreenDoorZombie(Zombie):
 
 
 class PoleVaultingZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.POLE_VAULTING_ZOMBIE, head_group=head_group, body_health=c.POLE_VAULTING_HEALTH, losthead_health=c.POLE_VAULTING_LOSTHEAD_HEALTH)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.POLE_VAULTING_ZOMBIE, head_group=head_group, body_health=c.POLE_VAULTING_HEALTH, losthead_health=c.POLE_VAULTING_LOSTHEAD_HEALTH, left=left)
         self.speed = 1.88
         self.jumped = False
         self.jumping = False
@@ -1001,9 +1001,9 @@ class PoleVaultingZombie(Zombie):
             if self.state == c.WALK:
                 if self.jumping and (not self.jumped):
                     if self.successfullyJumped:
-                        self.rect.x -= 5
+                        self.rect.x -= 5 * self.getDirection()
                     else:
-                        self.rect.x -= 1
+                        self.rect.x -= 1 * self.getDirection()
             if self.frame_index >= self.frame_num:
                 if self.state == c.DIE:
                     self.kill()
@@ -1049,8 +1049,8 @@ class PoleVaultingZombie(Zombie):
 
 # 注意：冰车僵尸移动变速
 class Zomboni(Zombie):
-    def __init__(self, x, y, plant_group, map, IceFrozenPlot):
-        Zombie.__init__(self, x, y, c.ZOMBONI, body_health=c.ZOMBONI_HEALTH)
+    def __init__(self, x, y, plant_group, map, IceFrozenPlot, left = True):
+        Zombie.__init__(self, x, y, c.ZOMBONI, body_health=c.ZOMBONI_HEALTH, left=left)
         self.plant_group = plant_group
         self.map = map
         self.IceFrozenPlot = IceFrozenPlot
@@ -1105,9 +1105,9 @@ class Zomboni(Zombie):
         if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()) and (not self.losthead):
             self.walk_timer = self.current_time
             if self.is_hypno:
-                self.rect.x += 1
+                self.rect.x += self.speed * self.getDirection()
             else:
-                self.rect.x -= 1
+                self.rect.x -= self.speed * self.getDirection()
 
             # 行进时碾压
             for plant in self.plant_group:
@@ -1118,7 +1118,7 @@ class Zomboni(Zombie):
                     plant.health -= 8000
 
             # 造冰
-            map_x, map_y = self.map.getMapIndex(self.rect.right - 40, self.rect.bottom)
+            map_x, map_y = self.map.getMapIndex(self.rect.right - 40 if self.left else self.rect.left + 40, self.rect.bottom)
             if 0 <= map_x < c.GRID_X_LEN:
                 if c.ICEFROZENPLOT not in self.map.map[map_y][map_x]:
                     x, y = self.map.getMapGridPos(map_x, map_y)
@@ -1136,8 +1136,8 @@ class Zomboni(Zombie):
 
 
 class SnorkelZombie(Zombie):
-    def __init__(self, x, y, head_group):
-        Zombie.__init__(self, x, y, c.SNORKELZOMBIE, can_swim=True)
+    def __init__(self, x, y, head_group, left = True):
+        Zombie.__init__(self, x, y, c.SNORKELZOMBIE, can_swim=True, left=left)
         self.speed = 1.6
         self.walk_animate_interval = 50
         self.canSetAttack = True
@@ -1216,9 +1216,9 @@ class SnorkelZombie(Zombie):
             if (self.frames == self.float_frames) or (self.frames == self.sink_frames):
                 pass
             elif self.is_hypno:
-                self.rect.x += 1
+                self.rect.x += self.speed * self.getDirection()
             else:
-                self.rect.x -= 1
+                self.rect.x -= self.speed * self.getDirection()
 
     def animation(self):
         if self.state == c.FREEZE:

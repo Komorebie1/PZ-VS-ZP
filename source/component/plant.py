@@ -1482,14 +1482,14 @@ class TorchWood(Plant):
             and i.passed_torchwood_x != self.rect.centerx
             and abs(i.rect.centerx - self.rect.centerx) <= 20):
                 self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
-                                        c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY,
+                                        c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, i.left,
                                         effect=c.BULLET_EFFECT_UNICE, passed_torchwood_x=self.rect.centerx))
                 i.kill()
             elif (i.name == c.BULLET_PEA_ICE
             and i.passed_torchwood_x != self.rect.centerx
             and abs(i.rect.centerx - self.rect.centerx)):
                 self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
-                                        c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL,
+                                        c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL,i.left,
                                         effect=None, passed_torchwood_x=self.rect.centerx))
                 i.kill()
 

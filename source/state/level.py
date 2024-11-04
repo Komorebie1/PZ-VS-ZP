@@ -1016,7 +1016,7 @@ class Level(tool.State):
         # 播放种植音效
         c.SOUND_PLANT.play()
 
-    def addZombie(self):
+    def addZombie(self, left = test_direction):
         pos = self.canPlaceZombie()
         if pos is None:
             return
@@ -1031,28 +1031,28 @@ class Level(tool.State):
 
         match self.zombie_name:
             case c.NORMAL_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.NormalZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.NormalZombie(x, y, self.head_group, left=left))
             case c.CONEHEAD_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.ConeHeadZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.ConeHeadZombie(x, y, self.head_group, left=left))
             case c.BUCKETHEAD_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.BucketHeadZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.BucketHeadZombie(x, y, self.head_group, left=left))
             case c.FLAG_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.FlagZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.FlagZombie(x, y, self.head_group, left=left))
             case c.NEWSPAPER_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.NewspaperZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.NewspaperZombie(x, y, self.head_group, left=left))
             case c.FOOTBALL_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.FootballZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.FootballZombie(x, y, self.head_group, left=left))
             case c.DUCKY_TUBE_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.DuckyTubeZombie(x, y, self.head_group, left=left))
             case c.CONEHEAD_DUCKY_TUBE_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.ConeHeadDuckyTubeZombie(x, y, self.head_group, left=left))
             case c.BUCKETHEAD_DUCKY_TUBE_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.BucketHeadDuckyTubeZombie(x, y, self.head_group, left=left))
             case c.SCREEN_DOOR_ZOMBIE:
-                self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.ScreenDoorZombie(x, y, self.head_group, left=left))
             case c.POLE_VAULTING_ZOMBIE:
                 # 本来撑杆跳生成位置不同，对齐左端可认为修正了一部分（看作移动了70），只需要相对修改即可
-                self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(x, y, self.head_group))
+                self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(x, y, self.head_group, left=left))
             case c.ZOMBONI:
                 # 冰车僵尸生成位置不同
                 self.zombie_groups[map_y].add(zombie.Zomboni(x, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
