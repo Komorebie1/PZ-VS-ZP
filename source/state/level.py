@@ -7,6 +7,14 @@ from .. import constants as c
 from ..component import map, plant, zombie, menubar
 # logger = logging.getLogger("main")
 
+test_direction = False  # False for right, True for left(only for test)
+
+'''
+修改左右需要修改 play() 中三个地方，分别是：
+- addPlant or addZombie
+- setMouseImage
+'''
+
 class Level(tool.State):
     def __init__(self):
         tool.State.__init__(self)
@@ -503,7 +511,7 @@ class Level(tool.State):
         frame_rect = (0, 0, 500, 500)
         self.big_menu = tool.get_image_alpha(tool.GFX[c.BIG_MENU], *frame_rect, c.BLACK, 1.1)
         self.big_menu_rect = self.big_menu.get_rect()
-        self.big_menu_rect.x = 150
+        self.big_menu_rect.x = 150 + c.BUTTON_OFFSET
         self.big_menu_rect.y = 0
 
         # 返回按钮，用字体渲染实现，增强灵活性
@@ -511,7 +519,7 @@ class Level(tool.State):
         self.return_button = pg.Surface((376, 96))
         self.return_button.set_colorkey(c.BLACK)    # 避免多余区域显示成黑色
         self.return_button_rect = self.return_button.get_rect()
-        self.return_button_rect.x = 220
+        self.return_button_rect.x = 220 + c.BUTTON_OFFSET
         self.return_button_rect.y = 440
         font = pg.font.Font(c.FONT_PATH, 40)
         font.bold = True
@@ -525,14 +533,14 @@ class Level(tool.State):
         frame_rect = (0, 0, 207, 45)
         self.restart_button = tool.get_image_alpha(tool.GFX[c.RESTART_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.restart_button_rect = self.restart_button.get_rect()
-        self.restart_button_rect.x = 295
+        self.restart_button_rect.x = 295 + c.BUTTON_OFFSET
         self.restart_button_rect.y = 325
 
         # 主菜单按钮
         frame_rect = (0, 0, 206, 43)
         self.mainMenu_button = tool.get_image_alpha(tool.GFX[c.MAINMENU_BUTTON], *frame_rect, c.BLACK, 1.1)
         self.mainMenu_button_rect = self.mainMenu_button.get_rect()
-        self.mainMenu_button_rect.x = 299
+        self.mainMenu_button_rect.x = 299 + c.BUTTON_OFFSET
         self.mainMenu_button_rect.y = 372
 
         # 音量+、音量-
@@ -547,7 +555,7 @@ class Level(tool.State):
         sign_rect.y = -4
         self.sound_volume_plus_button.blit(sign, sign_rect)
         self.sound_volume_plus_button_rect = self.sound_volume_plus_button.get_rect()
-        self.sound_volume_plus_button_rect.x = 500
+        self.sound_volume_plus_button_rect.x = 500 + c.BUTTON_OFFSET
         # 音量-
         self.sound_volume_minus_button = tool.get_image_alpha(tool.GFX[c.SOUND_VOLUME_BUTTON], *frame_rect, c.BLACK)
         sign = font.render("-", True, c.YELLOWGREEN)
@@ -556,7 +564,7 @@ class Level(tool.State):
         sign_rect.y = -8
         self.sound_volume_minus_button.blit(sign, sign_rect)
         self.sound_volume_minus_button_rect = self.sound_volume_minus_button.get_rect()
-        self.sound_volume_minus_button_rect.x = 450
+        self.sound_volume_minus_button_rect.x = 450 + c.BUTTON_OFFSET
         # 音量+、-应当处于同一高度
         self.sound_volume_minus_button_rect.y = self.sound_volume_plus_button_rect.y = 250
 
@@ -671,7 +679,7 @@ class Level(tool.State):
                 self.removeMouseImagePlus()
                 return
 
-    def play(self, mouse_pos, mouse_click):
+    def play(self, mouse_pos, mouse_click, left = test_direction):
         # 如果暂停
         if self.show_game_menu:
             self.pauseAndCheckMenuOptions(mouse_pos, mouse_click)
@@ -737,7 +745,7 @@ class Level(tool.State):
         if not self.drag_plant and not self.drag_zombie and mouse_pos and mouse_click[0] and not clicked_sun:
             self.click_result = self.menubar.checkCardClick(mouse_pos)
             if self.click_result:
-                self.setupMouseImage(self.click_result[0], self.click_result[1])
+                self.setupMouseImage(self.click_result[0], self.click_result[1], left=left)
                 self.click_result[1].clicked = True
                 clicked_cards_or_map = True
                 # 播放音效
@@ -745,7 +753,7 @@ class Level(tool.State):
             else:
                 self.click_result = self.zombiebar.checkCardClick(mouse_pos)
                 if self.click_result:
-                    self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False)
+                    self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False, left=left)
                     self.click_result[1].clicked = True
                     clicked_cards_or_map = True
                     # 播放音效
@@ -890,7 +898,7 @@ class Level(tool.State):
         return self.map.checkZombieToPlace(x, y)
 
     # 种植物
-    def addPlant(self):
+    def addPlant(self, left = test_direction):
         pos = self.canSeedPlant(self.plant_name)
         if pos is None:
             return
@@ -907,78 +915,78 @@ class Level(tool.State):
         # 新植物也需要在这里声明
         match self.plant_name:
             case c.SUNFLOWER:
-                new_plant = plant.SunFlower(x, y, self.sun_group)
+                new_plant = plant.SunFlower(x, y, self.sun_group, left=left)
             case c.GLOOMSHROOM:
-                new_plant = plant.GloomShroom(x,y,map_y,self.bullet_groups[map_y],self.zombie_groups)
+                new_plant = plant.GloomShroom(x,y,map_y,self.bullet_groups[map_y],self.zombie_groups, left=left)
             case c.TWINSUNFLOWER:
-                new_plant = plant.TwinSunFlower(x, y, self.sun_group)
+                new_plant = plant.TwinSunFlower(x, y, self.sun_group, left=left)
             case c.PEASHOOTER:
-                new_plant = plant.PeaShooter(x, y, self.bullet_groups[map_y])
+                new_plant = plant.PeaShooter(x, y, self.bullet_groups[map_y], left=left)
             case c.SNOWPEASHOOTER:
-                new_plant = plant.SnowPeaShooter(x, y, self.bullet_groups[map_y])
+                new_plant = plant.SnowPeaShooter(x, y, self.bullet_groups[map_y], left=left)
             case c.WALLNUT:
-                new_plant = plant.WallNut(x, y)
+                new_plant = plant.WallNut(x, y, left=left)
             case c.CHERRYBOMB:
-                new_plant = plant.CherryBomb(x, y)
+                new_plant = plant.CherryBomb(x, y, left=left)
             case c.THREEPEASHOOTER:
-                new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y, self.map.background_type)
+                new_plant = plant.ThreePeaShooter(x, y, self.bullet_groups, map_y, self.map.background_type, left=left)
             case c.REPEATERPEA:
-                new_plant = plant.RepeaterPea(x, y, self.bullet_groups[map_y])
+                new_plant = plant.RepeaterPea(x, y, self.bullet_groups[map_y], left=left)
             case c.MACHINEGUNNER:
-                new_plant = plant.MachineGunner(x, y, self.bullet_groups[map_y])
+                new_plant = plant.MachineGunner(x, y, self.bullet_groups[map_y], left=left)
             case c.CHOMPER:
-                new_plant = plant.Chomper(x, y)
+                new_plant = plant.Chomper(x, y, left=left)
             case c.PUFFSHROOM:
-                new_plant = plant.PuffShroom(x, y, self.bullet_groups[map_y])
+                new_plant = plant.PuffShroom(x, y, self.bullet_groups[map_y], left=left)
             case c.POTATOMINE:
-                new_plant = plant.PotatoMine(x, y)
+                new_plant = plant.PotatoMine(x, y, left=left)
             case c.SQUASH:
-                new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT])
+                new_plant = plant.Squash(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], left=left)
             case c.SPIKEWEED:
-                new_plant = plant.Spikeweed(x, y)
+                new_plant = plant.Spikeweed(x, y, left=left)
             case c.JALAPENO:
-                new_plant = plant.Jalapeno(x, y)
+                new_plant = plant.Jalapeno(x, y, left=left)
             case c.SCAREDYSHROOM:
-                new_plant = plant.ScaredyShroom(x, y, self.bullet_groups[map_y])
+                new_plant = plant.ScaredyShroom(x, y, self.bullet_groups[map_y], left=left)
             case c.SUNSHROOM:
-                new_plant = plant.SunShroom(x, y, self.sun_group)
+                new_plant = plant.SunShroom(x, y, self.sun_group, left=left)
             case c.ICESHROOM:
-                new_plant = plant.IceShroom(x, y)
+                new_plant = plant.IceShroom(x, y, left=left)
             case c.HYPNOSHROOM:
-                new_plant = plant.HypnoShroom(x, y)
+                new_plant = plant.HypnoShroom(x, y, left=left)
             case c.WALLNUTBOWLING:
-                new_plant = plant.WallNutBowling(x, y, map_y, self)
+                new_plant = plant.WallNutBowling(x, y, map_y, self, left=left)
             case c.REDWALLNUTBOWLING:
-                new_plant = plant.RedWallNutBowling(x, y)
+                new_plant = plant.RedWallNutBowling(x, y, left=left)
             case c.LILYPAD:
-                new_plant = plant.LilyPad(x, y)
+                new_plant = plant.LilyPad(x, y, left=left)
             case c.TORCHWOOD:
-                new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y])
+                new_plant = plant.TorchWood(x, y, self.bullet_groups[map_y], left=left)
             case c.STARFRUIT:
-                new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self)
+                new_plant = plant.StarFruit(x, y, self.bullet_groups[map_y], self, left=left)
             case c.COFFEEBEAN:
-                new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x], self.map, map_x)
+                new_plant = plant.CoffeeBean(x, y, self.plant_groups[map_y], self.map.map[map_y][map_x], self.map, map_x, left=left)
             case c.SEASHROOM:
-                new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y])
+                new_plant = plant.SeaShroom(x, y, self.bullet_groups[map_y], left=left)
             case c.TALLNUT:
-                new_plant = plant.TallNut(x, y)
+                new_plant = plant.TallNut(x, y, left=left)
             case c.TANGLEKLEP:
-                new_plant = plant.TangleKlep(x, y)
+                new_plant = plant.TangleKlep(x, y, left=left)
             case c.DOOMSHROOM:
                 if self.map.grid_height_size == c.GRID_Y_SIZE:
-                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2)
+                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=2, left=left)
                 else:
-                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3)
+                    new_plant = plant.DoomShroom(x, y, self.map.map[map_y][map_x][c.MAP_PLANT], explode_y_range=3, left=left)
             case c.GRAVEBUSTER:
-                new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x)
+                new_plant = plant.GraveBuster(x, y, self.plant_groups[map_y], self.map, map_x, left=left)
             case c.FUMESHROOM:
-                new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y])
+                new_plant = plant.FumeShroom(x, y, self.bullet_groups[map_y], self.zombie_groups[map_y], left=left)
             case c.GARLIC:
-                new_plant = plant.Garlic(x, y)
+                new_plant = plant.Garlic(x, y, left=left)
             case c.PUMPKINHEAD:
-                new_plant = plant.PumpkinHead(x, y)
+                new_plant = plant.PumpkinHead(x, y, left=left)
             case c.GIANTWALLNUT:
-                new_plant = plant.GiantWallNut(x, y)
+                new_plant = plant.GiantWallNut(x, y, left=left)
 
 
         if ((new_plant.name in c.CAN_SLEEP_PLANTS)
@@ -1085,7 +1093,7 @@ class Level(tool.State):
         else:
             self.hint_plant = False
 
-    def setupMouseImage(self, name, select, colorkey=c.BLACK, is_plant=True):
+    def setupMouseImage(self, name, select, colorkey=c.BLACK, is_plant=True, left = test_direction):
         frame_list = tool.GFX[name]
         if name in c.PLANT_RECT:
             data = c.PLANT_RECT[name]
@@ -1094,10 +1102,10 @@ class Level(tool.State):
             x, y = 0, 0
             rect = frame_list[0].get_rect()
             width, height = rect.w, rect.h
-        if name is "NewspaperZombie":  # 特殊处理白色边框的
-            self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey=c.WHITE)
+        if name == "NewspaperZombie":  # 特殊处理白色边框的
+            self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey=c.WHITE, left=left)
         else:
-            self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey=colorkey)
+            self.mouse_image = tool.get_image(frame_list[0], x, y, width, height, colorkey=colorkey, left=left)
 
         self.mouse_rect = self.mouse_image.get_rect()
         if is_plant:
@@ -1659,7 +1667,7 @@ class Level(tool.State):
         font = pg.font.Font(c.FONT_PATH, 30)
         volume_tips = font.render(f"音量：{round(self.game_info[c.SOUND_VOLUME]*100):3}%", True, c.LIGHTGRAY)
         volume_tips_rect = volume_tips.get_rect()
-        volume_tips_rect.x = 275
+        volume_tips_rect.x = 275 + c.BUTTON_OFFSET
         volume_tips_rect.y = 247
         surface.blit(volume_tips, volume_tips_rect)
 
