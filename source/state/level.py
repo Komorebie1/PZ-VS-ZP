@@ -561,7 +561,7 @@ class Level(tool.State):
                 c.SOUND_BUTTON_CLICK.play()
 
     def initPlay(self, card_list):
-        self.connect_server()
+        # self.connect_server()
         # 播放bgm
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, self.bgm))
@@ -1057,7 +1057,7 @@ class Level(tool.State):
             case c.SNORKELZOMBIE:
                 # 潜水僵尸生成位置不同
                 self.zombie_groups[map_y].add(zombie.SnorkelZombie(position, y, self.head_group))
-        self.send_process_zombie(map_y, name, position, y)
+        # self.send_process_zombie(map_y, name, position, y)
     # 能否种植物的判断：
     # 先判断位置是否合法 isValid(map_x, map_y)
     # 再判断位置是否可用 isMovable(map_x, map_y)
@@ -1170,7 +1170,7 @@ class Level(tool.State):
         else:
             mushroom_sleep = False
         self.plant_groups[map_y].add(new_plant)
-        self.send_process_plant(x, y, map_x, map_y, new_plant.name)
+        # self.send_process_plant(x, y, map_x, map_y, new_plant.name)
         # 种植植物后应当刷新僵尸的攻击对象
         # 用元组表示植物的名称和格子坐标
         self.new_plant_and_positon = (new_plant.name, (map_x, map_y))
@@ -1565,7 +1565,8 @@ class Level(tool.State):
         # 避免僵尸在用铲子移除植物后还在原位啃食
         target_plant.health = 0
         target_plant.kill()
-        self.send_process_delete_plant(map_x, map_y)
+        # self.send_process_delete_plant(map_x, map_y)
+        
 
     def checkPlant(self, target_plant, i):
         zombie_len = len(self.zombie_groups[i])
