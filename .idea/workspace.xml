@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87cb3c6b-dbf2-47ca-9b25-5347884d79cf" name="Changes" comment="联机和UI界面文件创建">
-      <change afterPath="$PROJECT_DIR$/player1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/player2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/component/menubar.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/component/menubar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/source/state/level.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/state/level.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/tool.py" beforeDir="false" afterPath="$PROJECT_DIR$/source/tool.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,8 +193,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.player1 (1)" />
-        <item itemvalue="Python.player2" />
         <item itemvalue="Python.server (1)" />
+        <item itemvalue="Python.player2" />
         <item itemvalue="Python.start" />
         <item itemvalue="Python.tool" />
       </list>
@@ -251,6 +247,7 @@
       <workItem from="1730730724669" duration="7000" />
       <workItem from="1730730752259" duration="3425000" />
       <workItem from="1730810645637" duration="16000" />
+      <workItem from="1730812088160" duration="357000" />
     </task>
     <task id="LOCAL-00001" summary="联机和UI界面文件创建">
       <option name="closed" value="true" />
@@ -290,14 +287,14 @@
     <option name="LAST_COMMIT_MESSAGE" value="联机和UI界面文件创建" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/PZVZP$player2.coverage" NAME="player2 Coverage Results" MODIFIED="1730733886016" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PZVZP$player2.coverage" NAME="player2 Coverage Results" MODIFIED="1730812151419" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PZVZP$player1.coverage" NAME="player1 Coverage Results" MODIFIED="1729685695601" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Online" />
     <SUITE FILE_PATH="coverage/PZVZP$tool.coverage" NAME="tool Coverage Results" MODIFIED="1730344075066" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/source" />
-    <SUITE FILE_PATH="coverage/PZVZP$player1__1_.coverage" NAME="player1 (1) Coverage Results" MODIFIED="1730733888331" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PZVZP$player1__1_.coverage" NAME="player1 (1) Coverage Results" MODIFIED="1730812444773" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PZVZP$start.coverage" NAME="start Coverage Results" MODIFIED="1730344454424" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PZVZP$pypvz.coverage" NAME="pypvz Coverage Results" MODIFIED="1730130623460" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PZVZP$server.coverage" NAME="server Coverage Results" MODIFIED="1729685690807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Online" />
-    <SUITE FILE_PATH="coverage/PZVZP$server__1_.coverage" NAME="server (1) Coverage Results" MODIFIED="1730733883883" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PZVZP$server__1_.coverage" NAME="server (1) Coverage Results" MODIFIED="1730812440810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PZVZP$UI.coverage" NAME="UI Coverage Results" MODIFIED="1729410128615" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PZVZP$UI__1_.coverage" NAME="UI (1) Coverage Results" MODIFIED="1729691576993" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/UI" />
   </component>
