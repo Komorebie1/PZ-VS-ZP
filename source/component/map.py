@@ -46,7 +46,10 @@ class Map():
                         for y in range(self.height)
                         ]
         else:
-            self.width = c.GRID_X_LEN
+            if self.background_type == c.BACKGROUND_BIG:
+                self.width = c.GRID_BIG_X_LEN
+            else:
+                self.width = c.GRID_X_LEN
             self.height = c.GRID_Y_LEN
             self.grid_height_size = c.GRID_Y_SIZE
             self.map =  [   [self.initMapGrid(c.MAP_GRASS)
@@ -161,6 +164,10 @@ class Map():
             else:
                 grid_y = (y - 20*(6 - grid_x)) // 85
             return (grid_x, grid_y)
+        elif self.background_type == c.BACKGROUND_BIG:
+            x -= c.MAP_OFFSET_X + 220
+            y -= c.MAP_OFFSET_Y
+            return (x // c.GRID_X_SIZE, y // c.GRID_Y_SIZE)
         else:
             x -= c.MAP_OFFSET_X
             y -= c.MAP_OFFSET_Y
@@ -173,6 +180,9 @@ class Map():
         elif self.background_type in c.ON_ROOF_BACKGROUNDS:
             return (map_x * c.GRID_ROOF_X_SIZE + c.GRID_ROOF_X_SIZE//2 + c.MAP_ROOF_OFFSET_X,
                     map_y * c.GRID_ROOF_Y_SIZE + 20 * max(0, (6 - map_y)) + c.GRID_ROOF_Y_SIZE//5 * 3 + c.MAP_POOL_OFFSET_Y)
+        elif self.background_type == c.BACKGROUND_BIG:
+            return (map_x * c.GRID_X_SIZE + c.GRID_X_SIZE//2 + c.MAP_OFFSET_X + 220,
+                    map_y * c.GRID_Y_SIZE + c.GRID_Y_SIZE//5 * 3 + c.MAP_OFFSET_Y)
         else:
             return (map_x * c.GRID_X_SIZE + c.GRID_X_SIZE//2 + c.MAP_OFFSET_X,
                     map_y * c.GRID_Y_SIZE + c.GRID_Y_SIZE//5 * 3 + c.MAP_OFFSET_Y)
@@ -196,6 +206,13 @@ class Map():
         pos = None
         map_x, map_y = self.getMapIndex(x, y)
         if self.isValid(map_x, map_y) and self.isAvailable(map_x, map_y, plant_name):
+            pos = self.getMapGridPos(map_x, map_y)
+        return pos
+    
+    def checkZombieToPlace(self, x:int, y:int) -> tuple[int, int]:
+        pos = None
+        map_x, map_y = self.getMapIndex(x, y)
+        if self.isValid(map_x, map_y):
             pos = self.getMapGridPos(map_x, map_y)
         return pos
 
@@ -388,6 +405,15 @@ LEVEL_MAP_DATA = (
     c.SPAWN_ZOMBIES: c.SPAWN_ZOMBIES_AUTO,
     c.INCLUDED_ZOMBIES: (   c.NORMAL_ZOMBIE, c.CONEHEAD_ZOMBIE,
                             c.POLE_VAULTING_ZOMBIE, c.BUCKETHEAD_ZOMBIE),
+    c.NUM_FLAGS:3,
+},
+# 第15关 测试
+{
+    c.BACKGROUND_TYPE: 9,
+    c.GAME_TITLE: "多人模式",
+    c.SHOVEL: 1,
+    c.INIT_SUN_NAME: 10000,
+    c.SPAWN_ZOMBIES: c.SPAWN_NO_ZOMBIES,
     c.NUM_FLAGS:3,
 }
 )

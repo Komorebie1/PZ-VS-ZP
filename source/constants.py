@@ -29,8 +29,12 @@ MODE_LITTLEGAME = "littleGame"
 # 窗口大小
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+LEVEL_SCREEN_WIDTH = 1472
+LEVEL_SCREEN_HEIGHT = 600
 SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
+LEVEL_SCREEN_SIZE = (LEVEL_SCREEN_WIDTH, LEVEL_SCREEN_HEIGHT)
 
+BUTTON_OFFSET = 340
 
 # 选卡数量
 # 最大数量
@@ -54,6 +58,8 @@ GRID_ROOF_X_LEN = GRID_X_LEN
 GRID_ROOF_Y_LEN = GRID_Y_LEN
 GRID_ROOF_X_SIZE = GRID_X_SIZE
 GRID_ROOF_Y_SIZE = 85
+# BIG
+GRID_BIG_X_LEN = 12
 
 # 颜色
 WHITE        = (255, 255, 255)
@@ -138,6 +144,7 @@ BACKGROUND_ROOFNIGHT = 5
 BACKGROUND_WALLNUTBOWLING = 6
 BACKGROUND_SINGLE = 7
 BACKGROUND_TRIPLE = 8
+BACKGROUND_BIG = 9
 
 # 地图类型集合
 # 白天场地（泛指蘑菇睡觉的场地）
@@ -170,6 +177,7 @@ GRAVES_GRADE_INFO = (0, 4, 7, 11)
 
 # 僵尸生成方式
 SPAWN_ZOMBIES = "spawn_zombies"
+SPAWN_NO_ZOMBIES = 2
 SPAWN_ZOMBIES_AUTO = 1
 SPAWN_ZOMBIES_LIST = 0
 INCLUDED_ZOMBIES = "included_zombies"
@@ -209,6 +217,7 @@ MOVEBAR_BACKGROUND = "MoveBackground"
 PANEL_BACKGROUND = "PanelBackground"
 START_BUTTON = "StartButton"
 CARD_POOL = "card_pool"
+ZOMBIE_CARD_BAR = "ZombieCardBar"
 
 # 关于植物栏的像素设置
 PANEL_Y_START = 87
@@ -217,8 +226,9 @@ PANEL_Y_INTERNAL = 69
 PANEL_X_INTERNAL = 53
 BAR_CARD_X_INTERNAL = 51
 
-# 植物卡片信息索引
+# 植物、僵尸卡片信息索引
 PLANT_NAME_INDEX = 0
+ZOMBIE_NAME_INDEX = 0
 CARD_INDEX = 1
 SUN_INDEX = 2
 FROZEN_TIME_INDEX = 3
@@ -332,6 +342,10 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_SPIKEWEED := "card_spikeweed",
                 100,
                 7500),
+            (SPIKEROCK := "Spikerock",
+                CARD_SPIKEROCK := "card_spikerock",
+                100,
+                70),
             (TORCHWOOD := "TorchWood",
                 CARD_TORCHWOOD := "card_torchwood",
                 175,
@@ -355,7 +369,7 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (COFFEEBEAN := "CoffeeBean",
                 CARD_COFFEEBEAN := "card_coffeebean",
                 75,
-                7500),
+                7),#7500
             (GARLIC := "Garlic",
                 CARD_GARLIC := "card_garlic",
                 50,
@@ -368,6 +382,10 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_TWINSUNFLOWER := "card_twinsunflower",
                 50,
                 1000),
+            (GLOOMSHROOM := "GloomShroom",
+                CARD_GLOOMSHROOM := "card_gloomshroom",
+                50,
+                1),
             # 应当保证这3个在一般模式下不可选的特殊植物恒在最后
             (WALLNUTBOWLING := "WallNutBowling",
                 CARD_WALLNUT := "card_wallnut",
@@ -388,6 +406,26 @@ PLANT_CARD_INDEX = {item[PLANT_NAME_INDEX]: index for (index, item) in enumerate
 
 # 指定了哪些卡可选（排除坚果保龄球特殊植物）
 CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
+
+# 僵尸卡片信息汇总（包括僵尸名称, 卡片名称, 阳光, 冷却时间）
+ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间)
+    (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 0,10),
+    (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 0,1),
+    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 0,5),
+    (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 0,5),
+    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 0,5),
+    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 0,2),
+    (FOOTBALL_ZOMBIE := "Zomboni", CARD_FOOTBALLZOMBIE := "card_zomboni", 0, 0,1),
+)
+
+# 僵尸卡片信息索引
+ZOMBIE_CARD_INDEX = {item[0]: index for (index, item) in enumerate(ZOMBIE_CARD_INFO)}
+
+ZOMBIE_CARD_LIST = [ZOMBIE_CARD_INDEX[item] for item in ZOMBIE_CARD_INDEX]
+
+ZOMBIE_WEIGHT_NUM = [item[4] for (index, item) in enumerate(ZOMBIE_CARD_INFO)]
+
+ZOMBIE_WEIGHT_LIST = [x / sum(ZOMBIE_WEIGHT_NUM) for x in ZOMBIE_WEIGHT_NUM]
 
 
 # 植物集体属性集合
@@ -411,7 +449,7 @@ CAN_SKIP_ZOMBIE_COLLISION_CHECK = ( # 这里运用了集合运算
                 # 非植物对象
                 NON_PLANT_OBJECTS |
                 # 地刺类
-                {SPIKEWEED, }
+                {SPIKEWEED,SPIKEROCK}
 )
 
 # 死亡时不触发音效的对象
@@ -446,6 +484,7 @@ CAN_SLEEP_PLANTS = {
     FUMESHROOM, HYPNOSHROOM,
     SCAREDYSHROOM, ICESHROOM,
     DOOMSHROOM, SEASHROOM,
+    GLOOMSHROOM
 }
 
 # 选卡不推荐选择理由
@@ -486,6 +525,8 @@ BULLET_FIREBALL = "Fireball"
 BULLET_MUSHROOM = "BulletMushRoom"
 BULLET_SEASHROOM = "BulletSeaShroom"
 FUME = "Fume"
+GLOOM_FUME= "GloomFume"
+
 # 子弹伤害
 BULLET_DAMAGE_NORMAL = 20
 BULLET_DAMAGE_FIREBALL_BODY = 27 # 这是火球本体的伤害，注意不是40，本体(27) + 溅射(13)才是40
@@ -718,7 +759,7 @@ SOUNDS = (  # 程序交互等
 
 # 记录本地存储文件初始值
 INIT_USERDATA = {   
-                LEVEL_NUM:              14,
+                LEVEL_NUM:              15,
                 LITTLEGAME_NUM:         1,
                 LEVEL_COMPLETIONS:      0,
                 LITTLEGAME_COMPLETIONS: 0,

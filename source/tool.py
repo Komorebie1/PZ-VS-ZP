@@ -129,6 +129,10 @@ class Control():
         self.state_name = self.state.next
         persist = self.state.cleanup()
         self.state = self.state_dict[self.state_name]
+        if self.state_name == c.LEVEL:
+            pg.display.set_mode(c.LEVEL_SCREEN_SIZE)
+        elif self.state_name == c.MAIN_MENU:
+            pg.display.set_mode(c.SCREEN_SIZE)
         self.state.startup(self.current_time, persist)
 
     def event_loop(self):
@@ -157,7 +161,7 @@ class Control():
             self.clock.tick(self.fps)
 
 def get_image(  sheet:pg.Surface, x:int, y:int, width:int, height:int,
-                colorkey:tuple[int]=c.BLACK, scale:int=1) -> pg.Surface:
+                colorkey:tuple[int]=c.BLACK, scale:int=1, left = True) -> pg.Surface:
         # 不保留alpha通道的图片导入
         image = pg.Surface([width, height])
         rect = image.get_rect()
@@ -168,10 +172,12 @@ def get_image(  sheet:pg.Surface, x:int, y:int, width:int, height:int,
         image = pg.transform.scale(image,
                                    (int(rect.width*scale),
                                     int(rect.height*scale)))
+        if not left:
+            image = pg.transform.flip(image, True, False)
         return image
 
 def get_image_alpha(sheet:pg.Surface, x:int, y:int, width:int, height:int,
-                    colorkey:tuple[int]=c.BLACK, scale:int=1) -> pg.Surface:
+                    colorkey:tuple[int]=c.BLACK, scale:int=1, left = True) -> pg.Surface:
     # 保留alpha通道的图片导入
     image = pg.Surface([width, height], SRCALPHA)
     rect = image.get_rect()
@@ -181,6 +187,8 @@ def get_image_alpha(sheet:pg.Surface, x:int, y:int, width:int, height:int,
     image = pg.transform.scale(image,
                                 (int(rect.width*scale),
                                 int(rect.height*scale)))
+    if not left:
+            image = pg.transform.flip(image, True, False)
     return image  
         
 def load_image_frames(  directory:str, image_name:str,

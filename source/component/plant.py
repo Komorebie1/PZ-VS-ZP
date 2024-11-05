@@ -23,7 +23,7 @@ class Car(pg.sprite.Sprite):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.WALK:
             self.rect.x += 5
-        if self.rect.x > c.SCREEN_WIDTH + 25:
+        if self.rect.x > c.LEVEL_SCREEN_WIDTH + 25 - 250:
             self.dead = True
 
     def setWalk(self):
@@ -37,11 +37,12 @@ class Car(pg.sprite.Sprite):
 
 # 豌豆及孢子类普通子弹
 class Bullet(pg.sprite.Sprite):
-    def __init__(   self, x:int, start_y:int, dest_y:int, name:str, damage:int,
+    def __init__(   self, x:int, start_y:int, dest_y:int, name:str, damage:int,left:bool=True,
                     effect:str=None, passed_torchwood_x:int=None,
                     damage_type:str=c.ZOMBIE_DEAFULT_DAMAGE):
         pg.sprite.Sprite.__init__(self)
 
+        self.left = left
         self.name = name
         self.frames = []
         self.frame_index = 0
@@ -54,7 +55,7 @@ class Bullet(pg.sprite.Sprite):
         self.rect.y = start_y
         self.dest_y = dest_y
         self.y_vel = 15 if (dest_y > start_y) else -15
-        self.x_vel = 10
+        self.x_vel = 10 if left else -10
         self.damage = damage
         self.damage_type = damage_type
         self.effect = effect
@@ -75,7 +76,7 @@ class Bullet(pg.sprite.Sprite):
             width, height = rect.w, rect.h
 
         for frame in frame_list:
-            frames.append(tool.get_image(frame, x, y, width, height))
+            frames.append(tool.get_image(frame, x, y, width, height, left=self.left))
 
     def load_images(self):
         self.fly_frames = []
@@ -100,7 +101,7 @@ class Bullet(pg.sprite.Sprite):
                 if self.y_vel * (self.dest_y - self.rect.y) < 0:
                     self.rect.y = self.dest_y
             self.rect.x += self.x_vel
-            if self.rect.x >= c.SCREEN_WIDTH + 20:
+            if self.rect.x >= c.LEVEL_SCREEN_WIDTH + 20:
                 self.kill()
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
@@ -175,6 +176,52 @@ class Fume(pg.sprite.Sprite):
 
         for frame in frame_list:
             frames.append(tool.get_image(frame, x, y, width, height))
+            
+class GloomFume(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.name = c.GLOOM_FUME
+        self.timer = 0
+        self.frame_index = 0
+        self.load_images()
+        self.frame_num = len(self.frames)
+        self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def load_images(self):
+        self.fly_frames = []
+
+        fly_name = self.name
+
+        self.loadFrames(self.fly_frames, fly_name)
+
+        self.frames = self.fly_frames
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+    def update(self, game_info):
+        self.current_time = game_info[c.CURRENT_TIME]
+        if self.current_time - self.timer >= 100:
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                self.frame_index = self.frame_num - 1
+                self.kill()
+            self.timer = self.current_time
+        self.image = self.frames[self.frame_index]
+
+    def loadFrames(self, frames, name):
+        frame_list = tool.GFX[name]
+        x, y = 0, 0
+        rect = frame_list[0].get_rect()
+        width, height = rect.w, rect.h
+
+        for frame in frame_list:
+            frames.append(tool.get_image(frame, x, y, width, height))
+
 
 # 杨桃的子弹
 class StarBullet(Bullet):
@@ -204,7 +251,7 @@ class StarBullet(Bullet):
             else:
                 self.rect.x -= 10
             self.handleMapYPosition()
-            if ((self.rect.x > c.SCREEN_WIDTH + 20) or (self.rect.right < -20)
+            if ((self.rect.x > c.LEVEL_SCREEN_WIDTH + 20) or (self.rect.right < -20)
                 or (self.rect.y > c.SCREEN_HEIGHT) or (self.rect.y < 0)):
                 self.kill()
         elif self.state == c.EXPLODE:
@@ -224,11 +271,12 @@ class StarBullet(Bullet):
 
 
 class Plant(pg.sprite.Sprite):
-    def __init__(self, x, y, name, health, bullet_group, scale=1):
+    def __init__(self, x, y, name, health, bullet_group, scale=1, left = True):
         pg.sprite.Sprite.__init__(self)
 
         self.frames = []
         self.frame_index = 0
+        self.left = left  # 是否在左侧
         self.loadImages(name, scale)
         self.frame_num = len(self.frames)
         self.image = self.frames[self.frame_index]
@@ -249,6 +297,9 @@ class Plant(pg.sprite.Sprite):
 
         self.attack_check = c.CHECK_ATTACK_ALWAYS
 
+    def get_direction(self):  # 获取植物的朝向（用于控制子弹方向等）
+        return 1 if self.left else -1
+
     def loadFrames(self, frames, name, scale=1, color=c.BLACK):
         frame_list = tool.GFX[name]
         if name in c.PLANT_RECT:
@@ -260,7 +311,7 @@ class Plant(pg.sprite.Sprite):
             width, height = rect.w, rect.h
 
         for frame in frame_list:
-            frames.append(tool.get_image(frame, x, y, width, height, color, scale))
+            frames.append(tool.get_image(frame, x, y, width, height, color, scale, self.left))
 
     def loadImages(self, name, scale):
         self.loadFrames(self.frames, name, scale)
@@ -318,11 +369,18 @@ class Plant(pg.sprite.Sprite):
             self.image.set_alpha(255)
 
     def canAttack(self, zombie):
-        if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
-            return False
-        if (self.state != c.SLEEP and zombie.state != c.DIE and
-            self.rect.x <= zombie.rect.right and zombie.rect.x <= c.SCREEN_WIDTH - 24):
-            return True
+        if self.left:
+            if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+                return False
+            if (self.state != c.SLEEP and zombie.state != c.DIE and
+                self.rect.x <= zombie.rect.right and zombie.rect.x <= c.LEVEL_SCREEN_WIDTH - 24):
+                return True
+        else:
+            if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
+                return False
+            if (self.state != c.SLEEP and zombie.state != c.DIE and
+                self.rect.right >= zombie.rect.x and zombie.rect.x >= 0):
+                return True
         return False
 
     def setAttack(self):
@@ -388,8 +446,8 @@ class Sun(Plant):
 
 
 class SunFlower(Plant):
-    def __init__(self, x, y, sun_group):
-        Plant.__init__(self, x, y, c.SUNFLOWER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, sun_group, left=True):
+        Plant.__init__(self, x, y, c.SUNFLOWER, c.PLANT_HEALTH, None, left=left)
         self.sun_timer = 0
         self.sun_group = sun_group
         self.attack_check = c.CHECK_ATTACK_NEVER
@@ -404,8 +462,8 @@ class SunFlower(Plant):
             self.sun_timer = self.current_time
 
 class TwinSunFlower(Plant):
-    def __init__(self, x, y, sun_group):
-        Plant.__init__(self, x, y, c.TWINSUNFLOWER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, sun_group, left=True):
+        Plant.__init__(self, x, y, c.TWINSUNFLOWER, c.PLANT_HEALTH, None, left=left)
         self.sun_timer = 0
         self.sun_group = sun_group
         self.attack_check = c.CHECK_ATTACK_NEVER
@@ -423,16 +481,17 @@ class TwinSunFlower(Plant):
             self.sun_timer = self.current_time
 
 class PeaShooter(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.PEASHOOTER, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left=True):
+        Plant.__init__(self, x, y, c.PEASHOOTER, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
 
     def attacking(self):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
-        elif (self.current_time - self.shoot_timer) >= 1400:
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+        elif (self.current_time - self.shoot_timer) >= 1400:      
+            bullet_x = self.rect.right - 15 if self.left else self.rect.left + 15
+            self.bullet_group.add(Bullet(bullet_x, self.rect.y, self.rect.y,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
@@ -443,9 +502,10 @@ class PeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
 
 class RepeaterPea(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.REPEATERPEA, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.REPEATERPEA, c.PLANT_HEALTH, bullet_group, left = left)
         self.shoot_timer = 0
+        self.bullet_begin_x = self.rect.left - 15 if not left else self.rect.right - 15
 
         # 是否发射第一颗
         self.first_shot = False
@@ -455,15 +515,15 @@ class RepeaterPea(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer >= 1400):
             self.first_shot = True
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y, self.rect.y,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
         elif self.first_shot and (self.current_time - self.shoot_timer) > 100:
             self.first_shot = False
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y, self.rect.y,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             # 播放发射音效
             c.SOUND_SHOOT.play()
 
@@ -473,10 +533,11 @@ class RepeaterPea(Plant):
             self.shoot_timer = self.current_time - 700
             
 class MachineGunner(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.MACHINEGUNNER, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.MACHINEGUNNER, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
-
+        self.bullet_begin_x = self.rect.left - 15 if not left else self.rect.right - 15
+        
         # 是否发射第一颗
         self.first_shot = False
         self.second_shot = False
@@ -487,29 +548,29 @@ class MachineGunner(Plant):
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer >= 1400):
             self.first_shot = True
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y+8, self.rect.y+8,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
         elif self.first_shot and (self.current_time - self.shoot_timer) > 100:
             self.first_shot = False
             self.second_shot = True
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y+8, self.rect.y+8,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             # 播放发射音效
             c.SOUND_SHOOT.play()
         elif self.second_shot and (self.current_time - self.shoot_timer) > 200:
             self.second_shot = False
             self.third_shot = True
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y+8, self.rect.y+8,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             # 播放发射音效
             c.SOUND_SHOOT.play()
         elif self.third_shot and (self.current_time - self.shoot_timer) > 300:
             self.third_shot = False
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y+8, self.rect.y+8,
-                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+            self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y+8, self.rect.y+8,
+                                         c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             # 播放发射音效
             c.SOUND_SHOOT.play()
 
@@ -520,12 +581,13 @@ class MachineGunner(Plant):
 
 
 class ThreePeaShooter(Plant):
-    def __init__(self, x, y, bullet_groups, map_y, background_type):
-        Plant.__init__(self, x, y, c.THREEPEASHOOTER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, bullet_groups, map_y, background_type, left = True):
+        Plant.__init__(self, x, y, c.THREEPEASHOOTER, c.PLANT_HEALTH, None, left=left)
         self.shoot_timer = 0
         self.map_y = map_y
         self.bullet_groups = bullet_groups
         self.background_type = background_type
+        self.bullet_begin_x = self.rect.left - 15 if not left else self.rect.right - 15
 
     def attacking(self):
         if self.shoot_timer == 0:
@@ -544,8 +606,8 @@ class ThreePeaShooter(Plant):
                     dest_y = self.rect.y + (i - 1) * c.GRID_POOL_Y_SIZE + offset_y
                 else:
                     dest_y = self.rect.y + (i - 1) * c.GRID_Y_SIZE + offset_y
-                self.bullet_groups[tmp_y].add(Bullet(self.rect.right  - 15, self.rect.y, dest_y,
-                                                     c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, effect=None))
+                self.bullet_groups[tmp_y].add(Bullet(self.bullet_begin_x, self.rect.y, dest_y,
+                                                     c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL, self.left, effect=None))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
@@ -556,16 +618,18 @@ class ThreePeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
 
 class SnowPeaShooter(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.SNOWPEASHOOTER, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.SNOWPEASHOOTER, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
+        self.bullet_begin_x = self.rect.left - 15 if not left else self.rect.right - 15
 
     def attacking(self):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
-            self.bullet_group.add(Bullet(self.rect.right  - 15, self.rect.y, self.rect.y,
-                                         c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, effect=c.BULLET_EFFECT_ICE))
+            # print(self.bullet_begin_x-self.rect.left)
+            self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y, self.rect.y,
+                                         c.BULLET_PEA_ICE, c.BULLET_DAMAGE_NORMAL, self.left, effect=c.BULLET_EFFECT_ICE))
             self.shoot_timer = self.current_time
             # 播放发射音效
             c.SOUND_SHOOT.play()
@@ -578,8 +642,8 @@ class SnowPeaShooter(Plant):
             self.shoot_timer = self.current_time - 700
 
 class WallNut(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.WALLNUT, c.WALLNUT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.WALLNUT, c.WALLNUT_HEALTH, None, left=left)
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
@@ -605,8 +669,8 @@ class WallNut(Plant):
 
 
 class CherryBomb(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.CHERRYBOMB, c.INF, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.CHERRYBOMB, c.INF, None, left=left)
         self.state = c.ATTACK
         self.start_boom = False
         self.boomed = False
@@ -656,8 +720,8 @@ class CherryBomb(Plant):
 
 
 class Chomper(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.CHOMPER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.CHOMPER, c.PLANT_HEALTH, None, left=left)
         self.animate_interval = 140
         self.digest_timer = 0
         self.digest_interval = 15000
@@ -690,9 +754,13 @@ class Chomper(Plant):
             return False
         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
             return False
-        elif (self.state == c.IDLE and zombie.state != c.DIGEST and
+        elif self.left and (self.state == c.IDLE and zombie.state != c.DIGEST and
             self.rect.x <= zombie.rect.centerx and (not zombie.losthead) and
             (self.rect.x + c.GRID_X_SIZE*2.7 >= zombie.rect.centerx)):
+            return True
+        elif not self.left and (self.state == c.IDLE and zombie.state != c.DIGEST and
+            self.rect.right >= zombie.rect.centerx and (not zombie.losthead) and
+            (self.rect.right - c.GRID_X_SIZE*2.7 <= zombie.rect.centerx)):
             return True
         return False
 
@@ -736,8 +804,8 @@ class Chomper(Plant):
 
 
 class PuffShroom(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.PUFFSHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.PUFFSHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
 
     def loadImages(self, name, scale):
@@ -770,7 +838,7 @@ class PuffShroom(Plant):
             return False
         if (self.rect.x <= zombie.rect.right
         and (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x)
-        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -781,8 +849,8 @@ class PuffShroom(Plant):
 
 
 class PotatoMine(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.POTATOMINE, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.POTATOMINE, c.PLANT_HEALTH, None, left=left)
         self.animate_interval = 300
         self.is_init = True
         self.init_timer = 0
@@ -837,8 +905,8 @@ class PotatoMine(Plant):
 
 
 class Squash(Plant):
-    def __init__(self, x, y, map_plant_set):
-        Plant.__init__(self, x, y, c.SQUASH, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, map_plant_set, left = True):
+        Plant.__init__(self, x, y, c.SQUASH, c.PLANT_HEALTH, None, left=left)
         self.orig_pos = (x, y)
         self.aim_timer = 0
         self.start_boom = False # 和灰烬等植物统一变量名，在这里表示倭瓜是否跳起
@@ -907,8 +975,8 @@ class Squash(Plant):
 
 
 class Spikeweed(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None, scale=0.9)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.SPIKEWEED, c.PLANT_HEALTH, None, scale=0.9, left=left)
         self.animate_interval = 70
         self.attack_timer = 0
 
@@ -952,11 +1020,65 @@ class Spikeweed(Plant):
                 self.health = 0
             # 播放攻击音效，同子弹打击
             c.SOUND_BULLET_EXPLODE.play()
+            
+            
+class Spikerock(Plant):
+    def __init__(self, x, y, left=True):
+        Plant.__init__(self, x, y, c.SPIKEROCK, c.PLANT_HEALTH, None, scale=0.9, left=left)
+        self.animate_interval = 70
+        self.attack_timer = 0
+        self.solid = 2
+
+    def setIdle(self):
+        self.animate_interval = 70
+        self.state = c.IDLE
+
+    def canAttack(self, zombie):
+        # 地刺能不能扎的判据：
+        # 僵尸中心与地刺中心的距离或僵尸包括了地刺中心和右端（平衡得到合理的攻击范围,"僵尸包括了地刺中心和右端"是为以后巨人做准备）
+        # 暂时不能用碰撞判断，平衡性不好
+        if ((-40 <= zombie.rect.centerx - self.rect.centerx <= 40)
+        or (zombie.rect.left <= self.rect.x <= zombie.rect.right 
+            and zombie.rect.left <= self.rect.right <= zombie.rect.right)):
+            return True
+        return False
+
+    def setAttack(self, zombie_group):
+        self.zombie_group = zombie_group
+        self.animate_interval = 35
+        self.state = c.ATTACK
+        if self.hit_timer != 0:
+            self.hit_timer = self.current_time - 500
+
+    def attacking(self):
+        if self.hit_timer == 0:
+            self.hit_timer = self.current_time - 500
+        elif (self.current_time - self.attack_timer) >= 700:
+            self.attack_timer = self.current_time
+            # 最后再来判断攻击是否要杀死自己
+            killSelf = self.solid == 0
+            for zombie in self.zombie_group:
+                if self.canAttack(zombie):
+                    # 有车的僵尸
+                    if zombie.name in {c.ZOMBONI} and zombie.health != zombie.losthead_health:
+                        zombie.health = zombie.losthead_health
+                        zombie.setDie()
+                        self.solid -= 1
+                        print(self.solid)
+                        killSelf = self.solid == 0
+                    else:
+                        zombie.setDamage(40, damage_type=c.ZOMBIE_COMMON_DAMAGE)
+            if killSelf:
+                self.health = 0
+            # 播放攻击音效，同子弹打击
+            c.SOUND_BULLET_EXPLODE.play()
 
 
-class Jalapeno(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.JALAPENO, c.INF, None)
+
+
+class Jalapeno(Plant):  # 火爆辣椒
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.JALAPENO, c.INF, None, left=left)
         self.orig_pos = (x, y)
         self.state = c.ATTACK
         self.start_boom = False
@@ -1010,8 +1132,8 @@ class Jalapeno(Plant):
 
 
 class ScaredyShroom(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.SCAREDYSHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.SCAREDYSHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
         self.cry_x_range = c.GRID_X_SIZE * 1.5
 
@@ -1055,7 +1177,7 @@ class ScaredyShroom(Plant):
         if self.shoot_timer == 0:
             self.shoot_timer = self.current_time - 700
         elif (self.current_time - self.shoot_timer) >= 1400:
-            self.bullet_group.add(Bullet(self.rect.right - 15, self.rect.y + 40, self.rect.y + 40,
+            self.bullet_group.add(Bullet(self.bullet_begin_x, self.rect.y + 40, self.rect.y + 40,
                                          c.BULLET_MUSHROOM, c.BULLET_DAMAGE_NORMAL, effect=None))
             self.shoot_timer = self.current_time
             # 播放音效
@@ -1063,8 +1185,8 @@ class ScaredyShroom(Plant):
 
 
 class SunShroom(Plant):
-    def __init__(self, x, y, sun_group):
-        Plant.__init__(self, x, y, c.SUNSHROOM, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, sun_group, left = True):
+        Plant.__init__(self, x, y, c.SUNSHROOM, c.PLANT_HEALTH, None, left=left)
         self.animate_interval = 140
         self.sun_timer = 0
         self.sun_group = sun_group
@@ -1106,8 +1228,8 @@ class SunShroom(Plant):
 
 
 class IceShroom(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.ICESHROOM, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.ICESHROOM, c.PLANT_HEALTH, None, left=left)
         self.orig_pos = (x, y)
         self.start_boom = False
         self.boomed = False
@@ -1176,8 +1298,8 @@ class IceShroom(Plant):
 
 
 class HypnoShroom(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.HYPNOSHROOM, c.PLANT_HEALTH, None, left=left)
         self.animate_interval = 80
         self.zombie_to_hypno = None
         self.attack_check = c.CHECK_ATTACK_NEVER
@@ -1203,8 +1325,8 @@ class HypnoShroom(Plant):
 
 
 class WallNutBowling(Plant):
-    def __init__(self, x, y, map_y, level):
-        Plant.__init__(self, x, y, c.WALLNUTBOWLING, 1, None)
+    def __init__(self, x, y, map_y, level, left = True):
+        Plant.__init__(self, x, y, c.WALLNUTBOWLING, 1, None, left=left)
         self.map_y = map_y
         self.level = level
         self.init_rect = self.rect.copy()
@@ -1230,7 +1352,7 @@ class WallNutBowling(Plant):
             self.handleMapYPosition()
             if self.shouldChangeDirection():
                 self.changeDirection(-1)
-            if self.init_rect.x > c.SCREEN_WIDTH + 25:
+            if self.init_rect.x > c.LEVEL_SCREEN_WIDTH + 25:
                 self.health = 0
             self.move_timer += self.move_interval
 
@@ -1280,8 +1402,8 @@ class WallNutBowling(Plant):
 
 
 class RedWallNutBowling(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.REDWALLNUTBOWLING, 1, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.REDWALLNUTBOWLING, 1, None, left=left)
         self.orig_y = y
         self.explode_timer = 0
         self.explode_y_range = 1
@@ -1312,7 +1434,7 @@ class RedWallNutBowling(Plant):
         elif (self.current_time - self.move_timer) >= self.move_interval:
             self.rotate_degree = (self.rotate_degree - 30) % 360
             self.init_rect.x += self.vel_x
-            if self.init_rect.x > c.SCREEN_WIDTH + 25:
+            if self.init_rect.x > c.LEVEL_SCREEN_WIDTH + 25:
                 self.health = 0
             self.move_timer += self.move_interval
 
@@ -1346,13 +1468,13 @@ class RedWallNutBowling(Plant):
         return (self.rect.centerx, self.orig_y)
 
 class LilyPad(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.LILYPAD, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.LILYPAD, c.PLANT_HEALTH, None, left=left)
         self.attack_check = c.CHECK_ATTACK_NEVER
 
 class TorchWood(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.TORCHWOOD, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.TORCHWOOD, c.PLANT_HEALTH, bullet_group, left=left)
         self.attack_check = c.CHECK_ATTACK_NEVER
 
     def idling(self):
@@ -1361,20 +1483,20 @@ class TorchWood(Plant):
             and i.passed_torchwood_x != self.rect.centerx
             and abs(i.rect.centerx - self.rect.centerx) <= 20):
                 self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
-                                        c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY,
+                                        c.BULLET_FIREBALL, c.BULLET_DAMAGE_FIREBALL_BODY, i.left,
                                         effect=c.BULLET_EFFECT_UNICE, passed_torchwood_x=self.rect.centerx))
                 i.kill()
             elif (i.name == c.BULLET_PEA_ICE
             and i.passed_torchwood_x != self.rect.centerx
             and abs(i.rect.centerx - self.rect.centerx)):
                 self.bullet_group.add(Bullet(i.rect.x, i.rect.y, i.dest_y,
-                                        c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL,
+                                        c.BULLET_PEA, c.BULLET_DAMAGE_NORMAL,i.left,
                                         effect=None, passed_torchwood_x=self.rect.centerx))
                 i.kill()
 
 class StarFruit(Plant):
-    def __init__(self, x, y, bullet_group, level):
-        Plant.__init__(self, x, y, c.STARFRUIT, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, level, left = True):
+        Plant.__init__(self, x, y, c.STARFRUIT, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
         self.level = level
         self.map_x, self.map_y = self.level.map.getMapIndex(x, y)
@@ -1390,12 +1512,12 @@ class StarFruit(Plant):
             # f(zombie.rect.x) = -0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10
             # 注意实际上为射线
             elif (-100 <= (zombie.rect.y - (-0.75*(zombie.rect.x - (self.rect.right - 5)) + self.rect.y - 10)) <= 70
-            and (zombie.rect.left <= c.SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x)):
+            and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH) and (zombie.rect.x >= self.rect.x)):
                 return True
             # 斜向下，理想直线方程为：f(zombie.rect.x) = zombie.rect.x + self.rect.y - self.rect.right - 15
             # 注意实际上为射线
             elif (abs(zombie.rect.y - (zombie.rect.x + self.rect.y - self.rect.right - 15)) <= 70
-            and (zombie.rect.left <= c.SCREEN_WIDTH)
+            and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH)
             and (zombie.rect.x >= self.rect.x)):
                 return True
             elif zombie.rect.left <= self.rect.x <= zombie.rect.right:
@@ -1434,8 +1556,8 @@ class StarFruit(Plant):
 
 
 class CoffeeBean(Plant):
-    def __init__(self, x, y, plant_group, map_content, map, map_x):
-        Plant.__init__(self, x, y, c.COFFEEBEAN, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, plant_group, map_content, map, map_x, left = True):
+        Plant.__init__(self, x, y, c.COFFEEBEAN, c.PLANT_HEALTH, None, left=left)
         self.plant_group = plant_group
         self.map_content = map_content
         self.map = map
@@ -1475,8 +1597,8 @@ class CoffeeBean(Plant):
             
 
 class SeaShroom(Plant):
-    def __init__(self, x, y, bullet_group):
-        Plant.__init__(self, x, y, c.SEASHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, left = True):
+        Plant.__init__(self, x, y, c.SEASHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
 
     def loadImages(self, name, scale):
@@ -1509,7 +1631,7 @@ class SeaShroom(Plant):
             return False
         if (self.rect.x <= zombie.rect.right
         and (self.rect.x + c.GRID_X_SIZE * 4 >= zombie.rect.x)
-        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -1520,8 +1642,8 @@ class SeaShroom(Plant):
 
 
 class TallNut(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.TALLNUT, c.TALLNUT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.TALLNUT, c.TALLNUT_HEALTH, None, left=left)
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
@@ -1547,8 +1669,8 @@ class TallNut(Plant):
 
 
 class TangleKlep(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.TANGLEKLEP, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.TANGLEKLEP, c.PLANT_HEALTH, None, left=left)
         self.load_images()
         self.splashing = False
 
@@ -1598,8 +1720,8 @@ class TangleKlep(Plant):
 # 坑形态的毁灭菇同地刺一样不可以被啃食
 # 爆炸时杀死同一格的所有植物
 class DoomShroom(Plant):
-    def __init__(self, x, y, map_plant_set, explode_y_range):
-        Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, map_plant_set, explode_y_range, left = True):
+        Plant.__init__(self, x, y, c.DOOMSHROOM, c.PLANT_HEALTH, None, left=left)
         self.map_plant_set = map_plant_set
         self.bomb_timer = 0
         self.explode_y_range = explode_y_range
@@ -1673,10 +1795,10 @@ class DoomShroom(Plant):
 
 # 用于描述毁灭菇的坑
 class Hole(Plant):
-    def __init__(self, x, y, plot_type):
+    def __init__(self, x, y, plot_type, left = True):
         # 指定区域类型这一句必须放在前面，否则加载图片判断将会失败
         self.plot_type = plot_type
-        Plant.__init__(self, x, y, c.HOLE, c.INF, None)
+        Plant.__init__(self, x, y, c.HOLE, c.INF, None, left=left)
         self.timer = 0
         self.shallow = False
         self.attack_check = c.CHECK_ATTACK_NEVER
@@ -1729,8 +1851,8 @@ class Hole(Plant):
 
 
 class Grave(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.GRAVE, c.INF, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.GRAVE, c.INF, None, left=left)
         self.frame_index = random.randint(0, self.frame_num - 1)
         self.image = self.frames[self.frame_index]
         self.mask = pg.mask.from_surface(self.image)
@@ -1741,8 +1863,8 @@ class Grave(Plant):
 
 
 class GraveBuster(Plant):
-    def __init__(self, x, y, plant_group, map, map_x):
-        Plant.__init__(self, x, y, c.GRAVEBUSTER, c.PLANT_HEALTH, None)
+    def __init__(self, x, y, plant_group, map, map_x, left = True):
+        Plant.__init__(self, x, y, c.GRAVEBUSTER, c.PLANT_HEALTH, None, left=left)
         self.map = map
         self.map_x = map_x
         self.plant_group = plant_group
@@ -1775,8 +1897,8 @@ class GraveBuster(Plant):
             self.image.set_alpha(255)
 
 class FumeShroom(Plant):
-    def __init__(self, x, y, bullet_group, zombie_group):
-        Plant.__init__(self, x, y, c.FUMESHROOM, c.PLANT_HEALTH, bullet_group)
+    def __init__(self, x, y, bullet_group, zombie_group, left = True):
+        Plant.__init__(self, x, y, c.FUMESHROOM, c.PLANT_HEALTH, bullet_group, left=left)
         self.shoot_timer = 0
         self.show_attack_frames = True
         self.zombie_group = zombie_group
@@ -1803,7 +1925,7 @@ class FumeShroom(Plant):
             return False
         if (self.rect.x <= zombie.rect.right
         and (self.rect.x + c.GRID_X_SIZE * 5 >= zombie.rect.x)
-        and (zombie.rect.left <= c.SCREEN_WIDTH + 10)):
+        and (zombie.rect.left <= c.LEVEL_SCREEN_WIDTH + 10)):
             return True
         return False
 
@@ -1852,9 +1974,127 @@ class FumeShroom(Plant):
             self.image.set_alpha(255)
 
 
+class GloomShroom(Plant):
+    def __init__(self, x, y,map_y ,bullet_group, zombie_group, left = True):
+        Plant.__init__(self, x, y, c.GLOOMSHROOM, c.PLANT_HEALTH, bullet_group, left=left)
+        self.attack_radius = 240 # 设置多嘴喷菇的攻击半径
+        self.shoot_timer = 0
+        self.show_attack_frames = True
+        self.zombie_group = zombie_group
+        self.map_y = map_y
+        print(map_y)
+
+    def loadImages(self, name, scale):
+        self.idle_frames = []
+        self.sleep_frames = []
+        self.attack_frames = []
+
+        idle_name = name
+        sleep_name = name + "Sleep"
+        attack_name = name + "Attack"
+
+        frame_list = [self.idle_frames, self.sleep_frames, self.attack_frames]
+        name_list = [idle_name, sleep_name, attack_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name)
+
+        self.frames = self.idle_frames
+
+    def canAttack(self, zombie):
+        # 检查僵尸是否在多嘴喷菇的攻击范围内
+        
+    # 计算多嘴喷菇与僵尸之间的距离
+        distance = ((self.rect.centerx - zombie.rect.centerx) ** 2 + 
+                    (self.rect.centery - zombie.rect.centery) ** 2) ** 0.5
+        
+        # 检查距离是否在攻击半径范围内
+        if distance <= self.attack_radius:
+            return True
+        return False
+        # if (self.rect.x - self.attack_radius <= zombie.rect.right
+        #     and self.rect.x + self.attack_radius >= zombie.rect.x
+        #     and self.rect.y + self.attack_radius >= zombie.rect.y
+        #     and self.rect.y - self.attack_radius <= zombie.rect.y
+        #     and zombie.rect.left <= c.SCREEN_WIDTH + 10):
+        #     return True
+        # return False
+
+    def setAttack(self):
+        self.state = c.ATTACK
+        if self.shoot_timer != 0:
+            self.shoot_timer = self.current_time - 700
+            
+    def idling(self):
+        for i in [self.map_y-1,self.map_y,self.map_y+1]:
+            if i == -1 or i == 5:
+                continue
+            for target_zombie in self.zombie_group[i]:
+                # print(target_zombie.rect.centerx,target_zombie.rect.centery)
+                if self.canAttack(target_zombie):
+                    self.setAttack()
+                    return 
+                
+    def canhasoneAttack(self):
+        for i in [self.map_y-1,self.map_y,self.map_y+1]:
+            if i == -1 or i == 5:
+                continue
+            for target_zombie in self.zombie_group[i]:
+                # print(target_zombie.rect.centerx,target_zombie.rect.centery)
+                if self.canAttack(target_zombie):
+                    return True
+        return False
+        
+    def attacking(self):
+        if self.shoot_timer == 0:
+            self.shoot_timer = self.current_time - 700
+        elif self.current_time - self.shoot_timer >= 1100:
+            # 提前切换到攻击状态
+            if self.show_attack_frames:
+                self.show_attack_frames = False
+                self.changeFrames(self.attack_frames)
+        # print((self.rect.x, self.rect.y))
+        # 攻击间隔时间，符合原版多嘴喷菇
+        if self.current_time - self.shoot_timer >= 1400:
+            self.bullet_group.add(GloomFume(self.rect.centerx-106, self.rect.centery-96))
+            # 模拟多个伤害范围而不实际生成子弹
+            for i in [self.map_y-1,self.map_y,self.map_y+1]:
+                if i == -1 or i == 5:
+                    continue
+                for target_zombie in self.zombie_group[i]:
+                    if self.canAttack(target_zombie):
+                        target_zombie.setDamage(c.BULLET_DAMAGE_NORMAL*3, damage_type=c.ZOMBIE_RANGE_DAMAGE)
+            self.shoot_timer = self.current_time
+            self.show_attack_frames = True
+            # 播放发射音效
+            # c.SOUND_GLOOM.play()
+
+    def animation(self):
+        if (self.current_time - self.animate_timer) > self.animate_interval:
+            self.frame_index += 1
+            if self.frame_index >= self.frame_num:
+                if self.frames == self.attack_frames:
+                    self.changeFrames(self.idle_frames)
+                else:
+                    self.frame_index = 0
+            self.animate_timer = self.current_time
+
+        self.image = self.frames[self.frame_index]
+        self.mask = pg.mask.from_surface(self.image)
+
+        if (self.current_time - self.highlight_time < 100):
+            self.image.set_alpha(150)
+        elif (self.current_time - self.hit_timer < 200):
+            self.image.set_alpha(192)
+        else:
+            self.image.set_alpha(255)
+
+
+
+
 class IceFrozenPlot(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.ICEFROZENPLOT, c.INF, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.ICEFROZENPLOT, c.INF, None, left=left)
         self.timer = 0
         self.attack_check = c.CHECK_ATTACK_NEVER
 
@@ -1866,8 +2106,8 @@ class IceFrozenPlot(Plant):
 
 
 class Garlic(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.GARLIC, c.GARLIC_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.GARLIC, c.GARLIC_HEALTH, None, left=left)
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
@@ -1891,8 +2131,8 @@ class Garlic(Plant):
             self.cracked2 = True
 
 class PumpkinHead(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.PUMPKINHEAD, c.WALLNUT_HEALTH, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.PUMPKINHEAD, c.WALLNUT_HEALTH, None, left=left)
         self.load_images()
         self.cracked1 = False
         self.cracked2 = False
@@ -1919,8 +2159,8 @@ class PumpkinHead(Plant):
 
 
 class GiantWallNut(Plant):
-    def __init__(self, x, y):
-        Plant.__init__(self, x, y, c.GIANTWALLNUT, 1, None)
+    def __init__(self, x, y, left = True):
+        Plant.__init__(self, x, y, c.GIANTWALLNUT, 1, None, left=left)
         self.init_rect = self.rect.copy()
         self.rotate_degree = 0
         self.animate_interval = 200
@@ -1935,7 +2175,7 @@ class GiantWallNut(Plant):
         elif (self.current_time - self.move_timer) >= self.move_interval:
             self.rotate_degree = (self.rotate_degree - 30) % 360
             self.init_rect.x += self.vel_x
-            if self.init_rect.x > c.SCREEN_WIDTH:
+            if self.init_rect.x > c.LEVEL_SCREEN_WIDTH:
                 self.health = 0
             self.move_timer += self.move_interval
 
