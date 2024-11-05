@@ -75,6 +75,8 @@ class Zombie(pg.sprite.Sprite):
             frames.append(tool.get_image(frame, x, 0, width, height, colorkey, left=not self.left))
 
     def update(self, game_info):
+        if self.rect.x >= c.LEVEL_SCREEN_WIDTH + 40 or self.rect.x <= -40:
+            self.kill()
         self.current_time = game_info[c.CURRENT_TIME]
         self.handleState()
         self.updateIceSlow()
@@ -249,7 +251,7 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.attack_frames)
             self.helmet_type2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
-                self.speed = 2.65 * self.direction
+                self.speed = 2.65 * self.getDirection()
                 self.walk_animate_interval = 300
         if (((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()))
             and (not self.losthead)):
@@ -291,7 +293,7 @@ class Zombie(pg.sprite.Sprite):
         self.losthead = True
         self.animate_interval = self.losthead_animate_interval
         if self.head_group is not None:
-            self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom))
+            self.head_group.add(ZombieHead(self.rect.centerx, self.rect.bottom, left=self.left))
 
     def changeFrames(self, frames):
         """change image frames and modify rect position"""
