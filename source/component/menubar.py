@@ -295,6 +295,7 @@ class Panel():
             self.card_list.append(Card(x, y, index, 0.5, not_recommend))
 
     def checkCardClick(self, mouse_pos):
+        print("wojinlaile")
         delete_card = None
         for card in self.selected_cards:
             if delete_card: # when delete a card, move right cards to left
@@ -322,7 +323,9 @@ class Panel():
         for card in self.card_list:
             if card.checkMouseClick(mouse_pos):
                 if card.canSelect():
+                    print("keyixuan")
                     self.addCard(card)
+                    print("xuanle")
                     # 播放点击音效
                     c.SOUND_TAPPING_CARD.play()
                     if card.info[c.PLANT_NAME_INDEX] == c.COFFEEBEAN:
