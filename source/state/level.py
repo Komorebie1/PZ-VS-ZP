@@ -44,7 +44,7 @@ class Level(tool.State):
 
     def connect_server(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(("127.0.0.1", 5555))
+        self.client_socket.connect(("192.168.195.1", 5555))
         receive_thread = threading.Thread(target=self.receive_process)
         receive_thread.start()
 
@@ -197,15 +197,15 @@ class Level(tool.State):
                             case c.SNORKELZOMBIE:
                                 # 潜水僵尸生成位置不同
                                 self.zombie_groups[map_y].add(zombie.SnorkelZombie(position, y, self.head_group))
-                    elif mode == 2:
-                        map_x = int(data[1])
-                        map_y = int(data[2])
-                        for plant in self.plant_groups[map_y]:
-                            plant_map_x, plant_map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.centery)
-                            if plant_map_x == map_x and plant_map_y == map_y:
-                                plant.health = 0
-                                plant.kill()
-                                self.map.removeMapPlant(map_x, map_y, plant.name)
+                    # elif mode == 2:
+                    #     map_x = int(data[1])
+                    #     map_y = int(data[2])
+                    #     for plant in self.plant_groups[map_y]:
+                    #         plant_map_x, plant_map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.centery)
+                    #         if plant_map_x == map_x and plant_map_y == map_y:
+                    #             plant.health = 0
+                    #             plant.kill()
+                    #             self.map.removeMapPlant(map_x, map_y, plant.name)
             except:
                 print("接收失败")
                 break
