@@ -101,7 +101,7 @@ class Bullet(pg.sprite.Sprite):
                 if self.y_vel * (self.dest_y - self.rect.y) < 0:
                     self.rect.y = self.dest_y
             self.rect.x += self.x_vel
-            if self.rect.x >= c.LEVEL_SCREEN_WIDTH + 20:
+            if self.rect.x >= c.LEVEL_SCREEN_WIDTH + 20 or self.rect.x <= -20:
                 self.kill()
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
@@ -369,6 +369,8 @@ class Plant(pg.sprite.Sprite):
             self.image.set_alpha(255)
 
     def canAttack(self, zombie):
+        if self.left != zombie.left:
+            return False
         if self.left:
             if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
                 return False
@@ -458,7 +460,7 @@ class SunFlower(Plant):
         elif (self.current_time - self.sun_timer) > c.FLOWER_SUN_INTERVAL:
             self.sun_group.add(
                 Sun(    self.rect.centerx, self.rect.bottom,
-                        self.rect.right, self.rect.bottom + self.rect.h // 2))
+                        self.rect.right if self.left else self.rect.left, self.rect.bottom + self.rect.h // 2))
             self.sun_timer = self.current_time
 
 class TwinSunFlower(Plant):

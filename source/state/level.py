@@ -1239,7 +1239,7 @@ class Level(tool.State):
                 self.zombie_groups[map_y].add(zombie.PoleVaultingZombie(x, y, self.head_group, left=left))
             case c.ZOMBONI:
                 # 冰车僵尸生成位置不同
-                self.zombie_groups[map_y].add(zombie.Zomboni(x, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot))
+                self.zombie_groups[map_y].add(zombie.Zomboni(x, y, self.plant_groups[map_y], self.map, plant.IceFrozenPlot, left = left))
             case c.SNORKELZOMBIE:
                 # 潜水僵尸生成位置不同
                 self.zombie_groups[map_y].add(zombie.SnorkelZombie(x, y, self.head_group))
@@ -1326,6 +1326,8 @@ class Level(tool.State):
                 if bullet.state == c.FLY:
                     # 利用循环而非内建精灵组碰撞判断函数，处理更加灵活，可排除已死亡僵尸
                     for zombie in self.zombie_groups[i]:
+                        if bullet.left != zombie.left:
+                            continue
                         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
                             continue
                         if collided_func(zombie, bullet):
@@ -1396,7 +1398,10 @@ class Level(tool.State):
                 else:
                     if attackable_common_plants:
                         # 默认为最右侧的一个植物
-                        target_plant = max(attackable_common_plants, key=lambda i: i.rect.x)
+                        if zombie.left:
+                            target_plant = max(attackable_common_plants, key=lambda i: i.rect.x)
+                        else:
+                            target_plant = min(attackable_common_plants, key=lambda i: i.rect.x)
                         map_x, map_y = self.map.getMapIndex(target_plant.rect.centerx, target_plant.rect.centery)
                         if self.map.isValid(map_x, map_y):
                             if c.PUMPKINHEAD in self.map.map[map_y][map_x][c.MAP_PLANT]:
