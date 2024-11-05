@@ -60,7 +60,7 @@ class Zombie(pg.sprite.Sprite):
         self.is_hypno = False  # the zombie is hypo and attack other zombies when it ate a HypnoShroom
 
     def getDirection(self):
-        return 1 if self.left else -1
+        return -1 if self.left else 1
 
     def loadFrames(self, frames, name, colorkey=c.BLACK):
         frame_list = tool.GFX[name]
@@ -72,7 +72,7 @@ class Zombie(pg.sprite.Sprite):
         else:
             x = 0
         for frame in frame_list:
-            frames.append(tool.get_image(frame, x, 0, width, height, colorkey, left=self.left))
+            frames.append(tool.get_image(frame, x, 0, width, height, colorkey, left=not self.left))
 
     def update(self, game_info):
         self.current_time = game_info[c.CURRENT_TIME]
