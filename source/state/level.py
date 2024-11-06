@@ -1421,7 +1421,6 @@ class Level(tool.State):
                 if zombie_len > 0:
                     pass
                 elif (i-1) >= 0 and len([zombie for zombie in self.zombie_groups[i-1] if target_plant.left != zombie.left]) > 0:
-                elif (i-1) >= 0 and len([zombie for zombie in self.zombie_groups[i-1] if target_plant.left != zombie.left]) > 0:
                     pass
                 elif (i+1) < self.map_y_len and len([zombie for zombie in self.zombie_groups[i+1] if target_plant.left != zombie.left]) > 0:
                     pass
