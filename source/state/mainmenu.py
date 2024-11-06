@@ -5,11 +5,11 @@ from .. import constants as c
 
 class Menu(tool.State):
     
-    def __init__(self):
+    def __init__(self, next_state = c.LEVEL):
         tool.State.__init__(self)
+        self.next = next_state
     
     def startup(self, current_time:int, persist):
-        self.next = c.LEVEL
         self.persist = persist
         self.game_info = persist
         self.setupBackground()

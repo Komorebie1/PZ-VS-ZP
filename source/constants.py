@@ -116,6 +116,7 @@ LOAD_SCREEN = "load screen"
 GAME_LOSE = "game lose"
 GAME_VICTORY = "game victory"
 LEVEL = "level"
+MULTIPLAYER = "multiplayer"
 AWARD_SCREEN = "award screen"
 HELP_SCREEN = "help screen"
 

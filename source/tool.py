@@ -129,7 +129,7 @@ class Control():
         self.state_name = self.state.next
         persist = self.state.cleanup()
         self.state = self.state_dict[self.state_name]
-        if self.state_name == c.LEVEL:
+        if self.state_name == c.LEVEL or self.state_name == c.MULTIPLAYER:
             pg.display.set_mode(c.LEVEL_SCREEN_SIZE)
         elif self.state_name == c.MAIN_MENU:
             pg.display.set_mode(c.SCREEN_SIZE)
@@ -139,6 +139,8 @@ class Control():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.done = True
+                if self.state_name == c.MULTIPLAYER:
+                    self.state.closeConnection()
             elif event.type == pg.KEYDOWN:
                 self.keys = pg.key.get_pressed()
                 if event.key == pg.K_f:

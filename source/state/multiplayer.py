@@ -862,7 +862,7 @@ class Level(tool.State):
                 self.removeMouseImagePlus()
                 return
 
-    def play(self, mouse_pos, mouse_click, left = test_direction):
+    def play(self, mouse_pos, mouse_click):
         # 如果暂停
         if self.show_game_menu:
             self.pauseAndCheckMenuOptions(mouse_pos, mouse_click)
@@ -928,7 +928,7 @@ class Level(tool.State):
         if not self.drag_plant and not self.drag_zombie and mouse_pos and mouse_click[0] and not clicked_sun:
             self.click_result = self.menubar.checkCardClick(mouse_pos)
             if self.click_result:
-                self.setupMouseImage(self.click_result[0], self.click_result[1], left=left)
+                self.setupMouseImage(self.click_result[0], self.click_result[1], left=not self.direction)
                 self.click_result[1].clicked = True
                 clicked_cards_or_map = True
                 # 播放音效
@@ -936,7 +936,7 @@ class Level(tool.State):
             else:
                 self.click_result = self.zombiebar.checkCardClick(mouse_pos)
                 if self.click_result:
-                    self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False, left=left)
+                    self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False, left=self.direction)
                     self.click_result[1].clicked = True
                     clicked_cards_or_map = True
                     # 播放音效
@@ -1330,7 +1330,7 @@ class Level(tool.State):
                 if bullet.state == c.FLY:
                     # 利用循环而非内建精灵组碰撞判断函数，处理更加灵活，可排除已死亡僵尸
                     for zombie in self.zombie_groups[i]:
-                        if bullet.left != zombie.left:
+                        if bullet.left == zombie.left:
                             continue
                         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
                             continue
@@ -1525,12 +1525,12 @@ class Level(tool.State):
                 if self.cars[i].dead:
                     self.cars[i] = None
 
-    def boomZombies(self, x, map_y, y_range, x_range, effect=None):
+    def boomZombies(self, x, map_y, y_range, x_range, left, effect=None):
         for i in range(self.map_y_len):
             if abs(i - map_y) > y_range:
                 continue
             for zombie in self.zombie_groups[i]:
-                if ((abs(zombie.rect.centerx - x) <= x_range) or
+                if left != zombie.left and ((abs(zombie.rect.centerx - x) <= x_range) or
                     ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.2, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                     if effect == c.BULLET_EFFECT_UNICE:
                         zombie.ice_slow_ratio = 1
@@ -1544,8 +1544,9 @@ class Level(tool.State):
 
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                zombie.setFreeze(plant.trap_frames[0])
-                zombie.setDamage(20, damage_type=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
+                if plant.left != zombie.left:
+                    zombie.setFreeze(plant.trap_frames[0])
+                    zombie.setDamage(20, damage_type=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
 
     def killPlant(self, target_plant, shovel=False):
         x, y = target_plant.getPosition()
@@ -1590,7 +1591,7 @@ class Level(tool.State):
 
 
     def checkPlant(self, target_plant, i):
-        zombie_len = len(self.zombie_groups[i])
+        zombie_len = len([zombie for zombie in self.zombie_groups[i] if target_plant.left != zombie.left])
         # 不用检查攻击状况的情况
         if not target_plant.attack_check:
             pass
@@ -1598,16 +1599,16 @@ class Level(tool.State):
             if target_plant.state == c.IDLE:
                 if zombie_len > 0:
                     target_plant.setAttack()
-                elif (i-1) >= 0 and len(self.zombie_groups[i-1]) > 0:
+                elif (i-1) >= 0 and len([zombie for zombie in self.zombie_groups[i-1] if target_plant.left != zombie.left]) > 0:
                     target_plant.setAttack()
-                elif (i+1) < self.map_y_len and len(self.zombie_groups[i+1]) > 0:
+                elif (i+1) < self.map_y_len and len([zombie for zombie in self.zombie_groups[i+1] if target_plant.left != zombie.left]) > 0:
                     target_plant.setAttack()
             elif target_plant.state == c.ATTACK:
                 if zombie_len > 0:
                     pass
-                elif (i-1) >= 0 and len(self.zombie_groups[i-1]) > 0:
+                elif (i-1) >= 0 and len([zombie for zombie in self.zombie_groups[i-1] if target_plant.left != zombie.left]) > 0:
                     pass
-                elif (i+1) < self.map_y_len and len(self.zombie_groups[i+1]) > 0:
+                elif (i+1) < self.map_y_len and len([zombie for zombie in self.zombie_groups[i+1] if target_plant.left != zombie.left]) > 0:
                     pass
                 else:
                     target_plant.setIdle()
@@ -1624,7 +1625,7 @@ class Level(tool.State):
             if target_plant.start_boom and (not target_plant.boomed):
                 for zombie in self.zombie_groups[i]:
                     # 双判断：发生碰撞或在攻击范围内
-                    if ((pg.sprite.collide_mask(zombie, target_plant)) or
+                    if target_plant.left != zombie.left and ((pg.sprite.collide_mask(zombie, target_plant)) or
                         (abs(zombie.rect.centerx - target_plant.rect.centerx) <= target_plant.explode_x_range)):
                         zombie.setDamage(1800, damage_type=c.ZOMBIE_RANGE_DAMAGE)
                 target_plant.boomed = True
@@ -1682,12 +1683,12 @@ class Level(tool.State):
                 # 这样分成两层是因为场上灰烬植物肯定少，一个一个判断代价高，先笼统判断灰烬即可
                 if target_plant.name in {c.REDWALLNUTBOWLING, c.CHERRYBOMB}:
                     self.boomZombies(target_plant.rect.centerx, i, target_plant.explode_y_range,
-                                    target_plant.explode_x_range)
+                                    target_plant.explode_x_range, target_plant.left)
                 elif (target_plant.name == c.DOOMSHROOM):
                     x, y = target_plant.original_x, target_plant.original_y
                     map_x, map_y = self.map.getMapIndex(x, y)
                     self.boomZombies(target_plant.rect.centerx, i, target_plant.explode_y_range,
-                                    target_plant.explode_x_range)
+                                    target_plant.explode_x_range, target_plant.left)
                     for item in self.plant_groups[map_y]:
                         checkMapX, _ = self.map.getMapIndex(item.rect.centerx, item.rect.bottom)
                         if map_x == checkMapX:
@@ -1696,7 +1697,7 @@ class Level(tool.State):
                     self.map.map[map_y][map_x][c.MAP_PLANT].add(c.HOLE)
                 elif target_plant.name == c.JALAPENO:
                     self.boomZombies(target_plant.rect.centerx, i, target_plant.explode_y_range,
-                                    target_plant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
+                                    target_plant.explode_x_range, target_plant.left, effect=c.BULLET_EFFECT_UNICE)
                     # 消除冰道
                     for item in self.plant_groups[i]:
                         if item.name == c.ICEFROZENPLOT:
