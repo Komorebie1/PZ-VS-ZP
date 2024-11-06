@@ -261,7 +261,7 @@ class Zombie(pg.sprite.Sprite):
                     if self.prey.name == c.GARLIC:
                         self.setWalk()
                 else:
-                    self.prey.setDamage(self.damage)
+                    self.prey.setDamage(self.damage,damage_type = c.ZOMBIE_DEAFULT_DAMAGE)
                 
                 # 播放啃咬音效
                 c.SOUND_ZOMBIE_ATTACKING.play()
@@ -670,7 +670,7 @@ class FlagZombie(Zombie):
 
 class NewspaperZombie(Zombie):
     def __init__(self, x, y, head_group, left = True):
-        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmet_type2_health=c.NEWSPAPER_HEALTH, left=left)
+        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmet_type2_health=c.NEWSPAPER_HEALTH,body_health=7*c.NORMAL_HEALTH, left=left)
         self.speed_up = False
 
     def loadImages(self):

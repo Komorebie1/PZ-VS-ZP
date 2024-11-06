@@ -1165,12 +1165,16 @@ class Level(tool.State):
         for i in range(self.map_y_len):
             
             for zombie in self.zombie_groups[i]:    
+                print("wxy")
                 if zombie.health <= 0:
                         continue
+                print("yyx")
                 collided_func = pg.sprite.collide_mask
-                zombie_list = pg.sprite.spritecollide(  hypno_zombie, self.zombie_groups[i],
+                zombie_list = pg.sprite.spritecollide( zombie, self.zombie_groups[i],
                                                         False, collided_func)
+                print(zombie_list)
                 zombie_list = [_zombie for _zombie in zombie_list if _zombie.left != zombie.left]
+                print(zombie_list)
                 for _zombie in zombie_list:
                     if _zombie.state == c.DIE:
                         continue

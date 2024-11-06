@@ -600,7 +600,7 @@ class Level(tool.State):
         pg.mixer.music.play(-1, 0)
         pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
 
-        self.state = c.PLAY
+        
         if self.bar_type == c.CHOOSEBAR_STATIC:
             self.menubar = menubar.MenuBar(card_list, self.map_data[c.INIT_SUN_NAME])
         else:
@@ -698,6 +698,7 @@ class Level(tool.State):
                     self.map.map[map_y][map_x][c.MAP_PLANT].add(c.GRAVE)
             self.grave_zombie_created = False
             self.new_grave_added = False
+        self.state = c.PLAY
     # 小菜单
     def setupLittleMenu(self):
         # 具体运行游戏必定有个小菜单, 导入菜单和选项
@@ -1363,9 +1364,27 @@ class Level(tool.State):
 
     def checkZombieCollisions(self):
         for i in range(self.map_y_len):
+            for zombie in self.zombie_groups[i]:    
+                if zombie.health <= 0:
+                    continue
+                collided_func = pg.sprite.collide_mask
+                zombie_list = pg.sprite.spritecollide( zombie, self.zombie_groups[i],
+                                                        False, collided_func)
+                zombie_list = [_zombie for _zombie in zombie_list if _zombie.left != zombie.left]
+                for _zombie in zombie_list:
+                    if _zombie.state == c.DIE:
+                        continue
+                    # 正常僵尸攻击被魅惑的僵尸
+                    if _zombie.state == c.WALK:
+                        _zombie.setAttack(zombie, False)
+                    # 被魅惑的僵尸攻击正常僵尸
+                    if zombie.state == c.WALK:
+                        zombie.setAttack(_zombie, False)
+                        
             for zombie in self.zombie_groups[i]:
                 if zombie.name == c.ZOMBONI:
                     continue
+            
                 if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
                     collided_func = pg.sprite.collide_rect_ratio(0.6)
                 else:
@@ -1398,6 +1417,8 @@ class Level(tool.State):
                 attackable_backup_plants = []
                 # 利用更加精细的循环判断啃咬优先顺序
                 for plant in self.plant_groups[i]:
+                    if plant.left == zombie.left:
+                        continue
                     if collided_func(plant, zombie):
                         # 优先攻击南瓜头
                         if plant.name == c.PUMPKINHEAD:
