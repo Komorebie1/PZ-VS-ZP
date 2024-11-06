@@ -9,7 +9,7 @@ import socket
 import threading
 # logger = logging.getLogger("main")
 
-test_direction = False  # False for right, True for left(only for test)
+test_direction = True  # False for right, True for left(only for test)
 
 '''
 修改左右需要修改 play() 中三个地方，分别是：
@@ -18,17 +18,14 @@ test_direction = False  # False for right, True for left(only for test)
 '''
 
 class Level(tool.State):
-    def __init__(self, direction):
+    def __init__(self):
         tool.State.__init__(self)
-        self.direction = direction
 
     def startup(self, current_time, persist):
         self.game_info = persist
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
         self.client_socket = None
-        self.another_player_ready = False
-        self.self_ready = False
 
         # 暂停状态
         self.pause = False
@@ -47,7 +44,7 @@ class Level(tool.State):
 
     def connect_server(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(("192.168.195.1", 5555))
+        self.client_socket.connect(("127.0.0.1", 5555))
         receive_thread = threading.Thread(target=self.receive_process)
         receive_thread.start()
 
@@ -65,14 +62,8 @@ class Level(tool.State):
         message = f"{2},{map_x},{map_y}"
         self.client_socket.sendall(message.encode())
         print("发送成功")
-    def send_start(self):
-        message = f"{3},{self.direction}"
-        self.client_socket.sendall(message.encode())
-        print("发送成功")
-
     def closeConnection(self):
         self.client_socket.close()
-
     def receive_process(self):
         while True:
             try:
@@ -171,6 +162,7 @@ class Level(tool.State):
                                 new_plant = plant.PumpkinHead(x, y, left=left)
                             case c.GIANTWALLNUT:
                                 new_plant = plant.GiantWallNut(x, y, left=left)
+
                         if ((new_plant.name in c.CAN_SLEEP_PLANTS)
                                 and (self.background_type in c.DAYTIME_BACKGROUNDS)):
                             new_plant.setSleep()
@@ -218,19 +210,14 @@ class Level(tool.State):
                             case c.SNORKELZOMBIE:
                                 # 潜水僵尸生成位置不同
                                 self.zombie_groups[map_y].add(zombie.SnorkelZombie(x, y, self.head_group))
-                    elif mode == 2:
-                        map_x = int(data[1])
-                        map_y = int(data[2])
-                        for plt in self.plant_groups[map_y]:
-                            plant_map_x, plant_map_y = self.map.getMapIndex(plt.rect.centerx, plt.rect.centery)
-                            if plant_map_x == map_x and plant_map_y == map_y:
-                                plt.health = 0
-                                self.killPlant(plt, shovel=True)
-                    elif mode == 3:
-                        self.another_player_ready = True
-                        if self.ready and self.another_player_ready:
-                            self.initPlay()
-                            
+                    # elif mode == 2:
+                    #     map_x = int(data[1])
+                    #     map_y = int(data[2])
+                    #     for plant in self.plant_groups[map_y]:
+                    #         plant_map_x, plant_map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.centery)
+                    #         if plant_map_x == map_x and plant_map_y == map_y:
+                    #             plant.health = 0
+                    #             self.killPlant(plant, shovel=True)
             except:
                 print("接收失败")
                 break
@@ -562,7 +549,6 @@ class Level(tool.State):
         self.setupLittleMenu()
 
     def initChoose(self):
-        self.connect_server()
         self.state = c.CHOOSE
         self.panel = menubar.Panel(c.CARDS_TO_CHOOSE, self.map_data[c.INIT_SUN_NAME], self.background_type)
 
@@ -581,14 +567,13 @@ class Level(tool.State):
         elif mouse_pos and mouse_click[0]:
             self.panel.checkCardClick(mouse_pos)
             if self.panel.checkStartButtonClick(mouse_pos):
-                self.ready = True
-                if self.another_player_ready and self.ready:
-                    self.initPlay(self.panel.getSelectedCards())
+                self.initPlay(self.panel.getSelectedCards())
             elif self.inArea(self.little_menu_rect, *mouse_pos):
                 self.show_game_menu = True
                 c.SOUND_BUTTON_CLICK.play()
 
     def initPlay(self, card_list):
+        self.connect_server()
         # 播放bgm
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, self.bgm))
@@ -874,7 +859,7 @@ class Level(tool.State):
                 self.removeMouseImagePlus()
                 return
 
-    def play(self, mouse_pos, mouse_click):
+    def play(self, mouse_pos, mouse_click, left = test_direction):
         # 如果暂停
         if self.show_game_menu:
             self.pauseAndCheckMenuOptions(mouse_pos, mouse_click)
@@ -940,7 +925,7 @@ class Level(tool.State):
         if not self.drag_plant and not self.drag_zombie and mouse_pos and mouse_click[0] and not clicked_sun:
             self.click_result = self.menubar.checkCardClick(mouse_pos)
             if self.click_result:
-                self.setupMouseImage(self.click_result[0], self.click_result[1], left=not self.direction)
+                self.setupMouseImage(self.click_result[0], self.click_result[1], left=left)
                 self.click_result[1].clicked = True
                 clicked_cards_or_map = True
                 # 播放音效
@@ -948,7 +933,7 @@ class Level(tool.State):
             else:
                 self.click_result = self.zombiebar.checkCardClick(mouse_pos)
                 if self.click_result:
-                    self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False, left=self.direction)
+                    self.setupMouseImage(self.click_result[0], self.click_result[1], is_plant=False, left=left)
                     self.click_result[1].clicked = True
                     clicked_cards_or_map = True
                     # 播放音效
@@ -963,7 +948,7 @@ class Level(tool.State):
                     self.click_result[1].clicked = False
                     self.removeMouseImage()
                 else:
-                    self.addPlant(not self.direction)
+                    self.addPlant()
             elif mouse_pos is None:
                 self.setupHintImage()
         elif self.drag_shovel:
@@ -979,7 +964,7 @@ class Level(tool.State):
                     self.click_result[1].clicked = False
                     self.removeMouseImage()
                 else:
-                    self.addZombie(not self.direction)
+                    self.addZombie()
             elif mouse_pos is None:
                 self.setupHintImage(is_plant=False)
 
@@ -1342,7 +1327,7 @@ class Level(tool.State):
                 if bullet.state == c.FLY:
                     # 利用循环而非内建精灵组碰撞判断函数，处理更加灵活，可排除已死亡僵尸
                     for zombie in self.zombie_groups[i]:
-                        if bullet.left == zombie.left:
+                        if bullet.left != zombie.left:
                             continue
                         if (zombie.name == c.SNORKELZOMBIE) and (zombie.frames == zombie.swim_frames):
                             continue
@@ -1537,12 +1522,12 @@ class Level(tool.State):
                 if self.cars[i].dead:
                     self.cars[i] = None
 
-    def boomZombies(self, x, map_y, y_range, x_range, left, effect=None):
+    def boomZombies(self, x, map_y, y_range, x_range, effect=None):
         for i in range(self.map_y_len):
             if abs(i - map_y) > y_range:
                 continue
             for zombie in self.zombie_groups[i]:
-                if left != zombie.left and ((abs(zombie.rect.centerx - x) <= x_range) or
+                if ((abs(zombie.rect.centerx - x) <= x_range) or
                     ((zombie.rect.right - (x-x_range) > 20) or (zombie.rect.right - (x-x_range))/zombie.rect.width > 0.2, ((x+x_range) - zombie.rect.left > 20) or ((x+x_range) - zombie.rect.left)/zombie.rect.width > 0.2)[zombie.rect.x > x]):  # 这代码不太好懂，后面是一个判断僵尸在左还是在右，前面是一个元组，[0]是在左边的情况，[1]是在右边的情况
                     if effect == c.BULLET_EFFECT_UNICE:
                         zombie.ice_slow_ratio = 1
@@ -1556,9 +1541,8 @@ class Level(tool.State):
 
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if plant.left != zombie.left:
-                    zombie.setFreeze(plant.trap_frames[0])
-                    zombie.setDamage(20, damage_type=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
+                zombie.setFreeze(plant.trap_frames[0])
+                zombie.setDamage(20, damage_type=c.ZOMBIE_RANGE_DAMAGE)    # 寒冰菇还有全场20的伤害
 
     def killPlant(self, target_plant, shovel=False):
         x, y = target_plant.getPosition()
@@ -1603,7 +1587,7 @@ class Level(tool.State):
 
 
     def checkPlant(self, target_plant, i):
-        zombie_len = len([zombie for zombie in self.zombie_groups[i] if target_plant.left != zombie.left])
+        zombie_len = len(self.zombie_groups[i])
         # 不用检查攻击状况的情况
         if not target_plant.attack_check:
             pass
@@ -1611,16 +1595,16 @@ class Level(tool.State):
             if target_plant.state == c.IDLE:
                 if zombie_len > 0:
                     target_plant.setAttack()
-                elif (i-1) >= 0 and len([zombie for zombie in self.zombie_groups[i-1] if target_plant.left != zombie.left]) > 0:
+                elif (i-1) >= 0 and len(self.zombie_groups[i-1]) > 0:
                     target_plant.setAttack()
-                elif (i+1) < self.map_y_len and len([zombie for zombie in self.zombie_groups[i+1] if target_plant.left != zombie.left]) > 0:
+                elif (i+1) < self.map_y_len and len(self.zombie_groups[i+1]) > 0:
                     target_plant.setAttack()
             elif target_plant.state == c.ATTACK:
                 if zombie_len > 0:
                     pass
-                elif (i-1) >= 0 and len([zombie for zombie in self.zombie_groups[i-1] if target_plant.left != zombie.left]) > 0:
+                elif (i-1) >= 0 and len(self.zombie_groups[i-1]) > 0:
                     pass
-                elif (i+1) < self.map_y_len and len([zombie for zombie in self.zombie_groups[i+1] if target_plant.left != zombie.left]) > 0:
+                elif (i+1) < self.map_y_len and len(self.zombie_groups[i+1]) > 0:
                     pass
                 else:
                     target_plant.setIdle()
@@ -1637,7 +1621,7 @@ class Level(tool.State):
             if target_plant.start_boom and (not target_plant.boomed):
                 for zombie in self.zombie_groups[i]:
                     # 双判断：发生碰撞或在攻击范围内
-                    if target_plant.left != zombie.left and ((pg.sprite.collide_mask(zombie, target_plant)) or
+                    if ((pg.sprite.collide_mask(zombie, target_plant)) or
                         (abs(zombie.rect.centerx - target_plant.rect.centerx) <= target_plant.explode_x_range)):
                         zombie.setDamage(1800, damage_type=c.ZOMBIE_RANGE_DAMAGE)
                 target_plant.boomed = True
@@ -1695,12 +1679,12 @@ class Level(tool.State):
                 # 这样分成两层是因为场上灰烬植物肯定少，一个一个判断代价高，先笼统判断灰烬即可
                 if target_plant.name in {c.REDWALLNUTBOWLING, c.CHERRYBOMB}:
                     self.boomZombies(target_plant.rect.centerx, i, target_plant.explode_y_range,
-                                    target_plant.explode_x_range, target_plant.left)
+                                    target_plant.explode_x_range)
                 elif (target_plant.name == c.DOOMSHROOM):
                     x, y = target_plant.original_x, target_plant.original_y
                     map_x, map_y = self.map.getMapIndex(x, y)
                     self.boomZombies(target_plant.rect.centerx, i, target_plant.explode_y_range,
-                                    target_plant.explode_x_range, target_plant.left)
+                                    target_plant.explode_x_range)
                     for item in self.plant_groups[map_y]:
                         checkMapX, _ = self.map.getMapIndex(item.rect.centerx, item.rect.bottom)
                         if map_x == checkMapX:
@@ -1709,7 +1693,7 @@ class Level(tool.State):
                     self.map.map[map_y][map_x][c.MAP_PLANT].add(c.HOLE)
                 elif target_plant.name == c.JALAPENO:
                     self.boomZombies(target_plant.rect.centerx, i, target_plant.explode_y_range,
-                                    target_plant.explode_x_range, target_plant.left, effect=c.BULLET_EFFECT_UNICE)
+                                    target_plant.explode_x_range, effect=c.BULLET_EFFECT_UNICE)
                     # 消除冰道
                     for item in self.plant_groups[i]:
                         if item.name == c.ICEFROZENPLOT:
@@ -1924,4 +1908,4 @@ class Level(tool.State):
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
                 self.showLevelProgress(surface)
                 if self.current_time - self.show_hugewave_approching_time <= 2000:
-                    surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)                 
+                    surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)

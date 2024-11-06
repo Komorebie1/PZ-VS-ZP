@@ -35,7 +35,7 @@ if __name__ == "__main__":
                     c.MAIN_MENU:    mainmenu.Menu(c.MULTIPLAYER),
                     # c.GAME_VICTORY: screen.GameVictoryScreen(),
                     # c.GAME_LOSE:    screen.GameLoseScreen(),
-                    c.MULTIPLAYER:        Level(),
+                    c.MULTIPLAYER:        Level(False),
                     # c.AWARD_SCREEN: screen.AwardScreen(),
                     # c.HELP_SCREEN:  screen.HelpScreen(),
                 }
