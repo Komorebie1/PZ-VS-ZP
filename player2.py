@@ -11,7 +11,7 @@ pg.init()
 from source import tool
 from source import constants as c
 from source.state import mainmenu, screen, level
-from source.state.level2 import Level
+from source.state.multiplayer import Level
 
 if __name__ == "__main__":
     # 日志设置
@@ -27,14 +27,15 @@ if __name__ == "__main__":
     # streamHandler.setFormatter(formatter)
     # logger.addHandler(fileHandler)
     # logger.addHandler(streamHandler)
+
     # try:
     #     # 控制状态机运行
     game = tool.Control()
     state_dict = {
-                    c.MAIN_MENU:    mainmenu.Menu(),
+                    c.MAIN_MENU:    mainmenu.Menu(c.MULTIPLAYER),
                     # c.GAME_VICTORY: screen.GameVictoryScreen(),
                     # c.GAME_LOSE:    screen.GameLoseScreen(),
-                    c.LEVEL:        Level(),
+                    c.MULTIPLAYER:        Level(True),
                     # c.AWARD_SCREEN: screen.AwardScreen(),
                     # c.HELP_SCREEN:  screen.HelpScreen(),
                 }
