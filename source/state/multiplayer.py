@@ -81,7 +81,7 @@ class Level(tool.State):
                         map_x = int(data[3])
                         map_y = int(data[4])
                         new_plant_name = data[5]
-                        left = data[6] == ('True'if self.direction else 'False')
+                        left = data[6] == 'True'
                         match new_plant_name:
                             case c.SUNFLOWER:
                                 new_plant = plant.SunFlower(x, y, self.sun_group, left=left)
@@ -178,7 +178,7 @@ class Level(tool.State):
                         name = data[2]
                         x = int(data[3])
                         y = int(data[4])
-                        left = data[5] == ('True' if self.direction else 'False')
+                        left = data[5] == 'True'
                         match name:
                             case c.NORMAL_ZOMBIE:
                                 self.zombie_groups[map_y].add(zombie.NormalZombie(x, y, self.head_group, left=left))
@@ -516,7 +516,7 @@ class Level(tool.State):
         if self.state == c.CHOOSE:
             self.choose(mouse_pos, mouse_click)
         elif self.state == c.PLAY:
-            self.play(mouse_pos, mouse_click, not self.direction)
+            self.play(mouse_pos, mouse_click)
 
         # print(self.plant_name, self.zombie_name)
 
