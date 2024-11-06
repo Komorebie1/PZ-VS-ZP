@@ -9,7 +9,7 @@ os.environ["SDL_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR"]="0" # 设置临时环境变
 pg.init()
 from source import tool
 from source import constants as c
-from source.state import mainmenu, screen, level
+from source.state import mainmenu, screen, level, multiplayer
 
 if __name__ == "__main__":
     game = tool.Control()
@@ -18,6 +18,8 @@ if __name__ == "__main__":
                     # c.GAME_VICTORY: screen.GameVictoryScreen(),
                     # c.GAME_LOSE:    screen.GameLoseScreen(),
                     c.LEVEL:        level.Level(),
+                    c.MULTIPLAYER:        multiplayer.Level(False),
+                    c.HOST:        multiplayer.Level(True),
                     # c.AWARD_SCREEN: screen.AwardScreen(),
                     # c.HELP_SCREEN:  screen.HelpScreen(),
                 }
