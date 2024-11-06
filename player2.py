@@ -35,12 +35,14 @@ if __name__ == "__main__":
                     c.MAIN_MENU:    mainmenu.Menu(c.MULTIPLAYER),
                     # c.GAME_VICTORY: screen.GameVictoryScreen(),
                     # c.GAME_LOSE:    screen.GameLoseScreen(),
-                    c.MULTIPLAYER:        Level(True),
+                    c.MULTIPLAYER:        Level(False),
                     # c.AWARD_SCREEN: screen.AwardScreen(),
                     # c.HELP_SCREEN:  screen.HelpScreen(),
                 }
     game.setup_states(state_dict, c.MAIN_MENU)
-    game.run()
+    hostname = socket.gethostname()
+    ipv4_address = socket.gethostbyname(hostname)
+    game.run(ipv4_address)
     # except:
     #     print() # 将日志输出与上文内容分隔开，增加可读性
     #     logger.error(f"\n{traceback.format_exc()}")

@@ -969,7 +969,10 @@ class Squash(Plant):
                     if self.canAttack(zombie):
                         zombie.setDamage(1800, damage_type=c.ZOMBIE_RANGE_DAMAGE)
                 self.health = 0 # 避免僵尸在原位啃食
-                self.map_plant_set.remove(c.SQUASH)
+                try:
+                    self.map_plant_set.remove(c.SQUASH)
+                except:
+                    pass
                 self.kill()
                 # 播放碾压音效
                 c.SOUND_SQUASHING.play()

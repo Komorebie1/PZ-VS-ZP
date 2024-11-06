@@ -261,7 +261,7 @@ class Zombie(pg.sprite.Sprite):
                     if self.prey.name == c.GARLIC:
                         self.setWalk()
                 else:
-                    self.prey.setDamage(self.damage)
+                    self.prey.setDamage(self.damage,damage_type = c.ZOMBIE_DEAFULT_DAMAGE)
                 
                 # 播放啃咬音效
                 c.SOUND_ZOMBIE_ATTACKING.play()
@@ -670,7 +670,7 @@ class FlagZombie(Zombie):
 
 class NewspaperZombie(Zombie):
     def __init__(self, x, y, head_group, left = True):
-        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmet_type2_health=c.NEWSPAPER_HEALTH, left=left)
+        Zombie.__init__(self, x, y, c.NEWSPAPER_ZOMBIE, head_group, helmet_type2_health=c.NEWSPAPER_HEALTH,body_health=7*c.NORMAL_HEALTH, left=left)
         self.speed_up = False
 
     def loadImages(self):
@@ -1113,8 +1113,9 @@ class Zomboni(Zombie):
 
             # 行进时碾压
             for plant in self.plant_group:
+                
                 # 地刺和地刺王不用检验
-                if ((plant.name not in {c.SPIKEWEED,c.SPIKEROCK})
+                if ((plant.name not in {c.SPIKEWEED,c.SPIKEROCK}) and plant.left != self.left
                 and (self.rect.centerx <= plant.rect.right <= self.rect.right)):
                     # 扣除生命值为可能的最大有限生命值
                     plant.health -= 8000
