@@ -127,7 +127,7 @@ class Control():
         self.state_name = self.state.next
         persist = self.state.cleanup()
         self.state = self.state_dict[self.state_name]
-        if self.state_name == c.LEVEL or self.state_name == c.MULTIPLAYER:
+        if self.state_name == c.LEVEL or self.state_name == c.MULTIPLAYER or self.state_name == c.HOST:
             pg.display.set_mode(c.LEVEL_SCREEN_SIZE)
         elif self.state_name == c.MAIN_MENU:
             pg.display.set_mode(c.SCREEN_SIZE)
