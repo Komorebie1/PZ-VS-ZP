@@ -116,6 +116,7 @@ LOAD_SCREEN = "load screen"
 GAME_LOSE = "game lose"
 GAME_VICTORY = "game victory"
 LEVEL = "level"
+MULTIPLAYER = "multiplayer"
 AWARD_SCREEN = "award screen"
 HELP_SCREEN = "help screen"
 
@@ -337,7 +338,7 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (JALAPENO := "Jalapeno",
                 CARD_JALAPENO := "card_jalapeno",
                 125,
-                50000),
+                500),#50000
             (SPIKEWEED := "Spikeweed",
                 CARD_SPIKEWEED := "card_spikeweed",
                 100,
