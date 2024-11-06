@@ -50,7 +50,8 @@ class Level(tool.State):
 
     def connect_server(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect((self.ipv4_address, 5555))
+        print(self.ipv4_address)
+        self.client_socket.connect(("192.168.195.1", 5555))
         receive_thread = threading.Thread(target=self.receive_process)
         receive_thread.start()
 
