@@ -9,7 +9,7 @@ import socket
 import threading
 # logger = logging.getLogger("main")
 
-test_direction = False  # False for right, True for left(only for test)
+test_direction = True  # False for right, True for left(only for test)
 
 '''
 修改左右需要修改 play() 中三个地方，分别是：
@@ -62,7 +62,8 @@ class Level(tool.State):
         message = f"{2},{map_x},{map_y}"
         self.client_socket.sendall(message.encode())
         print("发送成功")
-
+    def closeConnection(self):
+        self.client_socket.close()
     def receive_process(self):
         while True:
             try:
@@ -77,7 +78,7 @@ class Level(tool.State):
                         map_x = int(data[3])
                         map_y = int(data[4])
                         new_plant_name = data[5]
-                        left = data[6] == 'False'
+                        left = data[6] == 'True'
                         match new_plant_name:
                             case c.SUNFLOWER:
                                 new_plant = plant.SunFlower(x, y, self.sun_group, left=left)
@@ -174,7 +175,7 @@ class Level(tool.State):
                         name = data[2]
                         x = int(data[3])
                         y = int(data[4])
-                        left = data[5] == 'False'
+                        left = data[5] == 'True'
                         match name:
                             case c.NORMAL_ZOMBIE:
                                 self.zombie_groups[map_y].add(zombie.NormalZombie(x, y, self.head_group, left=left))
@@ -209,14 +210,14 @@ class Level(tool.State):
                             case c.SNORKELZOMBIE:
                                 # 潜水僵尸生成位置不同
                                 self.zombie_groups[map_y].add(zombie.SnorkelZombie(x, y, self.head_group))
-                    elif mode == 2:
-                        map_x = int(data[1])
-                        map_y = int(data[2])
-                        for plant in self.plant_groups[map_y]:
-                            plant_map_x, plant_map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.centery)
-                            if plant_map_x == map_x and plant_map_y == map_y:
-                                plant.health = 0
-                                self.killPlant(plant, shovel=True)
+                    # elif mode == 2:
+                    #     map_x = int(data[1])
+                    #     map_y = int(data[2])
+                    #     for plant in self.plant_groups[map_y]:
+                    #         plant_map_x, plant_map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.centery)
+                    #         if plant_map_x == map_x and plant_map_y == map_y:
+                    #             plant.health = 0
+                    #             self.killPlant(plant, shovel=True)
             except:
                 print("接收失败")
                 break

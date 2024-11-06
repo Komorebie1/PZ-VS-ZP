@@ -139,6 +139,8 @@ class Control():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.done = True
+                if self.state_name == c.LEVEL:
+                    self.state.closeConnection()
             elif event.type == pg.KEYDOWN:
                 self.keys = pg.key.get_pressed()
                 if event.key == pg.K_f:
