@@ -2,6 +2,7 @@ import pygame as pg
 import os
 from .. import tool
 from .. import constants as c
+import subprocess
 
 class Menu(tool.State):
     
@@ -148,6 +149,7 @@ class Menu(tool.State):
 
     # 按到小游戏
     def respondLittleGameClick(self):
+        subprocess.Popen(["python", "server.py"])
         self.online_clicked = True
         self.next = c.HOST
         self.online_timer = self.online_start = self.current_time
