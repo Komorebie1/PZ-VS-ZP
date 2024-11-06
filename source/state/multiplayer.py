@@ -165,7 +165,6 @@ class Level(tool.State):
                                 new_plant = plant.PumpkinHead(x, y, left=left)
                             case c.GIANTWALLNUT:
                                 new_plant = plant.GiantWallNut(x, y, left=left)
-
                         if ((new_plant.name in c.CAN_SLEEP_PLANTS)
                                 and (self.background_type in c.DAYTIME_BACKGROUNDS)):
                             new_plant.setSleep()
@@ -216,11 +215,11 @@ class Level(tool.State):
                     elif mode == 2:
                         map_x = int(data[1])
                         map_y = int(data[2])
-                        for plant in self.plant_groups[map_y]:
-                            plant_map_x, plant_map_y = self.map.getMapIndex(plant.rect.centerx, plant.rect.centery)
+                        for plt in self.plant_groups[map_y]:
+                            plant_map_x, plant_map_y = self.map.getMapIndex(plt.rect.centerx, plt.rect.centery)
                             if plant_map_x == map_x and plant_map_y == map_y:
-                                plant.health = 0
-                                self.killPlant(plant, shovel=True)
+                                plt.health = 0
+                                self.killPlant(plt, shovel=True)
             except:
                 print("接收失败")
                 break
@@ -1912,4 +1911,4 @@ class Level(tool.State):
             if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_AUTO:
                 self.showLevelProgress(surface)
                 if self.current_time - self.show_hugewave_approching_time <= 2000:
-                    surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
+                    surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)                 
