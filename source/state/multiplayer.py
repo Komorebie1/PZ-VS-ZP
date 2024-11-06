@@ -21,14 +21,17 @@ class Level(tool.State):
     def __init__(self, direction):
         tool.State.__init__(self)
         self.direction = direction
+        self.another_player_ready = False
+        self.ready = False
 
-    def startup(self, current_time, persist):
+    def startup(self, current_time, persist, ipv4_address):
         self.game_info = persist
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
         self.client_socket = None
         self.another_player_ready = False
-        self.self_ready = False
+        self.ready = False
+        self.ipv4_address = ipv4_address
 
         # 暂停状态
         self.pause = False
@@ -47,7 +50,7 @@ class Level(tool.State):
 
     def connect_server(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect(("192.168.195.1", 5555))
+        self.client_socket.connect((self.ipv4_address, 5555))
         receive_thread = threading.Thread(target=self.receive_process)
         receive_thread.start()
 
@@ -226,11 +229,12 @@ class Level(tool.State):
                             if plant_map_x == map_x and plant_map_y == map_y:
                                 plt.health = 0
                                 self.killPlant(plt, shovel=True)
+                                self.map.removeMapPlant(map_x, map_y, plt.name)
                     elif mode == 3:
                         self.another_player_ready = True
+                        print(self.ready, self.another_player_ready)
                         if self.ready and self.another_player_ready:
-                            self.initPlay()
-                            
+                            self.initPlay(self.panel.getSelectedCards())
             except:
                 print("接收失败")
                 break
@@ -582,6 +586,7 @@ class Level(tool.State):
             self.panel.checkCardClick(mouse_pos)
             if self.panel.checkStartButtonClick(mouse_pos):
                 self.ready = True
+                self.send_start()
                 if self.another_player_ready and self.ready:
                     self.initPlay(self.panel.getSelectedCards())
             elif self.inArea(self.little_menu_rect, *mouse_pos):
@@ -901,8 +906,6 @@ class Level(tool.State):
             # 无僵尸生成
             pass
             
-
-
         for i in range(self.map_y_len):
             self.bullet_groups[i].update(self.game_info)
             self.plant_groups[i].update(self.game_info)
@@ -1599,7 +1602,8 @@ class Level(tool.State):
         # 避免僵尸在用铲子移除植物后还在原位啃食
         target_plant.health = 0
         target_plant.kill()
-        self.send_process_delete_plant(map_x, map_y)
+        if shovel:
+            self.send_process_delete_plant(map_x, map_y)
 
 
     def checkPlant(self, target_plant, i):

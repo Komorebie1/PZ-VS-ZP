@@ -416,7 +416,7 @@ ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间)
     (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 0,5),
     (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 0,5),
     (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 0,2),
-    (FOOTBALL_ZOMBIE := "Zomboni", CARD_FOOTBALLZOMBIE := "card_zomboni", 0, 0,1),
+    (FOOTBALL_ZOMBIE := "Zomboni", CARD_FOOTBALLZOMBIE := "card_zomboni", 0, 0,100),
 )
 
 # 僵尸卡片信息索引
