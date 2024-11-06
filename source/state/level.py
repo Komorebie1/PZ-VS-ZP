@@ -1163,7 +1163,25 @@ class Level(tool.State):
 
     def checkZombieCollisions(self):
         for i in range(self.map_y_len):
-            for zombie in self.zombie_groups[i]:
+            
+            for zombie in self.zombie_groups[i]:    
+                if zombie.health <= 0:
+                        continue
+                collided_func = pg.sprite.collide_mask
+                zombie_list = pg.sprite.spritecollide(  hypno_zombie, self.zombie_groups[i],
+                                                        False, collided_func)
+                zombie_list = [_zombie for _zombie in zombie_list if _zombie.left != zombie.left]
+                for _zombie in zombie_list:
+                    if _zombie.state == c.DIE:
+                        continue
+                    # 正常僵尸攻击被魅惑的僵尸
+                    if _zombie.state == c.WALK:
+                        _zombie.setAttack(zombie, False)
+                    # 被魅惑的僵尸攻击正常僵尸
+                    if zombie.state == c.WALK:
+                        zombie.setAttack(_zombie, False)
+                        
+            for zombie in self.zombie_groups[i]:        
                 if zombie.name == c.ZOMBONI:
                     continue
                 if zombie.name in {c.POLE_VAULTING_ZOMBIE} and (not zombie.jumped):
@@ -1307,7 +1325,9 @@ class Level(tool.State):
                         zombie.target_y_change = _move * self.map.grid_height_size
                     else:
                         zombie.setAttack(target_plant)
-
+                
+            
+                            
             for hypno_zombie in self.hypno_zombie_groups[i]:
                 if hypno_zombie.health <= 0:
                     continue
