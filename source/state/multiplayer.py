@@ -27,6 +27,8 @@ class Level(tool.State):
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
         self.client_socket = None
+        self.another_player_ready = False
+        self.self_ready = False
 
         # 暂停状态
         self.pause = False
@@ -61,6 +63,10 @@ class Level(tool.State):
 
     def send_process_delete_plant(self, map_x, map_y):
         message = f"{2},{map_x},{map_y}"
+        self.client_socket.sendall(message.encode())
+        print("发送成功")
+    def send_start(self):
+        message = f"{3},{self.direction}"
         self.client_socket.sendall(message.encode())
         print("发送成功")
 
@@ -220,6 +226,11 @@ class Level(tool.State):
                             if plant_map_x == map_x and plant_map_y == map_y:
                                 plt.health = 0
                                 self.killPlant(plt, shovel=True)
+                    elif mode == 3:
+                        self.another_player_ready = True
+                        if self.ready and self.another_player_ready:
+                            self.initPlay()
+                            
             except:
                 print("接收失败")
                 break
@@ -551,6 +562,7 @@ class Level(tool.State):
         self.setupLittleMenu()
 
     def initChoose(self):
+        self.connect_server()
         self.state = c.CHOOSE
         self.panel = menubar.Panel(c.CARDS_TO_CHOOSE, self.map_data[c.INIT_SUN_NAME], self.background_type)
 
@@ -569,13 +581,14 @@ class Level(tool.State):
         elif mouse_pos and mouse_click[0]:
             self.panel.checkCardClick(mouse_pos)
             if self.panel.checkStartButtonClick(mouse_pos):
-                self.initPlay(self.panel.getSelectedCards())
+                self.ready = True
+                if self.another_player_ready and self.ready:
+                    self.initPlay(self.panel.getSelectedCards())
             elif self.inArea(self.little_menu_rect, *mouse_pos):
                 self.show_game_menu = True
                 c.SOUND_BUTTON_CLICK.play()
 
     def initPlay(self, card_list):
-        self.connect_server()
         # 播放bgm
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, self.bgm))
