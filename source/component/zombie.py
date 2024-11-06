@@ -75,6 +75,8 @@ class Zombie(pg.sprite.Sprite):
             frames.append(tool.get_image(frame, x, 0, width, height, colorkey, left=not self.left))
 
     def update(self, game_info):
+        if self.rect.x >= c.LEVEL_SCREEN_WIDTH + 40 or self.rect.x <= -40:
+            self.kill()
         self.current_time = game_info[c.CURRENT_TIME]
         self.handleState()
         self.updateIceSlow()
