@@ -48,12 +48,20 @@ class Menu(tool.State):
 
         # 小游戏
         littleGame_frame_rect = (0, 7, 317, 135)
-        self.littleGame_frames = [tool.get_image_alpha(tool.GFX[f"{c.LITTLEGAME_BUTTON}_{i}"], *littleGame_frame_rect) for i in range(2)]
+        self.littleGame_frames = [tool.get_image_alpha(tool.GFX[f"{c.LITTLEGAME_BUTTON}_{i}"], *littleGame_frame_rect, c.WHITE) for i in range(2)]
         self.littleGame_image = self.littleGame_frames[0]
         self.littleGame_rect = self.littleGame_image.get_rect()
         self.littleGame_rect.x = 397
         self.littleGame_rect.y = 175
         self.littleGame_highlight_time = 0
+
+        join_frame_rect = (0, 7, 317, 135)
+        self.join_frames = [tool.get_image_alpha(tool.GFX[f"{c.JOIN_BUTTON}_{i}"], *join_frame_rect, c.WHITE) for i in range(2)]
+        self.join_image = self.join_frames[0]
+        self.join_rect = self.join_image.get_rect()
+        self.join_rect.x = 390
+        self.join_rect.y = 270
+        self.join_highlight_time = 0
 
         # 退出按钮
         exit_frame_rect = (0, 0, 47, 27)
@@ -86,6 +94,12 @@ class Menu(tool.State):
         self.adventure_start = 0
         self.adventure_timer = 0
         self.adventure_clicked = False
+        self.online_start = 0
+        self.online_timer = 0
+        self.online_clicked = False
+        self.join_start = 0
+        self.join_timer = 0
+        self.join_clicked = False
         self.option_button_clicked = False
 
     def checkHilight(self, x:int, y:int):
@@ -95,6 +109,9 @@ class Menu(tool.State):
         # 高亮小游戏按钮
         elif self.inArea(self.littleGame_rect, x, y):
             self.littleGame_highlight_time = self.current_time
+        # 高亮加入按钮
+        elif self.inArea(self.join_rect, x, y):
+            self.join_highlight_time = self.current_time
         # 高亮退出按钮
         elif self.inArea(self.exit_rect, x, y):
             self.exit_highlight_time = self.current_time
@@ -110,6 +127,7 @@ class Menu(tool.State):
         self.exit_image = self.chooseHilightImage(self.exit_highlight_time, self.exit_frames)
         self.option_button_image = self.chooseHilightImage(self.option_button_highlight_time, self.option_button_frames)
         self.littleGame_image = self.chooseHilightImage(self.littleGame_highlight_time, self.littleGame_frames)
+        self.join_image = self.chooseHilightImage(self.join_highlight_time, self.join_frames)
         self.help_image = self.chooseHilightImage(self.help_hilight_time, self.help_frames)
 
     def chooseHilightImage(self, hilightTime:int, frames):
@@ -130,10 +148,24 @@ class Menu(tool.State):
 
     # 按到小游戏
     def respondLittleGameClick(self):
-        self.done = True
-        self.persist[c.GAME_MODE] = c.MODE_LITTLEGAME
-        # 播放点击音效
-        c.SOUND_BUTTON_CLICK.play()
+        self.online_clicked = True
+        self.next = c.HOST
+        self.online_timer = self.online_start = self.current_time
+        self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
+        # 播放进入音效
+        pg.mixer.music.stop()
+        c.SOUND_EVILLAUGH.play()
+        c.SOUND_LOSE.play()
+    
+    def respondJoinClick(self):
+        self.join_clicked = True
+        self.next = c.MULTIPLAYER
+        self.online_timer = self.online_start = self.current_time
+        self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
+        # 播放进入音效
+        pg.mixer.music.stop()
+        c.SOUND_EVILLAUGH.play()
+        c.SOUND_LOSE.play()
 
     # 点击到退出按钮，修改转态的done属性
     def respondExitClick(self):
@@ -243,6 +275,7 @@ class Menu(tool.State):
         surface.blit(self.bg_image, self.bg_rect)
         surface.blit(self.adventure_image, self.adventure_rect)
         surface.blit(self.littleGame_image, self.littleGame_rect)
+        surface.blit(self.join_image, self.join_rect)
         surface.blit(self.exit_image, self.exit_rect)
         surface.blit(self.option_button_image, self.option_button_rect)
         surface.blit(self.help_image, self.help_rect)
@@ -257,6 +290,22 @@ class Menu(tool.State):
             else:
                 self.adventure_image = self.adventure_frames[0]
             if (self.current_time - self.adventure_start) > 3200:
+                self.done = True
+        elif self.online_clicked:
+            # 乱写一个不用信号标记的循环播放 QwQ
+            if ((self.current_time - self.online_timer) // 150) % 2:
+                self.littleGame_image = self.littleGame_frames[1]
+            else:
+                self.littleGame_image = self.littleGame_frames[0]
+            if (self.current_time - self.online_start) > 3200:
+                self.done = True
+        elif self.join_clicked:
+            # 乱写一个不用信号标记的循环播放 QwQ
+            if ((self.current_time - self.join_timer) // 150) % 2:
+                self.join_image = self.join_frames[1]
+            else:
+                self.joinGame_image = self.join_frames[0]
+            if (self.current_time - self.join_start) > 3200:
                 self.done = True
         # 点到选项按钮后显示菜单
         elif self.option_button_clicked:
@@ -300,6 +349,8 @@ class Menu(tool.State):
                     self.respondAdventureClick()
                 elif self.inArea(self.littleGame_rect, *mouse_pos):
                     self.respondLittleGameClick()
+                elif self.inArea(self.join_rect, *mouse_pos):
+                    self.respondJoinClick()
                 elif self.inArea(self.option_button_rect, *mouse_pos):
                     self.respondOptionButtonClick()
                 elif self.inArea(self.exit_rect, *mouse_pos):
