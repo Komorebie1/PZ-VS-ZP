@@ -18,21 +18,19 @@ test_direction = False  # False for right, True for left(only for test)
 '''
 
 class Level(tool.State):
-    def __init__(self, direction):
+    def __init__(self, direction, ipv4_address):
         tool.State.__init__(self)
         self.direction = direction
         self.another_player_ready = False
         self.ready = False
-
-    def startup(self, current_time, persist, ipv4_address):
+        self.ipv4_address = ipv4_address
+    def startup(self, current_time, persist):
         self.game_info = persist
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
         self.client_socket = None
         self.another_player_ready = False
         self.ready = False
-        self.ipv4_address = ipv4_address
-
         # 暂停状态
         self.pause = False
         self.pause_time = 0
@@ -51,7 +49,7 @@ class Level(tool.State):
     def connect_server(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(self.ipv4_address)
-        self.client_socket.connect(("192.168.195.1", 5555))
+        self.client_socket.connect((self.ipv4_address, 5555))
         receive_thread = threading.Thread(target=self.receive_process)
         receive_thread.start()
 

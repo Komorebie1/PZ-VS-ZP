@@ -109,18 +109,18 @@ class Control():
         self.state = self.state_dict[self.state_name]
         self.state.startup(self.current_time, self.game_info)
 
-    def update(self, ipv4_address:str):
+    def update(self):
         # 自 pygame_init() 调用以来的毫秒数 * 游戏速度倍率，即游戏时间
         self.current_time = pg.time.get_ticks() * self.game_info[c.GAME_RATE]
         if self.state.done:
-            self.flip_state(ipv4_address)
+            self.flip_state()
         self.state.update(self.screen, self.current_time, self.mouse_pos, self.mouse_click)
         self.mouse_pos = None
         self.mouse_click[0] = False
         self.mouse_click[1] = False
 
     # 状态转移
-    def flip_state(self, ipv4_address:str):
+    def flip_state(self):
         if self.state.next == c.EXIT:
             pg.quit()
             os._exit(0)
@@ -132,7 +132,7 @@ class Control():
         elif self.state_name == c.MAIN_MENU:
             pg.display.set_mode(c.SCREEN_SIZE)
         if self.state_name == c.MULTIPLAYER:
-            self.state.startup(self.current_time, persist, ipv4_address)
+            self.state.startup(self.current_time, persist)
         else:
             self.state.startup(self.current_time, persist)
 
@@ -156,10 +156,10 @@ class Control():
                 # self.mouse_click[0]表示左键，self.mouse_click[1]表示右键
                 print(f"点击位置: ({self.mouse_pos[0]:3}, {self.mouse_pos[1]:3}) 左右键点击情况: {self.mouse_click}")
 
-    def run(self, ipv4_address:str):
+    def run(self):
         while not self.done:
             self.event_loop()
-            self.update(ipv4_address)
+            self.update()
             pg.display.update()
             self.clock.tick(self.fps)
 
