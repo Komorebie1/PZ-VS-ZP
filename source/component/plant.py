@@ -101,7 +101,7 @@ class Bullet(pg.sprite.Sprite):
                 if self.y_vel * (self.dest_y - self.rect.y) < 0:
                     self.rect.y = self.dest_y
             self.rect.x += self.x_vel
-            if self.rect.x >= c.LEVEL_SCREEN_WIDTH + 20 or self.rect.x <= -20:
+            if self.rect.x >= c.LEVEL_SCREEN_WIDTH + 20:
                 self.kill()
         elif self.state == c.EXPLODE:
             if (self.current_time - self.explode_timer) > 250:
@@ -133,7 +133,7 @@ class Bullet(pg.sprite.Sprite):
 # 大喷菇的烟雾
 # 仅有动画效果，不参与攻击运算
 class Fume(pg.sprite.Sprite):
-    def __init__(self, x, y,left):
+    def __init__(self, x, y, left):
         pg.sprite.Sprite.__init__(self)
         self.name = c.FUME
         self.timer = 0
@@ -461,7 +461,7 @@ class SunFlower(Plant):
         elif (self.current_time - self.sun_timer) > c.FLOWER_SUN_INTERVAL:
             self.sun_group.add(
                 Sun(    self.rect.centerx, self.rect.bottom,
-                        self.rect.right if self.left else self.rect.left, self.rect.bottom + self.rect.h // 2))
+                        self.rect.right, self.rect.bottom + self.rect.h // 2))
             self.sun_timer = self.current_time
 
 class TwinSunFlower(Plant):
@@ -1977,7 +1977,7 @@ class FumeShroom(Plant):
                 self.changeFrames(self.attack_frames)
         
         if self.current_time - self.shoot_timer >= 1400:
-            self.bullet_group.add(Fume(self.rect.right - 70, self.rect.y,self.left) if self.left else Fume(self.rect.x -140, self.rect.y,self.left))
+            self.bullet_group.add(Fume((self.rect.right - 70) if self.left else (self.rect.left - 330), self.rect.y, self.left))
             # 烟雾只是个动画，实际伤害由本身完成
             for target_zombie in self.zombie_group:
                 if self.canAttack(target_zombie):

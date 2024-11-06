@@ -36,7 +36,7 @@ def send_position(client_socket, x, y):
 def main():
     # 创建客户端socket并连接服务器
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(("127.0.0.1", 5555))
+    client_socket.connect(("192.168.195.1", 5555))
     # 启动接收线程
     receive_thread = threading.Thread(target=receive_updates, args=(client_socket,))
     receive_thread.start()
