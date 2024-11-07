@@ -72,6 +72,11 @@ class Level(tool.State):
         self.client_socket.sendall(message.encode())
         print("发送成功")
 
+    def send_process_tool(self, x, y, real_effect):
+        message = f"{4},{x},{y},{real_effect}"
+        self.client_socket.sendall(message.encode())
+        print("发送成功")
+    
     def closeConnection(self):
         self.client_socket.close()
 
@@ -234,6 +239,11 @@ class Level(tool.State):
                         print(self.ready, self.another_player_ready)
                         if self.ready and self.another_player_ready:
                             self.initPlay(self.panel.getSelectedCards())
+                    elif mode == 4:
+                        x = int(data[1])
+                        y = int(data[2])
+                        real_effect = int(data[3])
+                        self.tool_group.add(plant.Tool(x, 0, x, y,real_effect))
             except:
                 print("接收失败")
                 break
@@ -885,6 +895,7 @@ class Level(tool.State):
                 self.removeMouseImagePlus()
                 return
 
+    
     def play(self, mouse_pos, mouse_click):
         # 如果暂停
         if self.show_game_menu:
@@ -940,7 +951,9 @@ class Level(tool.State):
                 self.tool_timer = self.current_time
                 map_x, map_y = self.map.getToolRandomMapIndex()
                 x, y = self.map.getMapGridPos(map_x, map_y)
-                self.tool_group.add(plant.Tool(x, 0, x, y,c.TOOLEFFECT[random.randint(0, len(c.TOOLEFFECT)-1)]))
+                real_effect = c.TOOLEFFECT[random.randint(0, len(c.TOOLEFFECT)-1)]
+                self.tool_group.add(plant.Tool(x, 0, x, y,real_effect))
+                self.send_process_tool(x,y,real_effect)
             
 
         # 检查有没有捡到阳光
@@ -1354,11 +1367,12 @@ class Level(tool.State):
     
 
     def toolReward(self,left,tool):
-        match tool.real_effect:
-            case c.FREEZING_TOOL:
-                pass
-            case c.STONE:
-                pass
+        pass
+        # match tool.real_effect:
+        #     case c.FREEZING_TOOL:
+        #         pass
+        #     case c.STONE:
+        #         pass
     
     def checkBulletCollisions(self):
         for i in range(self.map_y_len):
