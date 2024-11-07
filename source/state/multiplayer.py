@@ -18,13 +18,13 @@ test_direction = False  # False for right, True for left(only for test)
 '''
 
 class Level(tool.State):
-    def __init__(self, direction, ipv4_address):
+    def __init__(self, direction):
         tool.State.__init__(self)
         self.direction = direction
         self.another_player_ready = False
         self.ready = False
+    def startup(self, current_time, persist, ipv4_address):
         self.ipv4_address = ipv4_address
-    def startup(self, current_time, persist):
         self.game_info = persist
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
@@ -521,6 +521,7 @@ class Level(tool.State):
             y = self.map.getMapGridPos(0, i)[1]
             if self.background_type == c.BACKGROUND_BIG:
                 self.cars.append(plant.Car(-45 + 220, y+20, i))
+                self.cars.append(plant.Car(c.LEVEL_SCREEN_WIDTH - 250, y+20, i, False))
             else:
                 self.cars.append(plant.Car(-45, y+20, i))
 
@@ -1612,12 +1613,12 @@ class Level(tool.State):
     def checkCarCollisions(self):
         for i in range(len(self.cars)):
             if self.cars[i]:
-                for zombie in self.zombie_groups[i]:
-                    if (zombie and zombie.state != c.DIE and (not zombie.losthead)
+                for zombie in self.zombie_groups[self.cars[i].map_y]:
+                    if zombie.left != self.cars[i].left and (zombie and zombie.state != c.DIE and (not zombie.losthead)
                     and (pg.sprite.collide_mask(zombie, self.cars[i]))):
                         self.cars[i].setWalk()
-                    if (pg.sprite.collide_mask(zombie, self.cars[i]) or
-                    self.cars[i].rect.x <= zombie.rect.right <= self.cars[i].rect.right):
+                    if zombie.left != self.cars[i].left and (pg.sprite.collide_mask(zombie, self.cars[i]) or
+                    (self.cars[i].rect.x <= zombie.rect.right <= self.cars[i].rect.right) if self.cars[i].left else (self.cars[i].rect.x <= zombie.rect.x <= self.cars[i].rect.right)):
                         zombie.health = 0
                 if self.cars[i].dead:
                     self.cars[i] = None
@@ -1826,60 +1827,78 @@ class Level(tool.State):
                     self.killPlant(plant)
 
     def checkVictory(self):
-        if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
-            if len(self.zombie_list) > 0:
-                return False
-            for i in range(self.map_y_len):
-                if len(self.zombie_groups[i]) > 0:
-                    return False
-        else:
-            if self.wave_num < self.map_data[c.NUM_FLAGS] * 10:
-                return False
-            for i in range(self.map_y_len):
-                if len(self.zombie_groups[i]) > 0:
-                    return False
-        return True
+        # if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+        #     if len(self.zombie_list) > 0:
+        #         return False
+        #     for i in range(self.map_y_len):
+        #         if len(self.zombie_groups[i]) > 0:
+        #             return False
+        # else:
+        #     if self.wave_num < self.map_data[c.NUM_FLAGS] * 10:
+        #         return False
+        #     for i in range(self.map_y_len):
+        #         if len(self.zombie_groups[i]) > 0:
+        #             return False
+        # return True
+        for i in range(self.map_y_len):
+            for zombie in self.zombie_groups[i]:
+                if zombie.left == self.direction:
+                    continue
+                ed = c.BACKGROUND_OFFSET_X if self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
+                victory = (zombie.rect.right < ed) if self.direction else (zombie.rect.x > ed)
+                if victory and (not zombie.losthead) and (zombie.state != c.DIE):
+                    return True
+        return False
 
     def checkLose(self):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.rect.right < -20 and (not zombie.losthead) and (zombie.state != c.DIE):
+                if zombie.left != self.direction:
+                    continue
+                ed = c.BACKGROUND_OFFSET_X if not self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
+                lose = (zombie.rect.right < ed) if not self.direction else (zombie.rect.x > ed)
+                if lose and (not zombie.losthead) and (zombie.state != c.DIE):
                     return True
         return False
 
     def checkGameState(self):
         if self.checkVictory():
-            if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
-                self.game_info[c.LEVEL_NUM] += 1
-                if self.game_info[c.LEVEL_NUM] >= map.TOTAL_LEVEL:
-                    self.game_info[c.LEVEL_COMPLETIONS] += 1
-                    self.game_info[c.LEVEL_NUM] = 1
-                    self.next = c.AWARD_SCREEN
-                    # 播放大胜利音效
-                    c.SOUND_FINAL_FANFARE.play()
-                else:
-                    self.next = c.GAME_VICTORY
-                    # 播放胜利音效
-                    c.SOUND_WIN.play()
-            elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-                self.game_info[c.LITTLEGAME_NUM] += 1
-                if self.game_info[c.LITTLEGAME_NUM] >= map.TOTAL_LITTLE_GAME:
-                    self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
-                    self.game_info[c.LITTLEGAME_NUM] = 1
-                    self.next = c.AWARD_SCREEN
-                    # 播放大胜利音效
-                    c.SOUND_FINAL_FANFARE.play()
-                else:
-                    self.next = c.GAME_VICTORY
-                    # 播放胜利音效
-                    c.SOUND_WIN.play()
+            # if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
+            #     self.game_info[c.LEVEL_NUM] += 1
+            #     if self.game_info[c.LEVEL_NUM] >= map.TOTAL_LEVEL:
+            #         self.game_info[c.LEVEL_COMPLETIONS] += 1
+            #         self.game_info[c.LEVEL_NUM] = 1
+            #         self.next = c.AWARD_SCREEN
+            #         # 播放大胜利音效
+            #         c.SOUND_FINAL_FANFARE.play()
+            #     else:
+            #         self.next = c.GAME_VICTORY
+            #         # 播放胜利音效
+            #         c.SOUND_WIN.play()
+            # elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+            #     self.game_info[c.LITTLEGAME_NUM] += 1
+            #     if self.game_info[c.LITTLEGAME_NUM] >= map.TOTAL_LITTLE_GAME:
+            #         self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
+            #         self.game_info[c.LITTLEGAME_NUM] = 1
+            #         self.next = c.AWARD_SCREEN
+            #         # 播放大胜利音效
+            #         c.SOUND_FINAL_FANFARE.play()
+            #     else:
+            #         self.next = c.GAME_VICTORY
+            #         # 播放胜利音效
+            #         c.SOUND_WIN.play()
+            self.next = c.AWARD_SCREEN
+            # 播放大胜利音效
+            c.SOUND_FINAL_FANFARE.play()
+            self.closeConnection()
             self.done = True
-            self.saveUserData()
+            # self.saveUserData()
         elif self.checkLose():
             # 播放失败音效
             c.SOUND_LOSE.play()
             c.SOUND_SCREAM.play()
             self.next = c.GAME_LOSE
+            self.closeConnection()
             self.done = True
 
     def drawMouseShow(self, surface):
@@ -1993,8 +2012,10 @@ class Level(tool.State):
                 self.hypno_zombie_groups[i].draw(surface)
                 self.bullet_groups[i].draw(surface)
                 self.drawZombieFreezeTrap(i, surface)
-                if self.cars[i]:
-                    self.cars[i].draw(surface)
+                if self.cars[i * 2]:
+                    self.cars[i * 2].draw(surface)
+                if self.cars[i * 2 + 1]:
+                    self.cars[i * 2 + 1].draw(surface)
             self.head_group.draw(surface)
             self.sun_group.draw(surface)
             self.tool_group.draw(surface)
