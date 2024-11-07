@@ -221,6 +221,7 @@ PANEL_BACKGROUND = "PanelBackground"
 START_BUTTON = "StartButton"
 CARD_POOL = "card_pool"
 ZOMBIE_CARD_BAR = "ZombieCardBar"
+GIFT_CARD_BAR = "GiftCardBar"
 
 # 关于植物栏的像素设置
 PANEL_Y_START = 87
