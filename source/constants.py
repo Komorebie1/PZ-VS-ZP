@@ -420,9 +420,10 @@ ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间, 
     (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 300,5),
     (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,500),
     (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,500),
-    (FOOTBALL_ZOMBIE := "Zomboni", CARD_FOOTBALLZOMBIE := "card_zomboni", 0, 300,0),
 )
 
+ZOMBONI = "Zomboni"
+CARD_ZOMBONI = "card_zomboni"
 # 僵尸卡片信息索引
 ZOMBIE_CARD_INDEX = {item[0]: index for (index, item) in enumerate(ZOMBIE_CARD_INFO)}
 
@@ -526,6 +527,19 @@ ZOMBONI_TOOL = "Zomboni"
 CHERRYBOMB_TOOL = "CherryBomb"
 JALAPENO_TOOL = "Jalapeno"
 DOOMSHROOM_TOOL = "DoomShroom"
+
+TOOL_CARD_INFO = (# 元组 (僵尸名称, 卡片名称)
+    (ICESHROOM,CARD_ICESHROOM),
+    (ZOMBONI,CARD_ZOMBONI),
+    (CHERRYBOMB,CARD_CHERRYBOMB),
+    (GLOOMSHROOM,CARD_GLOOMSHROOM),
+    (JALAPENO,CARD_JALAPENO)
+)
+
+TOOL_CARD_INDEX = {item[0]: index for (index, item) in enumerate(TOOL_CARD_INFO)}
+
+TOOL_CARD_LIST = [TOOL_CARD_INDEX[item] for item in TOOL_CARD_INDEX]
+
 TOOLEFFECT = [FREEZING_TOOL, ZOMBONI_TOOL,CHERRYBOMB_TOOL,JALAPENO_TOOL,DOOMSHROOM_TOOL]
 
 # 僵尸冷冻
