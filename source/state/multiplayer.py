@@ -1780,7 +1780,7 @@ class Level(tool.State):
         # return True
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.left != self.left:
+                if zombie.left != self.direction:
                     continue
                 ed = -20 + c.BACKGROUND_OFFSET_X if not self.left else c.LEVEL_SCREEN_WIDTH + 20 - c.BACKGROUND_OFFSET_X
                 victory = (zombie.rect.right < ed) if not self.left else (zombie.rect.x > ed)
