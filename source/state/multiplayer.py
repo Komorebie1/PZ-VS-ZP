@@ -654,7 +654,7 @@ class Level(tool.State):
             self.wave_zombies = []
             self.zombie_num = 0
             pass
-        self.setupCars()
+        # self.setupCars()
 
         # 地图有铲子才添加铲子
         if self.has_shovel:
@@ -1764,24 +1764,37 @@ class Level(tool.State):
                     self.killPlant(plant)
 
     def checkVictory(self):
-        if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
-            if len(self.zombie_list) > 0:
-                return False
-            for i in range(self.map_y_len):
-                if len(self.zombie_groups[i]) > 0:
-                    return False
-        else:
-            if self.wave_num < self.map_data[c.NUM_FLAGS] * 10:
-                return False
-            for i in range(self.map_y_len):
-                if len(self.zombie_groups[i]) > 0:
-                    return False
-        return True
+        # if self.map_data[c.SPAWN_ZOMBIES] == c.SPAWN_ZOMBIES_LIST:
+        #     if len(self.zombie_list) > 0:
+        #         return False
+        #     for i in range(self.map_y_len):
+        #         if len(self.zombie_groups[i]) > 0:
+        #             return False
+        # else:
+        #     if self.wave_num < self.map_data[c.NUM_FLAGS] * 10:
+        #         return False
+        #     for i in range(self.map_y_len):
+        #         if len(self.zombie_groups[i]) > 0:
+        #             return False
+        # return True
+        for i in range(self.map_y_len):
+            for zombie in self.zombie_groups[i]:
+                if zombie.left != self.left:
+                    continue
+                ed = -20 + c.BACKGROUND_OFFSET_X if not self.left else c.LEVEL_SCREEN_WIDTH + 20 - c.BACKGROUND_OFFSET_X
+                victory = (zombie.rect.right < ed) if not self.left else (zombie.rect.x > ed)
+                if victory and (not zombie.losthead) and (zombie.state != c.DIE):
+                    return True
+        return False
 
     def checkLose(self):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.rect.right < -20 and (not zombie.losthead) and (zombie.state != c.DIE):
+                if zombie.left == self.left:
+                    continue
+                ed = -20 + c.BACKGROUND_OFFSET_X if self.left else c.LEVEL_SCREEN_WIDTH + 20 - c.BACKGROUND_OFFSET_X
+                lose = (zombie.rect.right < ed) if self.left else (zombie.rect.x > ed)
+                if lose and (not zombie.losthead) and (zombie.state != c.DIE):
                     return True
         return False
 
