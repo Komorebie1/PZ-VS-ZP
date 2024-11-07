@@ -22,8 +22,8 @@ if __name__ == "__main__":
                     c.GAME_VICTORY: screen.GameVictoryScreen(),
                     c.GAME_LOSE:    screen.GameLoseScreen(),
                     c.LEVEL:        level.Level(),
-                    c.MULTIPLAYER:        multiplayer.Level(False, ipv4_address),
-                    c.HOST:        multiplayer.Level(True, ipv4_address),
+                    c.MULTIPLAYER:  multiplayer.Level(False, ipv4_address),
+                    c.HOST:         multiplayer.Level(True, ipv4_address),
                     c.AWARD_SCREEN: screen.AwardScreen(),
                     # c.HELP_SCREEN:  screen.HelpScreen(),
                 }

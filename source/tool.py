@@ -140,11 +140,8 @@ class Control():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.done = True
-                if self.state_name == c.MULTIPLAYER or self.state_name == c.HOST or self.state_name == c.GAME_LOSE or self.state_name == c.GAME_VICTORY:
-                    try:
-                        self.state.closeConnection()
-                    except:
-                        pass
+                if self.state_name == c.MULTIPLAYER or self.state_name == c.HOST:
+                    self.state.closeConnection()
             elif event.type == pg.KEYDOWN:
                 self.keys = pg.key.get_pressed()
                 if event.key == pg.K_f:

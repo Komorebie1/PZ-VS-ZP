@@ -108,7 +108,7 @@ class AwardScreen(tool.State):
         # 文字
         # 标题处文字
         font = pg.font.Font(c.FONT_PATH, 37)
-        title_text = font.render("您获得了新的战利品！", True, c.PARCHMENT_YELLOW)
+        title_text = font.render("胜利！", True, c.PARCHMENT_YELLOW)
         title_text_rect = title_text.get_rect()
         title_text_rect.x = 220
         title_text_rect.y = 23

@@ -1549,14 +1549,14 @@ class Level(tool.State):
             self.new_plant_and_positon = None    # 生效后需要解除刷新设置
 
     def checkCarCollisions(self):
-        for i in range(len(self.cars)):
+        for i in range(2 * len(self.cars)):
             if self.cars[i]:
                 for zombie in self.zombie_groups[self.cars[i].map_y]:
                     if zombie.left != self.cars[i].left and (zombie and zombie.state != c.DIE and (not zombie.losthead)
                     and (pg.sprite.collide_mask(zombie, self.cars[i]))):
                         self.cars[i].setWalk()
-                    if zombie.left != self.cars[i].left and(pg.sprite.collide_mask(zombie, self.cars[i]) or
-                    self.cars[i].rect.x <= zombie.rect.right <= self.cars[i].rect.right):
+                    if zombie.left != self.cars[i].left and (pg.sprite.collide_mask(zombie, self.cars[i]) or
+                    (self.cars[i].rect.x <= zombie.rect.right <= self.cars[i].rect.right) if self.cars[i].left else (self.cars[i].rect.x <= zombie.rect.x <= self.cars[i].rect.right)):
                         zombie.health = 0
                 if self.cars[i].dead:
                     self.cars[i] = None
@@ -1782,8 +1782,8 @@ class Level(tool.State):
             for zombie in self.zombie_groups[i]:
                 if zombie.left != self.direction:
                     continue
-                ed = c.BACKGROUND_OFFSET_X if not self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
-                victory = (zombie.rect.right < ed) if not self.direction else (zombie.rect.x > ed)
+                ed = c.BACKGROUND_OFFSET_X if self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
+                victory = (zombie.rect.right < ed) if self.direction else (zombie.rect.x > ed)
                 if victory and (not zombie.losthead) and (zombie.state != c.DIE):
                     return True
         return False
@@ -1793,8 +1793,8 @@ class Level(tool.State):
             for zombie in self.zombie_groups[i]:
                 if zombie.left == self.direction:
                     continue
-                ed = c.BACKGROUND_OFFSET_X if self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
-                lose = (zombie.rect.right < ed) if self.direction else (zombie.rect.x > ed)
+                ed = c.BACKGROUND_OFFSET_X if not self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
+                lose = (zombie.rect.right < ed) if not self.direction else (zombie.rect.x > ed)
                 if lose and (not zombie.losthead) and (zombie.state != c.DIE):
                     return True
         return False
@@ -1828,6 +1828,7 @@ class Level(tool.State):
             self.next = c.AWARD_SCREEN
             # 播放大胜利音效
             c.SOUND_FINAL_FANFARE.play()
+            self.closeConnection()
             self.done = True
             # self.saveUserData()
         elif self.checkLose():
@@ -1835,6 +1836,7 @@ class Level(tool.State):
             c.SOUND_LOSE.play()
             c.SOUND_SCREAM.play()
             self.next = c.GAME_LOSE
+            self.closeConnection()
             self.done = True
 
     def drawMouseShow(self, surface):
