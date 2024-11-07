@@ -1549,7 +1549,7 @@ class Level(tool.State):
             self.new_plant_and_positon = None    # 生效后需要解除刷新设置
 
     def checkCarCollisions(self):
-        for i in range(2 * len(self.cars)):
+        for i in range(len(self.cars)):
             if self.cars[i]:
                 for zombie in self.zombie_groups[self.cars[i].map_y]:
                     if zombie.left != self.cars[i].left and (zombie and zombie.state != c.DIE and (not zombie.losthead)
@@ -1780,7 +1780,7 @@ class Level(tool.State):
         # return True
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.left != self.direction:
+                if zombie.left == self.direction:
                     continue
                 ed = c.BACKGROUND_OFFSET_X if self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
                 victory = (zombie.rect.right < ed) if self.direction else (zombie.rect.x > ed)
@@ -1791,7 +1791,7 @@ class Level(tool.State):
     def checkLose(self):
         for i in range(self.map_y_len):
             for zombie in self.zombie_groups[i]:
-                if zombie.left == self.direction:
+                if zombie.left != self.direction:
                     continue
                 ed = c.BACKGROUND_OFFSET_X if not self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
                 lose = (zombie.rect.right < ed) if not self.direction else (zombie.rect.x > ed)
