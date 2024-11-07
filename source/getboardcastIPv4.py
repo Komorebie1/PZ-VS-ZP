@@ -20,11 +20,10 @@ class MyListener:
 def discover_service():
     zeroconf = Zeroconf()
     listener = MyListener()
+    browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
 
     print("Searching for service...")
+    time.sleep(3)
     IPv4 = listener.server_ip
     zeroconf.close()
     return IPv4
-
-if __name__ == "__main__":
-    discover_service()

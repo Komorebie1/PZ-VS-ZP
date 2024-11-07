@@ -10,12 +10,8 @@ pg.init()
 from source import tool
 from source import constants as c
 from source.state import mainmenu, screen, level, multiplayer
-import socket
 
 if __name__ == "__main__":
-    # hostname = socket.gethostname()
-    # ipv4_address = socket.gethostbyname(hostname)
-    # ipv4_address = '192.168.195.1'
     game = tool.Control()
     state_dict = {  
                     c.MAIN_MENU:    mainmenu.Menu(),
