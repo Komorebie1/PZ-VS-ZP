@@ -1369,14 +1369,19 @@ class Level(tool.State):
         self.shovel_rect.y = self.shovel_positon[1]
         
     
-
+    # 针对礼物添加对应卡片奖励
     def toolReward(self,left,tool):
-        pass
-        # match tool.real_effect:
-        #     case c.FREEZING_TOOL:
-        #         pass
-        #     case c.STONE:
-        #         pass
+        match tool.real_effect:
+            case c.FREEZING_TOOL:
+                self.addgift((c.ICESHROOM,c.CARD_ICESHROOM),left)
+            case c.ZOMBONI_TOOL:
+                self.addgift((c.ZOMBONI,c.CARD_ZOMBONI),left)
+            case c.CHERRYBOMB_TOOL:
+                self.addgift((c.CHERRYBOMB,c.CARD_CHERRYBOMB),left)
+            case c.GLOOMSHROOM_TOOL:
+                self.addgift((c.GLOOMSHROOM,c.CARD_GLOOMSHROOM),left)
+            case c.JALAPENO_TOOL:
+                self.addgift((c.JALAPENO,c.CARD_JALAPENO),left)
     
     def checkBulletCollisions(self):
         for i in range(self.map_y_len):
