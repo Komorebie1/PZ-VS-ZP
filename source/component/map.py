@@ -201,6 +201,11 @@ class Map():
         map_x = random.randint(0, self.width-1)
         map_y = random.randint(0, self.height-1)
         return (map_x, map_y)
+    
+    def getToolRandomMapIndex(self) -> tuple[int, int]:
+        map_x = random.randint(5, 6)
+        map_y = random.randint(0, self.height-1)
+        return (map_x, map_y)
 
     def checkPlantToSeed(self, x:int, y:int, plant_name:str) -> tuple[int, int]:
         pos = None
