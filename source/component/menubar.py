@@ -257,26 +257,7 @@ class ZombieBar():
 
     def update(self, current_time):
         self.current_time = current_time
-        # for card in self.card_list:
-        #     card.update(self.sun_value, self.current_time)
-        # self.updateCard()
         self.showCard.update(self.sun_value, self.current_time)
-
-    def createImage(self, x, y, num):
-        if num == 1:
-            return
-        img = self.image
-        rect = self.image.get_rect()
-        width = rect.w
-        height = rect.h
-        self.image = pg.Surface((width * num, height)).convert()
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        for i in range(num):
-            x = i * width
-            self.image.blit(img, (x,0))
-        self.image.set_colorkey(c.BLACK)
     
     def setupCards(self):
         self.card_list = []
@@ -312,12 +293,9 @@ class ZombieBar():
     #     if self.sun_value > 9990:
     #         self.sun_value = 9990
 
-    def setCardFrozenTime(self, zombie_name):
-        # for card in self.card_list:
-        #     if c.PLANT_CARD_INFO[card.index][c.PLANT_NAME_INDEX] == plant_name:
-        #         card.setFrozenTime(self.current_time)
-        #         break
-        pass
+    def setCardFrozenTime(self):
+        if self.showCard:
+            self.showCard.setFrozenTime(self.current_time)
 
     # def drawSunValue(self):
     #     self.value_image = getSunValueImage(self.sun_value)

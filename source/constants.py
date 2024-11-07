@@ -411,14 +411,14 @@ PLANT_CARD_INDEX = {item[PLANT_NAME_INDEX]: index for (index, item) in enumerate
 CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
 
 # 僵尸卡片信息汇总（包括僵尸名称, 卡片名称, 阳光, 冷却时间）
-ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间)
-    (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 5000,10),
-    (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 5000,1),
-    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 5000,5),
-    (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 5000,5),
-    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 5000,500),
-    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 5000,500),
-    (FOOTBALL_ZOMBIE := "Zomboni", CARD_FOOTBALLZOMBIE := "card_zomboni", 0, 5000,0),
+ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间, 权重)
+    (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 300,10),
+    (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 300,1),
+    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 300,5),
+    (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 300,5),
+    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,500),
+    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,500),
+    (FOOTBALL_ZOMBIE := "Zomboni", CARD_FOOTBALLZOMBIE := "card_zomboni", 0, 300,0),
 )
 
 # 僵尸卡片信息索引

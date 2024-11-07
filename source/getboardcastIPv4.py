@@ -23,7 +23,7 @@ def discover_service():
     browser = ServiceBrowser(zeroconf, "_http._tcp.local.", listener)
 
     print("Searching for service...")
-    time.sleep(3)
+    time.sleep(5)
     IPv4 = listener.server_ip
     zeroconf.close()
     return IPv4

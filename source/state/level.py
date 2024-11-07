@@ -1065,6 +1065,7 @@ class Level(tool.State):
                 self.zombie_groups[map_y].add(zombie.SnorkelZombie(x, y, self.head_group))
         
         self.zombiebar.updateCard()
+        self.zombiebar.setCardFrozenTime()
         self.removeMouseImage()
 
         print(self.zombie_name)

@@ -19,7 +19,7 @@ if __name__ == "__main__":
                     c.GAME_LOSE:    screen.GameLoseScreen(),
                     c.LEVEL:        level.Level(),
                     c.MULTIPLAYER:  multiplayer.Level(False),
-                    c.HOST:         multiplayer.Level(True),
+                    c.HOST:         multiplayer.Level(True), # 房主在右边
                     c.AWARD_SCREEN: screen.AwardScreen(),
                     c.HELP_SCREEN:  screen.HelpScreen(),
                 }
