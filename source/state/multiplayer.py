@@ -1265,6 +1265,7 @@ class Level(tool.State):
                 self.zombie_groups[map_y].add(zombie.SnorkelZombie(x, y, self.head_group))
         
         self.zombiebar.updateCard()
+        self.zombiebar.setCardFrozenTime()
         self.removeMouseImage()
         self.send_process_zombie(map_y, self.zombie_name, x, y, left)
 
@@ -1293,8 +1294,11 @@ class Level(tool.State):
             if is_plant and self.plant_name in {c.LILYPAD, "花盆（未实现）", c.TANGLEKLEP}:
                 self.hint_rect.centerx = pos[0]
                 self.hint_rect.bottom = pos[1] + 25
+            elif is_plant:
+                self.hint_rect.centerx = max(self.map.getMapGridPos(6, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(5, 0)[0], pos[0])
+                self.hint_rect.bottom = pos[1]
             else:
-                self.hint_rect.centerx = pos[0]
+                self.hint_rect.centerx = self.map.getMapGridPos(6 if self.direction else 5, 0)[0]
                 self.hint_rect.bottom = pos[1]
             self.hint_plant = True
         else:
