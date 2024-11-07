@@ -2,6 +2,8 @@ import pygame as pg
 import os
 from .. import tool
 from .. import constants as c
+from .. import getboardcastIPv4
+import socket
 import subprocess
 
 class Menu(tool.State):
@@ -17,6 +19,7 @@ class Menu(tool.State):
         self.setupOptions()
         self.setupOptionMenu()
         self.setupSunflowerTrophy()
+        self.IPv4 = None
         pg.mixer.music.stop()
         pg.mixer.music.load(os.path.join(c.PATH_MUSIC_DIR, "intro.opus"))
         pg.mixer.music.play(-1, 0)
@@ -150,6 +153,9 @@ class Menu(tool.State):
     # 按到小游戏
     def respondLittleGameClick(self):
         subprocess.Popen(["python", "server.py"])
+        subprocess.Popen(["python", "source/boardcastIPv4.py"])
+        hostname = socket.gethostname()
+        self.IPv4 = socket.gethostbyname(hostname)
         self.online_clicked = True
         self.next = c.HOST
         self.online_timer = self.online_start = self.current_time
@@ -164,6 +170,7 @@ class Menu(tool.State):
         self.next = c.MULTIPLAYER
         self.online_timer = self.online_start = self.current_time
         self.persist[c.GAME_MODE] = c.MODE_ADVENTURE
+        self.IPv4 = getboardcastIPv4.discover_service()
         # 播放进入音效
         pg.mixer.music.stop()
         c.SOUND_EVILLAUGH.play()

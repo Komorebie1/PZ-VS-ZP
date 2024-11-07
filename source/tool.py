@@ -17,6 +17,7 @@ class State():
         self.done = False   # false 代表未做完
         self.next = None    # 表示这个状态退出后要转到的下一个状态
         self.persist = {}   # 在状态间转换时需要传递的数据
+        self.IPv4 = None
 
     # 当从其他状态进入这个状态时，需要进行的初始化操作
     @abstractmethod
@@ -124,6 +125,7 @@ class Control():
         if self.state.next == c.EXIT:
             pg.quit()
             os._exit(0)
+        IPv4 = self.state.IPv4
         self.state_name = self.state.next
         persist = self.state.cleanup()
         self.state = self.state_dict[self.state_name]
@@ -131,8 +133,8 @@ class Control():
             pg.display.set_mode(c.LEVEL_SCREEN_SIZE)
         elif self.state_name == c.MAIN_MENU or self.state_name == c.GAME_VICTORY or self.state_name == c.GAME_LOSE or self.state_name == c.AWARD_SCREEN:
             pg.display.set_mode(c.SCREEN_SIZE)
-        if self.state_name == c.MULTIPLAYER:
-            self.state.startup(self.current_time, persist)
+        if self.state_name == c.MULTIPLAYER or self.state_name == c.HOST:
+            self.state.startup(self.current_time, persist, IPv4)
         else:
             self.state.startup(self.current_time, persist)
 

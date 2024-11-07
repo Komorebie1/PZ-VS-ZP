@@ -18,13 +18,13 @@ test_direction = False  # False for right, True for left(only for test)
 '''
 
 class Level(tool.State):
-    def __init__(self, direction, ipv4_address):
+    def __init__(self, direction):
         tool.State.__init__(self)
         self.direction = direction
         self.another_player_ready = False
         self.ready = False
+    def startup(self, current_time, persist, ipv4_address):
         self.ipv4_address = ipv4_address
-    def startup(self, current_time, persist):
         self.game_info = persist
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
