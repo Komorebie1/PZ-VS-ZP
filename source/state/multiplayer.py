@@ -1551,7 +1551,7 @@ class Level(tool.State):
     def checkCarCollisions(self):
         for i in range(len(self.cars)):
             if self.cars[i]:
-                for zombie in self.zombie_groups[i]:
+                for zombie in self.zombie_groups[self.cars[i].map_y]:
                     if zombie.left != self.cars[i].left and (zombie and zombie.state != c.DIE and (not zombie.losthead)
                     and (pg.sprite.collide_mask(zombie, self.cars[i]))):
                         self.cars[i].setWalk()
