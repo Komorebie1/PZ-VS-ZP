@@ -520,6 +520,7 @@ class Level(tool.State):
             y = self.map.getMapGridPos(0, i)[1]
             if self.background_type == c.BACKGROUND_BIG:
                 self.cars.append(plant.Car(-45 + 220, y+20, i))
+                self.cars.append(plant.Car(c.LEVEL_SCREEN_WIDTH - 220, y+20, i, False))
             else:
                 self.cars.append(plant.Car(-45, y+20, i))
 
@@ -654,7 +655,7 @@ class Level(tool.State):
             self.wave_zombies = []
             self.zombie_num = 0
             pass
-        # self.setupCars()
+        self.setupCars()
 
         # 地图有铲子才添加铲子
         if self.has_shovel:
@@ -1551,10 +1552,10 @@ class Level(tool.State):
         for i in range(len(self.cars)):
             if self.cars[i]:
                 for zombie in self.zombie_groups[i]:
-                    if (zombie and zombie.state != c.DIE and (not zombie.losthead)
+                    if zombie.left != self.cars[i].left and (zombie and zombie.state != c.DIE and (not zombie.losthead)
                     and (pg.sprite.collide_mask(zombie, self.cars[i]))):
                         self.cars[i].setWalk()
-                    if (pg.sprite.collide_mask(zombie, self.cars[i]) or
+                    if zombie.left != self.cars[i].left and(pg.sprite.collide_mask(zombie, self.cars[i]) or
                     self.cars[i].rect.x <= zombie.rect.right <= self.cars[i].rect.right):
                         zombie.health = 0
                 if self.cars[i].dead:

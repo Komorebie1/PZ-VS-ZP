@@ -5,12 +5,12 @@ from .. import constants as c
 
 
 class Car(pg.sprite.Sprite):
-    def __init__(self, x:int, y:int, map_y:int):
+    def __init__(self, x:int, y:int, map_y:int, left:bool=True):
         pg.sprite.Sprite.__init__(self)
-
+        self.left = left
         rect = tool.GFX[c.CAR].get_rect()
         width, height = rect.w, rect.h
-        self.image = tool.get_image(tool.GFX[c.CAR], 0, 0, width, height)
+        self.image = tool.get_image(tool.GFX[c.CAR], 0, 0, width, height, left=self.left)
         self.mask = pg.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -22,8 +22,8 @@ class Car(pg.sprite.Sprite):
     def update(self, game_info:dict):
         self.current_time = game_info[c.CURRENT_TIME]
         if self.state == c.WALK:
-            self.rect.x += 5
-        if self.rect.x > c.LEVEL_SCREEN_WIDTH + 25 - 250:
+            self.rect.x += 5 if self.left else -5
+        if self.rect.x > c.LEVEL_SCREEN_WIDTH + 25 - 250 - c.BACKGROUND_OFFSET_X or self.rect.x < -25 + c.BACKGROUND_OFFSET_X:
             self.dead = True
 
     def setWalk(self):
