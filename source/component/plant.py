@@ -272,12 +272,13 @@ class StarBullet(Bullet):
 
 
 class Plant(pg.sprite.Sprite):
-    def __init__(self, x, y, name, health, bullet_group, scale=1, left = True):
+    def __init__(self, x, y, name, health, bullet_group, scale=1, left = True,is_tool=False):
         pg.sprite.Sprite.__init__(self)
 
         self.frames = []
         self.frame_index = 0
         self.left = left  # 是否在左侧
+        self.name = name
         self.loadImages(name, scale)
         self.frame_num = len(self.frames)
         self.image = self.frames[self.frame_index]
@@ -286,13 +287,14 @@ class Plant(pg.sprite.Sprite):
         self.rect.centerx = x
         self.rect.bottom = y
 
-        self.name = name
+        
         self.health = health
         self.state = c.IDLE
         self.bullet_group = bullet_group
         self.animate_timer = 0
         self.animate_interval = 70  # 帧播放间隔
         self.hit_timer = 0
+        self.is_tool = is_tool
         # 被铲子指向时间
         self.highlight_time = 0
 
@@ -446,9 +448,51 @@ class Sun(Plant):
             self.kill()
             return True
         return False
+    
+class Tool(Plant):
+    def __init__(self, x, y, dest_x, dest_y,real_effect):
+        Plant.__init__(self, x, y, c.TOOL, 0, None, is_tool=True)
+        self.real_effect = real_effect
+        self.move_speed = 1
+        self.dest_x = dest_x
+        self.dest_y = dest_y
+        self.die_timer = 0
+        self.is_real = False
+        self.scale = 0.5
+        self.loadImages_again()
 
+    def handleState(self):
+        if self.rect.centerx != self.dest_x:
+            self.rect.centerx += self.move_speed if self.rect.centerx < self.dest_x else -self.move_speed
+        if self.rect.bottom != self.dest_y:
+            self.rect.bottom += self.move_speed if self.rect.bottom < self.dest_y else -self.move_speed
+
+        if self.rect.centerx == self.dest_x and self.rect.bottom == self.dest_y:
+            self.is_real = True
+            self.changeFrames(self.real_frames)
+            if self.die_timer == 0:
+                self.die_timer = self.current_time
+            elif (self.current_time - self.die_timer) > c.TOOL_LIVE_TIME:
+                self.state = c.DIE
+                self.kill()
+    
+    def loadImages_again(self):
+        self.present_frames = []
+        self.real_frames = []
+        
+
+        present_name = self.name
+        real_name = self.name + self.real_effect
+
+        frame_list = [self.present_frames, self.real_frames]
+        name_list = [present_name,real_name]
+
+        for i, name in enumerate(name_list):
+            self.loadFrames(frame_list[i], name,scale=self.scale)
+        print(self.real_frames)
 
 class SunFlower(Plant):
+    
     def __init__(self, x, y, sun_group, left=True):
         Plant.__init__(self, x, y, c.SUNFLOWER, c.PLANT_HEALTH, None, left=left)
         self.sun_timer = 0

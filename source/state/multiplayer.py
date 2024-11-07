@@ -72,6 +72,11 @@ class Level(tool.State):
         self.client_socket.sendall(message.encode())
         print("发送成功")
 
+    def send_process_tool(self, x, y, real_effect):
+        message = f"{4},{x},{y},{real_effect}"
+        self.client_socket.sendall(message.encode())
+        print("发送成功")
+    
     def closeConnection(self):
         self.client_socket.close()
 
@@ -234,6 +239,11 @@ class Level(tool.State):
                         print(self.ready, self.another_player_ready)
                         if self.ready and self.another_player_ready:
                             self.initPlay(self.panel.getSelectedCards())
+                    elif mode == 4:
+                        x = int(data[1])
+                        y = int(data[2])
+                        real_effect = data[3]
+                        self.tool_group.add(plant.Tool(x, 0, x, y,real_effect))
             except:
                 print("接收失败")
                 break
@@ -299,6 +309,7 @@ class Level(tool.State):
     def setupGroups(self):
         self.sun_group = pg.sprite.Group()
         self.head_group = pg.sprite.Group()
+        self.tool_group = pg.sprite.Group()
 
         # 改用列表生成器直接生成内容，不再在这里使用for循环
         self.plant_groups = [pg.sprite.Group() for i in range(self.map_y_len)]
@@ -616,7 +627,10 @@ class Level(tool.State):
         self.hint_image = None
         self.hint_plant = False
         self.hint_zombie = False
-
+        
+        #是否随机生成道具
+        self.produce_tool = True
+        
         # 用种下植物的名称与位置元组判断是否需要刷新僵尸的攻击对象
         # 种植植物后应当刷新僵尸的攻击对象，当然，默认初始时不用刷新
         self.new_plant_and_positon = None
@@ -627,6 +641,7 @@ class Level(tool.State):
         else:
             self.produce_sun = False
         self.sun_timer = self.current_time
+        self.tool_timer = self.current_time
 
         self.removeMouseImage()
         self.setupGroups()
@@ -880,6 +895,7 @@ class Level(tool.State):
                 self.removeMouseImagePlus()
                 return
 
+    
     def play(self, mouse_pos, mouse_click):
         # 如果暂停
         if self.show_game_menu:
@@ -919,6 +935,7 @@ class Level(tool.State):
 
         self.head_group.update(self.game_info)
         self.sun_group.update(self.game_info)
+        self.tool_group.update(self.game_info)
         
         if self.produce_sun:
             # 原版阳光掉落机制：(已掉落阳光数*100 ms + 4250 ms) 与 9500 ms的最小值，再加 0 ~ 2750 ms 之间的一个数
@@ -928,6 +945,16 @@ class Level(tool.State):
                 x, y = self.map.getMapGridPos(map_x, map_y)
                 self.sun_group.add(plant.Sun(x, 0, x, y))
                 self.fallen_sun += 1
+        
+        if self.produce_tool:
+            if (self.current_time - self.tool_timer) > c.TOOL_GENERATE_INTERVAL and self.current_time > c.START_TOOL_GENERATE:
+                self.tool_timer = self.current_time
+                map_x, map_y = self.map.getToolRandomMapIndex()
+                x, y = self.map.getMapGridPos(map_x, map_y)
+                real_effect = c.TOOLEFFECT[random.randint(0, len(c.TOOLEFFECT)-1)]
+                self.tool_group.add(plant.Tool(x, 0, x, y,real_effect))
+                self.send_process_tool(x,y,real_effect)
+            
 
         # 检查有没有捡到阳光
         clicked_sun = False
@@ -1340,7 +1367,17 @@ class Level(tool.State):
         self.drag_shovel = False
         self.shovel_rect.x = self.shovel_positon[0]
         self.shovel_rect.y = self.shovel_positon[1]
+        
+    
 
+    def toolReward(self,left,tool):
+        pass
+        # match tool.real_effect:
+        #     case c.FREEZING_TOOL:
+        #         pass
+        #     case c.STONE:
+        #         pass
+    
     def checkBulletCollisions(self):
         for i in range(self.map_y_len):
             for bullet in self.bullet_groups[i]:
@@ -1368,6 +1405,45 @@ class Level(tool.State):
 
     def checkZombieCollisions(self):
         for i in range(self.map_y_len):
+            for zombie in self.zombie_groups[i]:    
+                if zombie.health <= 0:
+                    continue
+                
+                def collide_lower_half_reduced_width_both(sprite1, sprite2):
+                    # 获取 sprite1 和 sprite2 的 rect
+                    rect1 = sprite1.rect
+                    rect2 = sprite2.rect
+
+                    # 计算 sprite1 的新宽度和新的 x 坐标
+                    new_width1 = rect1.width // 2
+                    new_x1 = rect1.x + (rect1.width - new_width1) // 2
+
+                    # 创建 sprite1 的下半部分矩形
+                    lower_half_rect1 = pg.Rect(new_x1, rect1.y + rect1.height // 2, new_width1, rect1.height // 2)
+
+                    # 计算 sprite2 的新宽度和新的 x 坐标
+                    new_width2 = rect2.width // 2
+                    new_x2 = rect2.x + (rect2.width - new_width2) // 2
+
+                    # 创建 sprite2 的下半部分矩形
+                    lower_half_rect2 = pg.Rect(new_x2, rect2.y + rect2.height // 2, new_width2, rect2.height // 2)
+
+                    # 检查两个新的下半部分矩形是否重叠
+                    return lower_half_rect1.colliderect(lower_half_rect2)
+                
+                collided_func = collide_lower_half_reduced_width_both
+                tool_list = pg.sprite.spritecollide( zombie, self.tool_group,
+                                                        False, collided_func)
+                tool_list = [tool for tool in tool_list if tool.is_real]
+                for tool in tool_list:
+                    if zombie.state == c.DIE:
+                        continue
+                    # 正常僵尸攻击被魅惑的僵尸
+                    if zombie.state == c.WALK:
+                        c.SOUND_SNOWPEA_SPARKLES.play(loops=3)
+                        self.toolReward(zombie.left,tool)
+                        tool.kill()
+                        
             for zombie in self.zombie_groups[i]:    
                 if zombie.health <= 0:
                     continue
@@ -1960,6 +2036,7 @@ class Level(tool.State):
                     self.cars[i * 2 + 1].draw(surface)
             self.head_group.draw(surface)
             self.sun_group.draw(surface)
+            self.tool_group.draw(surface)
 
             if self.drag_plant or self.drag_zombie:
                 self.drawMouseShow(surface)

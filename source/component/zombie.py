@@ -251,7 +251,7 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.attack_frames)
             self.helmet_type2 = False
             if self.name == c.NEWSPAPER_ZOMBIE:
-                self.speed = 2.65 * self.getDirection()
+                self.speed = 2.65
                 self.walk_animate_interval = 300
         if (((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()))
             and (not self.losthead)):
