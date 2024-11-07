@@ -242,7 +242,7 @@ class Level(tool.State):
                     elif mode == 4:
                         x = int(data[1])
                         y = int(data[2])
-                        real_effect = int(data[3])
+                        real_effect = data[3]
                         self.tool_group.add(plant.Tool(x, 0, x, y,real_effect))
             except:
                 print("接收失败")
@@ -2033,7 +2033,6 @@ class Level(tool.State):
             self.head_group.draw(surface)
             self.sun_group.draw(surface)
             self.tool_group.draw(surface)
-            print(self.tool_group)
 
             if self.drag_plant or self.drag_zombie:
                 self.drawMouseShow(surface)
