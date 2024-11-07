@@ -129,7 +129,7 @@ class Control():
         self.state = self.state_dict[self.state_name]
         if self.state_name == c.LEVEL or self.state_name == c.MULTIPLAYER or self.state_name == c.HOST:
             pg.display.set_mode(c.LEVEL_SCREEN_SIZE)
-        elif self.state_name == c.MAIN_MENU:
+        elif self.state_name == c.MAIN_MENU or self.state_name == c.GAME_VICTORY or self.state_name == c.GAME_LOSE:
             pg.display.set_mode(c.SCREEN_SIZE)
         if self.state_name == c.MULTIPLAYER:
             self.state.startup(self.current_time, persist)

@@ -1801,30 +1801,33 @@ class Level(tool.State):
 
     def checkGameState(self):
         if self.checkVictory():
-            if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
-                self.game_info[c.LEVEL_NUM] += 1
-                if self.game_info[c.LEVEL_NUM] >= map.TOTAL_LEVEL:
-                    self.game_info[c.LEVEL_COMPLETIONS] += 1
-                    self.game_info[c.LEVEL_NUM] = 1
-                    self.next = c.AWARD_SCREEN
-                    # 播放大胜利音效
-                    c.SOUND_FINAL_FANFARE.play()
-                else:
-                    self.next = c.GAME_VICTORY
-                    # 播放胜利音效
-                    c.SOUND_WIN.play()
-            elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
-                self.game_info[c.LITTLEGAME_NUM] += 1
-                if self.game_info[c.LITTLEGAME_NUM] >= map.TOTAL_LITTLE_GAME:
-                    self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
-                    self.game_info[c.LITTLEGAME_NUM] = 1
-                    self.next = c.AWARD_SCREEN
-                    # 播放大胜利音效
-                    c.SOUND_FINAL_FANFARE.play()
-                else:
-                    self.next = c.GAME_VICTORY
-                    # 播放胜利音效
-                    c.SOUND_WIN.play()
+            # if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
+            #     self.game_info[c.LEVEL_NUM] += 1
+            #     if self.game_info[c.LEVEL_NUM] >= map.TOTAL_LEVEL:
+            #         self.game_info[c.LEVEL_COMPLETIONS] += 1
+            #         self.game_info[c.LEVEL_NUM] = 1
+            #         self.next = c.AWARD_SCREEN
+            #         # 播放大胜利音效
+            #         c.SOUND_FINAL_FANFARE.play()
+            #     else:
+            #         self.next = c.GAME_VICTORY
+            #         # 播放胜利音效
+            #         c.SOUND_WIN.play()
+            # elif self.game_info[c.GAME_MODE] == c.MODE_LITTLEGAME:
+            #     self.game_info[c.LITTLEGAME_NUM] += 1
+            #     if self.game_info[c.LITTLEGAME_NUM] >= map.TOTAL_LITTLE_GAME:
+            #         self.game_info[c.LITTLEGAME_COMPLETIONS] += 1
+            #         self.game_info[c.LITTLEGAME_NUM] = 1
+            #         self.next = c.AWARD_SCREEN
+            #         # 播放大胜利音效
+            #         c.SOUND_FINAL_FANFARE.play()
+            #     else:
+            #         self.next = c.GAME_VICTORY
+            #         # 播放胜利音效
+            #         c.SOUND_WIN.play()
+            self.next = c.AWARD_SCREEN
+            # 播放大胜利音效
+            c.SOUND_FINAL_FANFARE.play()
             self.done = True
             self.saveUserData()
         elif self.checkLose():
@@ -1945,8 +1948,10 @@ class Level(tool.State):
                 self.hypno_zombie_groups[i].draw(surface)
                 self.bullet_groups[i].draw(surface)
                 self.drawZombieFreezeTrap(i, surface)
-                if self.cars[i]:
-                    self.cars[i].draw(surface)
+                if self.cars[i * 2]:
+                    self.cars[i * 2].draw(surface)
+                if self.cars[i * 2 + 1]:
+                    self.cars[i * 2 + 1].draw(surface)
             self.head_group.draw(surface)
             self.sun_group.draw(surface)
 
