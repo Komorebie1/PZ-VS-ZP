@@ -520,7 +520,7 @@ class Level(tool.State):
             y = self.map.getMapGridPos(0, i)[1]
             if self.background_type == c.BACKGROUND_BIG:
                 self.cars.append(plant.Car(-45 + 220, y+20, i))
-                self.cars.append(plant.Car(c.LEVEL_SCREEN_WIDTH - 220, y+20, i, False))
+                self.cars.append(plant.Car(c.LEVEL_SCREEN_WIDTH - 250, y+20, i, False))
             else:
                 self.cars.append(plant.Car(-45, y+20, i))
 
@@ -1782,7 +1782,7 @@ class Level(tool.State):
             for zombie in self.zombie_groups[i]:
                 if zombie.left != self.direction:
                     continue
-                ed = -20 + c.BACKGROUND_OFFSET_X if not self.direction else c.LEVEL_SCREEN_WIDTH + 20 - c.BACKGROUND_OFFSET_X
+                ed = c.BACKGROUND_OFFSET_X if not self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
                 victory = (zombie.rect.right < ed) if not self.direction else (zombie.rect.x > ed)
                 if victory and (not zombie.losthead) and (zombie.state != c.DIE):
                     return True
@@ -1793,7 +1793,7 @@ class Level(tool.State):
             for zombie in self.zombie_groups[i]:
                 if zombie.left == self.direction:
                     continue
-                ed = -20 + c.BACKGROUND_OFFSET_X if self.direction else c.LEVEL_SCREEN_WIDTH + 20 - c.BACKGROUND_OFFSET_X
+                ed = c.BACKGROUND_OFFSET_X if self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
                 lose = (zombie.rect.right < ed) if self.direction else (zombie.rect.x > ed)
                 if lose and (not zombie.losthead) and (zombie.state != c.DIE):
                     return True
@@ -1829,7 +1829,7 @@ class Level(tool.State):
             # 播放大胜利音效
             c.SOUND_FINAL_FANFARE.play()
             self.done = True
-            self.saveUserData()
+            # self.saveUserData()
         elif self.checkLose():
             # 播放失败音效
             c.SOUND_LOSE.play()

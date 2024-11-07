@@ -129,7 +129,7 @@ class Control():
         self.state = self.state_dict[self.state_name]
         if self.state_name == c.LEVEL or self.state_name == c.MULTIPLAYER or self.state_name == c.HOST:
             pg.display.set_mode(c.LEVEL_SCREEN_SIZE)
-        elif self.state_name == c.MAIN_MENU or self.state_name == c.GAME_VICTORY or self.state_name == c.GAME_LOSE:
+        elif self.state_name == c.MAIN_MENU or self.state_name == c.GAME_VICTORY or self.state_name == c.GAME_LOSE or self.state_name == c.AWARD_SCREEN:
             pg.display.set_mode(c.SCREEN_SIZE)
         if self.state_name == c.MULTIPLAYER:
             self.state.startup(self.current_time, persist)
@@ -140,8 +140,11 @@ class Control():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.done = True
-                if self.state_name == c.MULTIPLAYER:
-                    self.state.closeConnection()
+                if self.state_name == c.MULTIPLAYER or self.state_name == c.HOST or self.state_name == c.GAME_LOSE or self.state_name == c.GAME_VICTORY:
+                    try:
+                        self.state.closeConnection()
+                    except:
+                        pass
             elif event.type == pg.KEYDOWN:
                 self.keys = pg.key.get_pressed()
                 if event.key == pg.K_f:

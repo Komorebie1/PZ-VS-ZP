@@ -141,7 +141,7 @@ class AwardScreen(tool.State):
                 if self.game_info[c.LEVEL_COMPLETIONS]:
                     intro_content = "您已完成冒险模式，获得此奖励！"
                 else:
-                    intro_content = "您已完成玩玩小游戏，获得此奖励！"
+                    intro_content = "您的僵尸成功吃掉了对面的脑瓜蛋！"
             sunflower_trophy_image = tool.get_image_alpha(tool.GFX[c.TROPHY_SUNFLOWER], *frame_rect, scale=0.7)
             sunflower_trophy_rect = sunflower_trophy_image.get_rect()
             sunflower_trophy_rect.x = 348
