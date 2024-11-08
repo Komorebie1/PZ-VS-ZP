@@ -241,18 +241,20 @@ class Zombie(pg.sprite.Sprite):
                 self.target_y_change = 0
 
     def attacking(self):
-        if self.checkToDie(self.losthead_attack_frames):
-            return
-        
-        if self.helmet_health <= 0 and self.helmet:
-            self.changeFrames(self.attack_frames)
-            self.helmet = False
-        if self.helmet_type2_health <= 0 and self.helmet_type2:
-            self.changeFrames(self.attack_frames)
-            self.helmet_type2 = False
-            if self.name == c.NEWSPAPER_ZOMBIE:
-                self.speed = 2.65
-                self.walk_animate_interval = 300
+        if self.name != c.ZOMBONI:
+            if self.checkToDie(self.losthead_attack_frames):
+                return
+            
+            if self.helmet_health <= 0 and self.helmet:
+                self.changeFrames(self.attack_frames)
+                self.helmet = False
+            if self.helmet_type2_health <= 0 and self.helmet_type2:
+                self.changeFrames(self.attack_frames)
+                self.helmet_type2 = False
+                if self.name == c.NEWSPAPER_ZOMBIE:
+                    self.speed = 2.65
+                    self.walk_animate_interval = 300
+                    
         if (((self.current_time - self.attack_timer) > (c.ATTACK_INTERVAL * self.getAttackTimeRatio()))
             and (not self.losthead)):
             if self.prey.health > 0:
@@ -486,7 +488,7 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.helmet_attack_frames)
         elif self.losthead:
             self.changeFrames(self.losthead_attack_frames)
-        else:
+        elif self.name != c.ZOMBONI:
             self.changeFrames(self.attack_frames)
 
     def setDie(self):
@@ -1058,6 +1060,7 @@ class Zomboni(Zombie):
         self.IceFrozenPlot = IceFrozenPlot
         self.die_animate_interval = 70
         self.boomDie_animate_interval = 150
+        self.damage = 1800
         # 播放冰车生成音效
         c.SOUND_ZOMBONI.play()
 

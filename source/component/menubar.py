@@ -238,7 +238,6 @@ class ZombieBar():
         self.rect.y = 0
         self.sun_value = 0
         
-        # self.sun_value = sun_value
         self.card_offset_x = 706
         self.showCard = None
         self.setupCards()
@@ -285,33 +284,85 @@ class ZombieBar():
             return True
         return False
 
-    # def decreaseSunValue(self, value):
-    #     self.sun_value -= value
-
-    # def increaseSunValue(self, value):
-    #     self.sun_value += value
-    #     if self.sun_value > 9990:
-    #         self.sun_value = 9990
-
     def setCardFrozenTime(self):
         if self.showCard:
             self.showCard.setFrozenTime(self.current_time)
-
-    # def drawSunValue(self):
-    #     self.value_image = getSunValueImage(self.sun_value)
-    #     self.value_rect = self.value_image.get_rect()
-    #     self.value_rect.x = 21
-    #     self.value_rect.y = self.rect.bottom - 24
-        
-    #     self.image.blit(self.value_image, self.value_rect)
 
     def draw(self, surface):
         # self.drawSunValue()
         surface.blit(self.image, self.rect)
         if self.showCard:
             self.showCard.draw(surface)
-        # for card in self.card_list:
-        #     card.draw(surface)
+
+class ToolBar():
+    def __init__(self):
+        self.card_index_list = c.TOOL_CARD_LIST
+        self.loadFrame(c.ZOMBIE_CARD_BAR)
+        self.rect = self.image.get_rect()
+        self.rect.x = 800
+        self.rect.y = 0
+        self.sun_value = 0
+        
+        self.card_offset_x = 806
+        self.showCard = None
+        self.setupCards()
+
+    def loadFrame(self, name):
+        frame = tool.GFX[name]
+        rect = frame.get_rect()
+        frame_rect = (rect.x, rect.y, rect.w, rect.h)
+
+        self.image = tool.get_image(tool.GFX[name], *frame_rect, c.WHITE, 1)
+
+    def updateCard(self, card_name):
+        index = c.TOOL_CARD_INDEX[card_name]
+        self.showCard = self.card_list[index]
+    
+    def resetCard(self):
+        self.showCard = None
+
+    def update(self, current_time):
+        if self.showCard:
+            self.current_time = current_time
+            self.showCard.update(self.sun_value, self.current_time)
+    
+    def setupCards(self):
+        self.card_list = []
+        x = self.card_offset_x
+        y = 8
+        for index in self.card_index_list:
+            # x += c.BAR_CARD_X_INTERNAL
+            self.card_list.append(Card(x, y, index, info=c.TOOL_CARD_INFO))
+        self.resetCard()
+
+    def checkCardClick(self, mouse_pos):
+        result = None
+        if not self.showCard:
+            return result
+        if self.showCard.checkMouseClick(mouse_pos):
+            if self.showCard.canClick(self.sun_value, self.current_time):
+                result = (c.TOOL_CARD_INFO[self.showCard.index][c.PLANT_NAME_INDEX], self.showCard)
+            else:
+                # 播放无法使用该卡片的警告音
+                c.SOUND_CANNOT_CHOOSE_WARNING.play()
+        return result
+    
+    def checkMenuBarClick(self, mouse_pos):
+        x, y = mouse_pos
+        if (self.rect.x <= x <= self.rect.right and
+            self.rect.y <= y <= self.rect.bottom):
+            return True
+        return False
+
+    def setCardFrozenTime(self):
+        if self.showCard:
+            self.showCard.setFrozenTime(self.current_time)
+
+    def draw(self, surface):
+        # self.drawSunValue()
+        surface.blit(self.image, self.rect)
+        if self.showCard:
+            self.showCard.draw(surface)
 
 # 关卡模式选植物的界面
 class Panel():
