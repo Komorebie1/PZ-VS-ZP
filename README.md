@@ -21,6 +21,9 @@
 ## 游戏界面
 
 主界面
+<div align = "center">
+<img src="images/mainmenu.png" width="75%">
+</div>
 
 选卡界面
 
