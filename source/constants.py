@@ -414,12 +414,14 @@ CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
 
 # 僵尸卡片信息汇总（包括僵尸名称, 卡片名称, 阳光, 冷却时间）
 ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间, 权重)
-    (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 300,10),
-    (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 300,1),
-    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 300,5),
-    (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 300,5),
-    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,500),
-    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,500),
+    (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 300,500),
+    (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 300,400),
+    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 300,400),
+    (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 300,300),
+    (SCREEN_DOOR_ZOMBIE := "ScreenDoorZombie", CARD_SCREENDOORZOMBIE := "card_screendoorzombie", 0, 300,300),
+    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,100),
+    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,75),
+    (POLE_VAULTING_ZOMBIE := "PoleVaultingZombie", CARD_POLEVAULTINGZOMBIE := "card_polevaultingzombie", 0, 300,75),
 )
 
 ZOMBONI = "Zomboni"
