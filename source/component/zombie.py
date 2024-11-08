@@ -486,7 +486,7 @@ class Zombie(pg.sprite.Sprite):
             self.changeFrames(self.helmet_attack_frames)
         elif self.losthead:
             self.changeFrames(self.losthead_attack_frames)
-        else:
+        elif self.name != c.ZOMBONI:
             self.changeFrames(self.attack_frames)
 
     def setDie(self):
