@@ -416,11 +416,10 @@ CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
 ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间, 权重)
     (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 300,10),
     (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 300,1),
-    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 300,5),
+    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 300,10),
     (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 300,5),
-    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,5),
-    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,5),
-    (GARGANTUAR:= "Gargantuar", CARD_GARGANTUAR := "card_gargantuar", 0, 300,1000)
+    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,3),
+    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,2)
 )
 
 GARGANTUAR_HEALTH = 3000
@@ -525,27 +524,29 @@ SUN_VALUE = 25
 
 #道具生成属性
 TOOL_LIVE_TIME = 20000
-TOOL_GENERATE_INTERVAL = 5000
-START_TOOL_GENERATE = 60000
+TOOL_GENERATE_INTERVAL = 20000
+START_TOOL_GENERATE = 120000
 FREEZING_TOOL = "IceShroom"
 ZOMBONI_TOOL = "Zomboni"
 CHERRYBOMB_TOOL = "CherryBomb"
 JALAPENO_TOOL = "Jalapeno"
 DOOMSHROOM_TOOL = "DoomShroom"
+GARGANTUAR_TOOL = "Gargantuar"
 
 TOOL_CARD_INFO = (# 元组 (僵尸名称, 卡片名称)
     (FREEZING_TOOL, CARD_ICESHROOM, 0, 0),
     (ZOMBONI_TOOL, CARD_ZOMBONI, 0, 0),
     (CHERRYBOMB_TOOL, CARD_CHERRYBOMB, 0, 0),
     (DOOMSHROOM, CARD_DOOMSHROOM, 0, 0),
-    (JALAPENO_TOOL, CARD_JALAPENO, 0, 0)
+    (JALAPENO_TOOL, CARD_JALAPENO, 0, 0),
+    (GARGANTUAR_TOOL, CARD_JALAPENO, 0, 0),
 )
 
 TOOL_CARD_INDEX = {item[0]: index for (index, item) in enumerate(TOOL_CARD_INFO)}
 
 TOOL_CARD_LIST = [TOOL_CARD_INDEX[item] for item in TOOL_CARD_INDEX]
 
-TOOLEFFECT = [FREEZING_TOOL, ZOMBONI_TOOL, CHERRYBOMB_TOOL, JALAPENO_TOOL, DOOMSHROOM_TOOL]
+TOOLEFFECT = [FREEZING_TOOL, ZOMBONI_TOOL, CHERRYBOMB_TOOL, JALAPENO_TOOL, DOOMSHROOM_TOOL,GARGANTUAR_TOOL]
 
 TOOL_ZOMBIE = [ZOMBONI]
 
