@@ -1087,7 +1087,7 @@ class Spikeweed(Plant):
             
 class Spikerock(Plant):
     def __init__(self, x, y, left=True):
-        Plant.__init__(self, x, y, c.SPIKEROCK, c.PLANT_HEALTH, None, scale=0.9, left=left)
+        Plant.__init__(self, x, y, c.SPIKEROCK, 20*c.PLANT_HEALTH, None, scale=0.9, left=left)
         self.animate_interval = 70
         self.attack_timer = 0
         self.solid = 2

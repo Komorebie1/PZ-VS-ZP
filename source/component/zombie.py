@@ -110,7 +110,7 @@ class Zombie(pg.sprite.Sprite):
             return False
 
     def walking(self):
-        if self.checkToDie(self.losthead_walk_frames):
+        if hasattr(self, 'losthead_walk_frames') and self.checkToDie(self.losthead_walk_frames):
             return
 
         # 能游泳的僵尸
@@ -278,10 +278,10 @@ class Zombie(pg.sprite.Sprite):
 
     def freezing(self):
         if self.old_state == c.WALK:
-            if self.checkToDie(self.losthead_walk_frames):
+            if hasattr(self, 'losthead_walk_frames') and self.checkToDie(self.losthead_walk_frames):
                 return
         else:
-            if self.checkToDie(self.losthead_attack_frames):
+            if self.losthead_attack_frames and self.checkToDie(self.losthead_attack_frames):
                 return
 
         if (self.current_time - self.freeze_timer) >= c.MIN_FREEZE_TIME + random.randint(0, 2000):
@@ -715,7 +715,7 @@ class NewspaperZombie(Zombie):
         self.frames = self.helmet_walk_frames
 
     def walking(self):
-        if self.checkToDie(self.losthead_walk_frames):
+        if hasattr(self, 'losthead_walk_frames') and self.checkToDie(self.losthead_walk_frames):
             return
 
         if self.helmet_type2_health <= 0 and self.helmet_type2:
@@ -1099,7 +1099,7 @@ class Zomboni(Zombie):
         pass
 
     def walking(self):
-        if self.checkToDie(self.losthead_walk_frames):
+        if self.losthead_walk_frames and self.checkToDie(self.losthead_walk_frames):
             return
 
         if self.health <= c.ZOMBONI_DAMAGED2_HEALTH:
@@ -1351,7 +1351,7 @@ class Gargantuar(Zombie):
         if (self.current_time - self.attack_timer) > (c.GARGANTUAR_ATTACK_INTERVAL * self.getAttackTimeRatio()):
             if self.prey.health > 0:
                 self.prey.setDamage(self.damage,self)
-                # c.SOUND_GARGANTUAR_SMASH.play()
+                c.SOUND_GARGANTUAR_TUMP.play()
             self.attack_timer = self.current_time
 
         if self.prey.health <= 0:

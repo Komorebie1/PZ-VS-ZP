@@ -1288,6 +1288,9 @@ class Level(tool.State):
                         # 同时也忽略了不可啃食对象
                         elif plant.name not in c.CAN_SKIP_ZOMBIE_COLLISION_CHECK:
                             attackable_common_plants.append(plant)
+                            
+                        elif plant.name in c.CAN_SKIP_ZOMBIE_COLLISION_CHECK and zombie.name == c.GARGANTUAR:
+                            attackable_common_plants.append(plant)
                         # 在生效状态下忽略啃食碰撞但其他状况下不能忽略的情形
                         elif plant.name in c.SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING:
                             if not plant.start_boom:
