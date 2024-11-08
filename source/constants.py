@@ -321,17 +321,15 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (CHERRYBOMB := "CherryBomb",
                 CARD_CHERRYBOMB := "card_cherrybomb",
                 150,
-                0)
-
+                0),
             (DOOMSHROOM := "DoomShroom",
-                            CARD_DOOMSHROOM := "card_doomshroom",
-                            125,
-                            0),
-
+                CARD_DOOMSHROOM := "card_doomshroom",
+                125,
+                0),
             (JALAPENO := "Jalapeno",
-                            CARD_JALAPENO := "card_jalapeno",
-                            125,
-                            0),#50000
+                CARD_JALAPENO := "card_jalapeno",
+                125,
+                0),#50000
             (LILYPAD := "LilyPad",
                 CARD_LILYPAD := "card_lilypad",
                 25,
@@ -348,7 +346,6 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_THREEPEASHOOTER := "card_threepeashooter",
                 325,
                 0),
-            
             (SPIKEWEED := "Spikeweed",
                 CARD_SPIKEWEED := "card_spikeweed",
                 100,
