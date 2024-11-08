@@ -438,6 +438,11 @@ class Panel():
                 not_recommend = 0
             self.card_list.append(Card(x, y, index, 0.5, not_recommend))
 
+    def setMutiplayerMode(self):
+        for card in self.card_list:
+            if c.PLANT_CARD_INDEX[card.index] in c.MULTIPLAYER_NOT_USE_PLANTS:
+                card.setSelect(False)
+
     def checkCardClick(self, mouse_pos):
         print("wojinlaile")
         delete_card = None
