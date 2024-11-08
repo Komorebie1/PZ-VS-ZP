@@ -216,7 +216,7 @@ class MenuBar():
                 break
 
     def drawSunValue(self):
-        self.value_image = getSunValueImage(self.sun_value)
+        self.value_image = getSunValueImage(max(0, self.sun_value))
         self.value_rect = self.value_image.get_rect()
         self.value_rect.x = 21
         self.value_rect.y = self.rect.bottom - 24
@@ -228,6 +228,9 @@ class MenuBar():
         surface.blit(self.image, self.rect)
         for card in self.card_list:
             card.draw(surface)
+    
+    def disableCard(self):
+        self.sun_value = -1
 
 class ZombieBar():
     def __init__(self):
@@ -293,6 +296,12 @@ class ZombieBar():
         surface.blit(self.image, self.rect)
         if self.showCard:
             self.showCard.draw(surface)
+
+    def disableCard(self):
+        self.sun_value = -1
+
+    def enableCard(self):
+        self.sun_value = 0
 
 class ToolBar():
     def __init__(self):

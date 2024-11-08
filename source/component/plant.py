@@ -489,7 +489,6 @@ class Tool(Plant):
 
         for i, name in enumerate(name_list):
             self.loadFrames(frame_list[i], name,scale=self.scale)
-        print(self.real_frames)
 
 class SunFlower(Plant):
     

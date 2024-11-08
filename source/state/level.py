@@ -26,7 +26,9 @@ class Level(tool.State):
         self.persist = self.game_info
         self.game_info[c.CURRENT_TIME] = current_time
         self.client_socket = None
-
+        self.countdown = False
+        self.countdown_start_time = 0
+        self.countdown_time = 0
         # 暂停状态
         self.pause = False
         self.pause_time = 0
@@ -402,6 +404,9 @@ class Level(tool.State):
         pg.mixer.music.set_volume(self.game_info[c.SOUND_VOLUME])
 
         self.state = c.PLAY
+        self.countdown = True
+        self.countdown_start_time = self.current_time
+        self.countdown_time = 60
         if self.bar_type == c.CHOOSEBAR_STATIC:
             self.menubar = menubar.MenuBar(card_list, self.map_data[c.INIT_SUN_NAME])
         else:
@@ -736,7 +741,7 @@ class Level(tool.State):
                 self.fallen_sun += 1
         
         if self.produce_tool:
-            if (self.current_time - self.tool_timer) > c.TOOL_GENERATE_INTERVAL and self.current_time > c.START_TOOL_GENERATE:
+            if (self.current_time - self.tool_timer) > c.TOOL_GENERATE_INTERVAL and self.current_time - self.countdown_start_time > c.START_TOOL_GENERATE:
                 self.tool_timer = self.current_time
                 map_x, map_y = self.map.getToolRandomMapIndex()
                 x, y = self.map.getMapGridPos(map_x, map_y)
@@ -1803,3 +1808,14 @@ class Level(tool.State):
                 self.showLevelProgress(surface)
                 if self.current_time - self.show_hugewave_approching_time <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
+        if self.countdown:
+            cdtime = self.countdown_time - (self.current_time - self.countdown_start_time) // 1000
+            if cdtime > 0:
+                tip = "植物种植阶段:" + str(cdtime)
+                font = pg.font.Font(c.FONT_PATH, 30)
+                self.countdown_image = font.render(tip, True, c.RED)
+                self.countdown_image_rect = self.countdown_image.get_rect()
+                self.countdown_image_rect.center = (c.LEVEL_SCREEN_WIDTH // 2, c.LEVEL_SCREEN_HEIGHT // 4)
+                surface.blit(self.countdown_image, self.countdown_image_rect)
+            else:
+                self.countdown = False
