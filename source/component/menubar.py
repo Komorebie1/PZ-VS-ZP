@@ -228,6 +228,14 @@ class MenuBar():
         surface.blit(self.image, self.rect)
         for card in self.card_list:
             card.draw(surface)
+    
+    def disableCard(self):
+        for card in self.card_list:
+            card.setSelect(False)
+    
+    def enableCard(self):
+        for card in self.card_list:
+            card.setSelect(True)
 
 class ZombieBar():
     def __init__(self):
@@ -293,6 +301,12 @@ class ZombieBar():
         surface.blit(self.image, self.rect)
         if self.showCard:
             self.showCard.draw(surface)
+
+    def disableCard(self):
+        self.showCard.setSelect(False)
+
+    def enableCard(self):
+        self.showCard.setSelect(True)
 
 class ToolBar():
     def __init__(self):

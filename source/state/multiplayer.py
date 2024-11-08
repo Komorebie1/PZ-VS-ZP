@@ -623,6 +623,7 @@ class Level(tool.State):
             self.menubar = menubar.MoveBar(card_list)
 
         self.zombiebar = menubar.ZombieBar()
+        self.zombiebar.disableCard()
         self.toolbar = menubar.ToolBar()
 
         # 是否拖住植物或者铲子
@@ -2083,4 +2084,6 @@ class Level(tool.State):
                 self.countdown_image_rect.center = (c.LEVEL_SCREEN_WIDTH // 2, c.LEVEL_SCREEN_HEIGHT // 4)
                 surface.blit(self.countdown_image, self.countdown_image_rect)
             else:
-                self.countdown = False               
+                self.countdown = False
+                self.menubar.disableCard()
+                self.zombiebar.enableCard()           
