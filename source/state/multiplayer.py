@@ -1044,7 +1044,7 @@ class Level(tool.State):
                     else:
                         self.addPlant(not self.direction, from_menubar=False)
             elif mouse_pos is None:
-                self.setupHintImage(is_plant=False)
+                self.setupHintImage()
 
         # 检查是否点击菜单
         if mouse_click[0] and (not clicked_sun) and (not clicked_cards_or_map):
@@ -1340,7 +1340,7 @@ class Level(tool.State):
         c.SOUND_PLANT.play()
         
 
-    def setupHintImage(self, is_plant=True):
+    def setupHintImage(self, is_plant=True, from_tool = False):
         if is_plant:
             pos = self.canSeedPlant(self.plant_name)
         else:
@@ -1360,11 +1360,11 @@ class Level(tool.State):
             if is_plant and self.plant_name in {c.LILYPAD, "花盆（未实现）", c.TANGLEKLEP}:
                 self.hint_rect.centerx = pos[0]
                 self.hint_rect.bottom = pos[1] + 25
-            elif is_plant:
-                self.hint_rect.centerx = max(self.map.getMapGridPos(7, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(4, 0)[0], pos[0])
+            elif is_plant and self.plant_name in c.TOOL_PLANT:
+                self.hint_rect.centerx = max(self.map.getMapGridPos(6, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(5, 0)[0], pos[0])
                 self.hint_rect.bottom = pos[1]
             else:
-                self.hint_rect.centerx = max(self.map.getMapGridPos(7, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(4, 0)[0], pos[0])
+                self.hint_rect.centerx = max(self.map.getMapGridPos(8, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(3, 0)[0], pos[0])
                 self.hint_rect.bottom = pos[1]
             self.hint_plant = True
         else:
