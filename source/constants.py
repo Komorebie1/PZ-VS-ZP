@@ -257,6 +257,9 @@ NON_PLANT_OBJECTS = {
 PLANT_IMAGE_RECT = "plant_image_rect"
 BOOM_IMAGE = "Boom"
 
+
+
+
 # 植物卡片信息汇总（包括植物名称, 卡片名称, 阳光, 冷却时间）
 PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (PEASHOOTER := "Peashooter",
@@ -266,10 +269,6 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (SUNFLOWER := "SunFlower",
                 CARD_SUNFLOWER := "card_sunflower",
                 50,
-                0),
-            (CHERRYBOMB := "CherryBomb",
-                CARD_CHERRYBOMB := "card_cherrybomb",
-                150,
                 0),
             (WALLNUT := "WallNut",
                 CARD_WALLNUT := "card_wallnut",
@@ -319,10 +318,20 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_ICESHROOM := "card_iceshroom",
                 75,
                 0),
+            (CHERRYBOMB := "CherryBomb",
+                CARD_CHERRYBOMB := "card_cherrybomb",
+                150,
+                0)
+
             (DOOMSHROOM := "DoomShroom",
-                CARD_DOOMSHROOM := "card_doomshroom",
-                125,
-                0),
+                            CARD_DOOMSHROOM := "card_doomshroom",
+                            125,
+                            0),
+
+            (JALAPENO := "Jalapeno",
+                            CARD_JALAPENO := "card_jalapeno",
+                            125,
+                            0),#50000
             (LILYPAD := "LilyPad",
                 CARD_LILYPAD := "card_lilypad",
                 25,
@@ -339,17 +348,14 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_THREEPEASHOOTER := "card_threepeashooter",
                 325,
                 0),
-            (JALAPENO := "Jalapeno",
-                CARD_JALAPENO := "card_jalapeno",
-                125,
-                0),#50000
+            
             (SPIKEWEED := "Spikeweed",
                 CARD_SPIKEWEED := "card_spikeweed",
                 100,
                 0),
             (SPIKEROCK := "Spikerock",
                 CARD_SPIKEROCK := "card_spikerock",
-                100,
+                200,
                 0),
             (TORCHWOOD := "TorchWood",
                 CARD_TORCHWOOD := "card_torchwood",
@@ -381,15 +387,15 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 0),
             (MACHINEGUNNER := "MachineGunner",
                 CARD_MACHINEGUNNER := "card_machinegunner",
-                50,
+                400,
                 0),
             (TWINSUNFLOWER := "TwinSunFlower",
                 CARD_TWINSUNFLOWER := "card_twinsunflower",
-                50,
+                150,
                 0),
             (GLOOMSHROOM := "GloomShroom",
                 CARD_GLOOMSHROOM := "card_gloomshroom",
-                50,
+                225,
                 0),
             # 应当保证这3个在一般模式下不可选的特殊植物恒在最后
             (WALLNUTBOWLING := "WallNutBowling",
@@ -406,6 +412,9 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 0),
 )
 
+MULTIPLAYER_NOT_USE_PLANTS = [SUNFLOWER,SUNSHROOM,GRAVEBUSTER,HYPNOSHROOM,ICESHROOM,CHERRYBOMB,DOOMSHROOM,JALAPENO,LILYPAD,TANGLEKLEP,SEASHROOM,TWINSUNFLOWER]
+                    
+
 # 卡片中的植物名称与索引序号的对应关系，指定名称以得到索引值
 PLANT_CARD_INDEX = {item[PLANT_NAME_INDEX]: index for (index, item) in enumerate(PLANT_CARD_INFO)}
 
@@ -414,12 +423,12 @@ CARDS_TO_CHOOSE = range(len(PLANT_CARD_INFO) - 3)
 
 # 僵尸卡片信息汇总（包括僵尸名称, 卡片名称, 阳光, 冷却时间）
 ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间, 权重)
-    (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 300,10),
-    (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 300,1),
-    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 300,10),
-    (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 300,5),
-    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,3),
-    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,2)
+    (NORMAL_ZOMBIE := "Zombie", CARD_NORMALZOMBIE := "card_normalzombie", 0, 3000,10),
+    (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 3000,1),
+    (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 3000,10),
+    (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 3000,5),
+    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 3000,3),
+    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 3000,2)
 )
 
 GARGANTUAR_HEALTH = 3000

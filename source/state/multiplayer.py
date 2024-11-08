@@ -39,6 +39,8 @@ class Level(tool.State):
         self.countdown = False
         self.countdown_time = 0
         self.countdown_start_time = 0
+        self.showplay = False
+        self.showplay_start_time = 0
 
         # 默认显然不用显示菜单
         self.show_game_menu = False
@@ -1555,7 +1557,7 @@ class Level(tool.State):
                         elif plant.name not in c.CAN_SKIP_ZOMBIE_COLLISION_CHECK:
                             attackable_common_plants.append(plant)
                             
-                        elif plant.name in c.CAN_SKIP_ZOMBIE_COLLISION_CHECK and zombie.name == c.GAR:
+                        elif plant.name in c.CAN_SKIP_ZOMBIE_COLLISION_CHECK and zombie.name == c.GARGANTUAR:
                             attackable_common_plants.append(plant)
                         # 在生效状态下忽略啃食碰撞但其他状况下不能忽略的情形
                         elif plant.name in c.SKIP_ZOMBIE_COLLISION_CHECK_WHEN_WORKING:
@@ -2104,12 +2106,22 @@ class Level(tool.State):
             cdtime = 60 - (self.current_time - self.countdown_start_time) // 1000
             if cdtime > 0:
                 tip = "植物种植阶段:" + str(cdtime)
-                font = pg.font.Font(c.FONT_PATH, 20)
+                font = pg.font.Font(c.FONT_PATH, 50)
                 self.countdown_image = font.render(tip, True, c.RED)
                 self.countdown_image_rect = self.countdown_image.get_rect()
                 self.countdown_image_rect.center = (c.LEVEL_SCREEN_WIDTH // 2, c.LEVEL_SCREEN_HEIGHT // 4)
                 surface.blit(self.countdown_image, self.countdown_image_rect)
             else:
                 self.countdown = False
+                self.showplay = True
+                self.showplay_start_time = self.current_time
                 self.menubar.disableCard()
-                self.zombiebar.enableCard()           
+                self.zombiebar.enableCard()
+                 
+        if self.showplay and self.current_time - self.showplay_start_time <= 3000:
+            tip = "种植结束，现在开始！"
+            font = pg.font.Font(c.FONT_PATH, 100)
+            self.showplay_image = font.render(tip, True, c.RED)
+            self.showplay_image_rect = self.showplay_image.get_rect()
+            self.showplay_image_rect.center = (c.LEVEL_SCREEN_WIDTH // 2, c.LEVEL_SCREEN_HEIGHT // 4)
+            surface.blit(self.play_image, self.play_image_rect)     
