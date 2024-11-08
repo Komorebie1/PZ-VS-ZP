@@ -440,7 +440,7 @@ class Panel():
 
     def setMutiplayerMode(self):
         for card in self.card_list:
-            if c.PLANT_CARD_INDEX[card.index] in c.MULTIPLAYER_NOT_USE_PLANTS:
+            if c.PLANT_CARD_INFO[card.index][c.PLANT_NAME_INDEX] in c.MULTIPLAYER_NOT_USE_PLANTS:
                 card.setSelect(False)
 
     def checkCardClick(self, mouse_pos):

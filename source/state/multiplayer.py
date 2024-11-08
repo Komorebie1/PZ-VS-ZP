@@ -41,6 +41,7 @@ class Level(tool.State):
         self.countdown_start_time = 0
         self.showplay = False
         self.showplay_start_time = 0
+        self.showplay_sound = False
 
         # 默认显然不用显示菜单
         self.show_game_menu = False
@@ -2118,11 +2119,16 @@ class Level(tool.State):
                 self.menubar.disableCard()
                 self.zombiebar.enableCard()
 
-        if self.showplay and self.current_time - self.showplay_start_time <= 3000:
-            tip = "种植结束，现在开始！"
-            c.SOUND_HUGE_WAVE_APPROCHING.play()
-            font = pg.font.Font(c.FONT_PATH, 100)
-            self.showplay_image = font.render(tip, True, c.RED)
-            self.showplay_image_rect = self.showplay_image.get_rect()
-            self.showplay_image_rect.center = (c.LEVEL_SCREEN_WIDTH // 2, c.LEVEL_SCREEN_HEIGHT // 4)
-            surface.blit(self.showplay_image, self.showplay_image_rect)     
+        if self.showplay:
+            if self.current_time - self.showplay_start_time <= 3000:
+                tip = "种植结束，现在开始！"
+                if not self.showplay_sound:
+                    c.SOUND_HUGE_WAVE_APPROCHING.play()
+                    self.showplay_sound = True
+                font = pg.font.Font(c.FONT_PATH, 100)
+                self.showplay_image = font.render(tip, True, c.RED)
+                self.showplay_image_rect = self.showplay_image.get_rect()
+                self.showplay_image_rect.center = (c.LEVEL_SCREEN_WIDTH // 2, c.LEVEL_SCREEN_HEIGHT // 4)
+                surface.blit(self.showplay_image, self.showplay_image_rect)     
+            else:
+                self.showplay = False

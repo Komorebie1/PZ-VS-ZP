@@ -321,17 +321,15 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
             (CHERRYBOMB := "CherryBomb",
                 CARD_CHERRYBOMB := "card_cherrybomb",
                 150,
-                0)
-
+                0),
             (DOOMSHROOM := "DoomShroom",
-                            CARD_DOOMSHROOM := "card_doomshroom",
-                            125,
-                            0),
-
+                CARD_DOOMSHROOM := "card_doomshroom",
+                125,
+                0),
             (JALAPENO := "Jalapeno",
-                            CARD_JALAPENO := "card_jalapeno",
-                            125,
-                            0),#50000
+                CARD_JALAPENO := "card_jalapeno",
+                125,
+                0),#50000
             (LILYPAD := "LilyPad",
                 CARD_LILYPAD := "card_lilypad",
                 25,
@@ -348,7 +346,6 @@ PLANT_CARD_INFO = (# 元组 (植物名称, 卡片名称, 阳光, 冷却时间)
                 CARD_THREEPEASHOOTER := "card_threepeashooter",
                 325,
                 0),
-            
             (SPIKEWEED := "Spikeweed",
                 CARD_SPIKEWEED := "card_spikeweed",
                 100,
@@ -431,7 +428,6 @@ ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间, 
     (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 3000,2)
 )
 
-GARGANTUAR_HEALTH = 3000
 GARGANTUAR_ATTACK_DAMAGE = 3000
 GARGANTUAR_ATTACK_INTERVAL = 3000
 
@@ -559,7 +555,7 @@ TOOL_CARD_LIST = [TOOL_CARD_INDEX[item] for item in TOOL_CARD_INDEX]
 
 TOOLEFFECT = [FREEZING_TOOL, ZOMBONI_TOOL, CHERRYBOMB_TOOL, JALAPENO_TOOL, DOOMSHROOM_TOOL,GARGANTUAR_TOOL]
 
-TOOL_ZOMBIE = [ZOMBONI]
+TOOL_ZOMBIE = [ZOMBONI, GARGANTUAR]
 
 TOOL_PLANT = [FREEZING_TOOL, CHERRYBOMB_TOOL, JALAPENO_TOOL, DOOMSHROOM_TOOL]
 
@@ -631,22 +627,24 @@ ZOMBIE_WALLNUT_BOWLING_DANMAGE = "wallnutBowlingDamage" # 坚果保龄球冲撞�
 
 # 僵尸生命值设置
 # 有关本体
-NORMAL_HEALTH = 200 # 普通僵尸生命值
-POLE_VAULTING_HEALTH = 333
-ZOMBONI_HEALTH = 1280
+ZOMBIE_HEALTH_RATIO = 2
+NORMAL_HEALTH = 200 * ZOMBIE_HEALTH_RATIO # 普通僵尸生命值
+POLE_VAULTING_HEALTH = 333 * ZOMBIE_HEALTH_RATIO
+ZOMBONI_HEALTH = 1280 * ZOMBIE_HEALTH_RATIO
+GARGANTUAR_HEALTH = 3000 * ZOMBIE_HEALTH_RATIO
 # 冰车损坏点
 ZOMBONI_DAMAGED1_HEALTH = 2 * ZOMBONI_HEALTH // 3 + 70
 ZOMBONI_DAMAGED2_HEALTH = ZOMBONI_HEALTH // 3 + 70
 # 掉头后僵尸的生命值
-LOSTHEAD_HEALTH = 70
-POLE_VAULTING_LOSTHEAD_HEALTH = 167
+LOSTHEAD_HEALTH = 70 * ZOMBIE_HEALTH_RATIO
+POLE_VAULTING_LOSTHEAD_HEALTH = 167 * ZOMBIE_HEALTH_RATIO
 # 有关一类防具
-CONEHEAD_HEALTH = 370
-BUCKETHEAD_HEALTH = 1100
-FOOTBALL_HELMET_HEALTH = 1400
+CONEHEAD_HEALTH = 370 * ZOMBIE_HEALTH_RATIO
+BUCKETHEAD_HEALTH = 1100 * ZOMBIE_HEALTH_RATIO
+FOOTBALL_HELMET_HEALTH = 1400 * ZOMBIE_HEALTH_RATIO
 # 有关二类防具
-NEWSPAPER_HEALTH = 150
-SCREEN_DOOR_HEALTH = 1100
+NEWSPAPER_HEALTH = 150 * ZOMBIE_HEALTH_RATIO
+SCREEN_DOOR_HEALTH = 1100 * ZOMBIE_HEALTH_RATIO
 
 # 僵尸行动信息
 ATTACK_INTERVAL = 500
