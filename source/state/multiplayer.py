@@ -23,6 +23,8 @@ class Level(tool.State):
         self.direction = direction
         self.another_player_ready = False
         self.ready = False
+        self.victory = False
+        self.lose = False
     def startup(self, current_time, persist, ipv4_address):
         self.ipv4_address = ipv4_address
         self.game_info = persist
@@ -77,6 +79,16 @@ class Level(tool.State):
 
     def send_process_tool(self, x, y, real_effect):
         message = f"{4},{x},{y},{real_effect}"
+        self.client_socket.sendall(message.encode())
+        print("发送成功")
+    
+    def send_victory(self):
+        message = f"{5}, {"victory"}"
+        self.client_socket.sendall(message.encode())
+        print("发送成功")
+    
+    def send_lose(self):
+        message = f"{5}, {"lose"}"
         self.client_socket.sendall(message.encode())
         print("发送成功")
     
@@ -249,6 +261,11 @@ class Level(tool.State):
                         y = int(data[2])
                         real_effect = data[3]
                         self.tool_group.add(plant.Tool(x, 0, x, y,real_effect))
+                    elif mode == 5:
+                        if data[1] == "victory":
+                            self.victory = True
+                        else:
+                            self.lose = True
             except:
                 print("接收失败")
                 break
@@ -1893,6 +1910,7 @@ class Level(tool.State):
                 ed = c.BACKGROUND_OFFSET_X if self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
                 victory = (zombie.rect.right < ed) if self.direction else (zombie.rect.x > ed)
                 if victory and (not zombie.losthead) and (zombie.state != c.DIE):
+                    self.send_lose()
                     return True
         return False
 
@@ -1904,11 +1922,12 @@ class Level(tool.State):
                 ed = c.BACKGROUND_OFFSET_X if not self.direction else c.LEVEL_SCREEN_WIDTH - c.BACKGROUND_OFFSET_X
                 lose = (zombie.rect.right < ed) if not self.direction else (zombie.rect.x > ed)
                 if lose and (not zombie.losthead) and (zombie.state != c.DIE):
+                    self.send_victory()
                     return True
         return False
 
     def checkGameState(self):
-        if self.checkVictory():
+        if self.checkVictory() or self.victory:
             # if self.game_info[c.GAME_MODE] == c.MODE_ADVENTURE:
             #     self.game_info[c.LEVEL_NUM] += 1
             #     if self.game_info[c.LEVEL_NUM] >= map.TOTAL_LEVEL:
@@ -1939,7 +1958,7 @@ class Level(tool.State):
             self.closeConnection()
             self.done = True
             # self.saveUserData()
-        elif self.checkLose():
+        elif self.checkLose() or self.lose:
             # 播放失败音效
             c.SOUND_LOSE.play()
             c.SOUND_SCREAM.play()
