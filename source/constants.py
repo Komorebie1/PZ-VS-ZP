@@ -786,7 +786,7 @@ SOUNDS = (  # 程序交互等
             SOUND_POLEVAULT_JUMP            := _getSound("polevaultjump.ogg"),
             SOUND_ZOMBONI                   := _getSound("zomboni.ogg"),
             SOUND_ZOMBONI_EXPLOSION         := _getSound("zomboniExplosion.ogg"),
-            SOUND_GARGANTUAR_TUMP           := _getSound("gargantuar_thump.wav"),
+            SOUND_GARGANTUAR_TUMP           := _getSound("gargantuar_thump.ogg"),
             # 关卡中
             SOUND_CAR_WALKING               := _getSound("carWalking.ogg"),
             SOUND_ZOMBIE_COMING             := _getSound("zombieComing.ogg"),
