@@ -83,12 +83,12 @@ class Level(tool.State):
         print("发送成功")
     
     def send_victory(self):
-        message = f"{5}, {"victory"}"
+        message = f"{5},victory"
         self.client_socket.sendall(message.encode())
         print("发送成功")
     
     def send_lose(self):
-        message = f"{5}, {"lose"}"
+        message = f"{5},lose"
         self.client_socket.sendall(message.encode())
         print("发送成功")
     
