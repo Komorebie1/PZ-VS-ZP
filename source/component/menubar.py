@@ -216,7 +216,7 @@ class MenuBar():
                 break
 
     def drawSunValue(self):
-        self.value_image = getSunValueImage(self.sun_value)
+        self.value_image = getSunValueImage(max(0, self.sun_value))
         self.value_rect = self.value_image.get_rect()
         self.value_rect.x = 21
         self.value_rect.y = self.rect.bottom - 24

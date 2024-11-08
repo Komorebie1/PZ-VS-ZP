@@ -1808,7 +1808,6 @@ class Level(tool.State):
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
         if self.countdown:
             cdtime = self.countdown_time - (self.current_time - self.countdown_start_time) // 1000
-            print("cdtime:", cdtime)
             if cdtime > 0:
                 tip = "植物种植阶段:" + str(cdtime)
                 font = pg.font.Font(c.FONT_PATH, 30)

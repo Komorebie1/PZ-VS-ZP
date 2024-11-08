@@ -1364,7 +1364,7 @@ class Level(tool.State):
                 self.hint_rect.centerx = max(self.map.getMapGridPos(7, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(4, 0)[0], pos[0])
                 self.hint_rect.bottom = pos[1]
             else:
-                self.hint_rect.centerx = max(self.map.getMapGridPos(6, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(5, 0)[0], pos[0])
+                self.hint_rect.centerx = max(self.map.getMapGridPos(7, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(4, 0)[0], pos[0])
                 self.hint_rect.bottom = pos[1]
             self.hint_plant = True
         else:
@@ -2075,9 +2075,8 @@ class Level(tool.State):
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)  
         if self.countdown:
             cdtime = 60 - (self.current_time - self.countdown_start_time) // 1000
-            print("cdtime:", cdtime)
             if cdtime > 0:
-                tip = "倒计时结束前只能种植物:" + str(cdtime)
+                tip = "植物种植阶段:" + str(cdtime)
                 font = pg.font.Font(c.FONT_PATH, 20)
                 self.countdown_image = font.render(tip, True, c.RED)
                 self.countdown_image_rect = self.countdown_image.get_rect()
