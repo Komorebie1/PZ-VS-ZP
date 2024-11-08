@@ -2119,6 +2119,7 @@ class Level(tool.State):
 
         if self.showplay and self.current_time - self.showplay_start_time <= 3000:
             tip = "种植结束，现在开始！"
+            c.SOUND_HUGE_WAVE_APPROCHING.play()
             font = pg.font.Font(c.FONT_PATH, 100)
             self.showplay_image = font.render(tip, True, c.RED)
             self.showplay_image_rect = self.showplay_image.get_rect()
