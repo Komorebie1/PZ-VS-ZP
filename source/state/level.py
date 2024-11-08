@@ -29,6 +29,8 @@ class Level(tool.State):
         self.countdown = False
         self.countdown_start_time = 0
         self.countdown_time = 0
+        self.showplay = False
+        self.showplay_start_time = 0
         # 暂停状态
         self.pause = False
         self.pause_time = 0
@@ -1812,13 +1814,25 @@ class Level(tool.State):
                 if self.current_time - self.show_hugewave_approching_time <= 2000:
                     surface.blit(self.huge_wave_approching_image, self.huge_wave_approching_image_rect)
         if self.countdown:
-            cdtime = self.countdown_time - (self.current_time - self.countdown_start_time) // 1000
+            cdtime = 60 - (self.current_time - self.countdown_start_time) // 1000
             if cdtime > 0:
                 tip = "植物种植阶段:" + str(cdtime)
-                font = pg.font.Font(c.FONT_PATH, 30)
+                font = pg.font.Font(c.FONT_PATH, 50)
                 self.countdown_image = font.render(tip, True, c.RED)
                 self.countdown_image_rect = self.countdown_image.get_rect()
                 self.countdown_image_rect.center = (c.LEVEL_SCREEN_WIDTH // 2, c.LEVEL_SCREEN_HEIGHT // 4)
                 surface.blit(self.countdown_image, self.countdown_image_rect)
             else:
                 self.countdown = False
+                self.showplay = True
+                self.showplay_start_time = self.current_time
+                self.menubar.disableCard()
+                self.zombiebar.enableCard()
+                 
+        if self.showplay and self.current_time - self.showplay_start_time <= 3000:
+            tip = "种植结束，现在开始！"
+            font = pg.font.Font(c.FONT_PATH, 100)
+            self.showplay_image = font.render(tip, True, c.RED)
+            self.showplay_image_rect = self.showplay_image.get_rect()
+            self.showplay_image_rect.center = (c.LEVEL_SCREEN_WIDTH // 2, c.LEVEL_SCREEN_HEIGHT // 4)
+            surface.blit(self.showplay_image, self.showplay_image_rect)     
