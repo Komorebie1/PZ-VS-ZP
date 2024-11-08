@@ -294,16 +294,16 @@ class ZombieBar():
         if self.showCard:
             self.showCard.draw(surface)
 
-class GiftBar():
+class ToolBar():
     def __init__(self):
-        self.card_index_list = c.ZOMBIE_CARD_LIST
-        self.loadFrame(c.GIFT_CARD_BAR)
+        self.card_index_list = c.TOOL_CARD_LIST
+        self.loadFrame(c.ZOMBIE_CARD_BAR)
         self.rect = self.image.get_rect()
         self.rect.x = 800
         self.rect.y = 0
         self.sun_value = 0
         
-        self.card_offset_x = 826
+        self.card_offset_x = 806
         self.showCard = None
         self.setupCards()
 
@@ -315,7 +315,7 @@ class GiftBar():
         self.image = tool.get_image(tool.GFX[name], *frame_rect, c.WHITE, 1)
 
     def updateCard(self, card_name):
-        index = c.GIFT_CARD_INDEX[card_name]
+        index = c.TOOL_CARD_INDEX[card_name]
         self.showCard = self.card_list[index]
     
     def resetCard(self):
@@ -332,14 +332,16 @@ class GiftBar():
         y = 8
         for index in self.card_index_list:
             # x += c.BAR_CARD_X_INTERNAL
-            self.card_list.append(Card(x, y, index, info=c.ZOMBIE_CARD_INFO))
-        self.updateCard()
+            self.card_list.append(Card(x, y, index, info=c.TOOL_CARD_INFO))
+        self.resetCard()
 
     def checkCardClick(self, mouse_pos):
         result = None
+        if not self.showCard:
+            return result
         if self.showCard.checkMouseClick(mouse_pos):
             if self.showCard.canClick(self.sun_value, self.current_time):
-                result = (c.ZOMBIE_CARD_INFO[self.showCard.index][c.PLANT_NAME_INDEX], self.showCard)
+                result = (c.TOOL_CARD_INFO[self.showCard.index][c.PLANT_NAME_INDEX], self.showCard)
             else:
                 # 播放无法使用该卡片的警告音
                 c.SOUND_CANNOT_CHOOSE_WARNING.play()
