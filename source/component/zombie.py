@@ -1278,3 +1278,97 @@ class SnorkelZombie(Zombie):
         self.swimming = True
         self.changeFrames(self.sink_frames)
 
+
+
+class Gargantuar(Zombie):
+    def __init__(self, x, y, head_group=None, left=True):
+        super().__init__(
+            x, y, name=c.GARGANTUAR,
+            head_group=head_group,
+            helmet_health=0,
+            helmet_type2_health=0,
+            body_health=c.GARGANTUAR_HEALTH,
+            losthead_health=0,
+            damage=c.GARGANTUAR_ATTACK_DAMAGE,
+            can_swim=False,
+            left=left
+        )
+        # self.imp_group = imp_group
+        # self.throw_imp_timer = 0
+        # self.throw_imp_interval = c.GARGANTUAR_THROW_IMP_INTERVAL
+        # self.smash_timer = 0
+        # self.smash_interval = c.GARGANTUAR_SMASH_INTERVAL
+        self.loadImages()
+
+    def loadImages(self):
+        self.walk_frames = []
+        self.attack_frames = []
+        self.die_frames = []
+        self.boomdie_frames = []
+
+        walk_name = self.name
+        attack_name = self.name + "Attack"
+        die_name = self.name + "Die"
+        boomdie_name = self.name + "Die"
+
+        frame_list = [
+            self.walk_frames,
+            self.attack_frames,
+            self.die_frames,
+            self.boomdie_frames
+        ]
+        name_list = [
+            walk_name,
+            attack_name,
+            die_name,
+            boomdie_name
+        ]
+
+        for frames, name in zip(frame_list, name_list):
+            self.loadFrames(frames, name)
+
+        self.frames = self.walk_frames
+
+    # def update(self, game_info):
+    #     super().update(game_info)
+        # if self.state == c.WALK and self.health <= c.GARGANTUAR_THROW_IMP_HEALTH_THRESHOLD:
+        #     self.throwImp()
+
+    def throwImp(self):
+        pass
+        # if (self.current_time - self.throw_imp_timer) > self.throw_imp_interval:
+        #     if self.imp_group is not None:
+        #         imp = Imp(self.rect.centerx, self.rect.bottom, left=self.left)
+        #         self.imp_group.add(imp)
+        #         c.SOUND_THROW_IMP.play()
+        #     self.throw_imp_timer = self.current_time
+
+    def attacking(self):
+        if self.checkToDie(self.attack_frames):
+            return
+        
+
+        if (self.current_time - self.attack_timer) > (c.GARGANTUAR_ATTACK_INTERVAL * self.getAttackTimeRatio()):
+            if self.prey.health > 0:
+                self.prey.setDamage(self.damage,self)
+                # c.SOUND_GARGANTUAR_SMASH.play()
+            self.attack_timer = self.current_time
+
+        if self.prey.health <= 0:
+            self.prey = None
+            self.setWalk()
+
+    def walking(self):
+        if self.helmet_health <= 0 and self.helmet:
+                self.changeFrames(self.walk_frames)
+                self.helmet = False
+        if self.helmet_type2_health <= 0 and self.helmet_type2:
+            self.changeFrames(self.walk_frames)
+            self.helmet_type2 = False
+
+        if (self.current_time - self.walk_timer) > (c.ZOMBIE_WALK_INTERVAL * self.getTimeRatio()):
+            self.walk_timer = self.current_time
+            if self.is_hypno:
+                self.rect.x += self.speed * self.getDirection()
+            else:
+                self.rect.x -= self.speed * self.getDirection()

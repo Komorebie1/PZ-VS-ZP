@@ -1076,6 +1076,8 @@ class Level(tool.State):
             case c.SNORKELZOMBIE:
                 # 潜水僵尸生成位置不同
                 self.zombie_groups[map_y].add(zombie.SnorkelZombie(x, y, self.head_group))
+            case c.GARGANTUAR:
+                self.zombie_groups[map_y].add(zombie.Gargantuar(x, y, self.head_group, left=left))
         
         self.zombiebar.updateCard()
         self.zombiebar.setCardFrozenTime()

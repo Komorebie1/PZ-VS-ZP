@@ -418,9 +418,14 @@ ZOMBIE_CARD_INFO = (# 元组 (僵尸名称, 卡片名称, 阳光, 冷却时间, 
     (FLAG_ZOMBIE := "FlagZombie", CARD_FLAGZOMBIE := "card_flagzombie", 0, 300,1),
     (CONEHEAD_ZOMBIE := "ConeheadZombie", CARD_CONEHEADZOMBIE := "card_coneheadzombie", 0, 300,5),
     (BUCKETHEAD_ZOMBIE := "BucketheadZombie", CARD_BUCKETHEADZOMBIE := "card_bucketheadzombie", 0, 300,5),
-    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,500),
-    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,500),
+    (NEWSPAPER_ZOMBIE := "NewspaperZombie", CARD_NEWSPAPERZOMBIE := "card_newspaperzombie", 0, 300,5),
+    (FOOTBALL_ZOMBIE := "FootballZombie", CARD_FOOTBALLZOMBIE := "card_footballzombie", 0, 300,5),
+    (GARGANTUAR:= "Gargantuar", CARD_GARGANTUAR := "card_gargantuar", 0, 300,1000)
 )
+
+GARGANTUAR_HEALTH = 3000
+GARGANTUAR_ATTACK_DAMAGE = 3000
+GARGANTUAR_ATTACK_INTERVAL = 1500
 
 ZOMBONI = "Zomboni"
 CARD_ZOMBONI = "card_zomboni"
