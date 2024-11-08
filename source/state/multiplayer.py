@@ -1038,7 +1038,7 @@ class Level(tool.State):
                     else:
                         self.addPlant(not self.direction, from_menubar=False)
             elif mouse_pos is None:
-                self.setupHintImage(is_plant= self.plant_name != None)
+                self.setupHintImage(is_plant=False)
 
         # 检查是否点击菜单
         if mouse_click[0] and (not clicked_sun) and (not clicked_cards_or_map):
