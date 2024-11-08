@@ -230,12 +230,7 @@ class MenuBar():
             card.draw(surface)
     
     def disableCard(self):
-        for card in self.card_list:
-            card.setSelect(False)
-    
-    def enableCard(self):
-        for card in self.card_list:
-            card.setSelect(True)
+        self.sun_value = -1
 
 class ZombieBar():
     def __init__(self):
@@ -303,10 +298,10 @@ class ZombieBar():
             self.showCard.draw(surface)
 
     def disableCard(self):
-        self.showCard.setSelect(False)
+        self.sun_value = -1
 
     def enableCard(self):
-        self.showCard.setSelect(True)
+        self.sun_value = 0
 
 class ToolBar():
     def __init__(self):
