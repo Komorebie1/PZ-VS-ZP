@@ -1361,7 +1361,7 @@ class Level(tool.State):
                 self.hint_rect.centerx = pos[0]
                 self.hint_rect.bottom = pos[1] + 25
             elif is_plant and self.plant_name in c.TOOL_PLANT:
-                self.hint_rect.centerx = max(self.map.getMapGridPos(6, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(5, 0)[0], pos[0])
+                self.hint_rect.centerx = max(self.map.getMapGridPos(7, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(4, 0)[0], pos[0])
                 self.hint_rect.bottom = pos[1]
             else:
                 self.hint_rect.centerx = max(self.map.getMapGridPos(8, 0)[0], pos[0]) if self.direction else min(self.map.getMapGridPos(3, 0)[0], pos[0])
