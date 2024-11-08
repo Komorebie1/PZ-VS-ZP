@@ -532,6 +532,8 @@ CHERRYBOMB_TOOL = "CherryBomb"
 JALAPENO_TOOL = "Jalapeno"
 DOOMSHROOM_TOOL = "DoomShroom"
 GARGANTUAR_TOOL = "Gargantuar"
+GARGANTUAR = "Gargantuar"
+CARD_GARGANTUAR = "card_gargantuar"
 
 TOOL_CARD_INFO = (# 元组 (僵尸名称, 卡片名称)
     (FREEZING_TOOL, CARD_ICESHROOM, 0, 0),
@@ -539,7 +541,7 @@ TOOL_CARD_INFO = (# 元组 (僵尸名称, 卡片名称)
     (CHERRYBOMB_TOOL, CARD_CHERRYBOMB, 0, 0),
     (DOOMSHROOM, CARD_DOOMSHROOM, 0, 0),
     (JALAPENO_TOOL, CARD_JALAPENO, 0, 0),
-    (GARGANTUAR_TOOL, CARD_JALAPENO, 0, 0),
+    (GARGANTUAR_TOOL, CARD_GARGANTUAR, 0, 0),
 )
 
 TOOL_CARD_INDEX = {item[0]: index for (index, item) in enumerate(TOOL_CARD_INFO)}
