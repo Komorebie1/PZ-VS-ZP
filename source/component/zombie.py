@@ -1349,7 +1349,10 @@ class Gargantuar(Zombie):
         
 
         if (self.current_time - self.attack_timer) > (c.GARGANTUAR_ATTACK_INTERVAL * self.getAttackTimeRatio()):
-            if self.prey.health > 0:
+            if self.prey.name == c.GARGANTUAR:
+                self.prey.setDamage(self.damage,self)
+                self.setDamage(self.damage,self)
+            elif self.prey.health > 0:
                 self.prey.setDamage(self.damage,self)
                 c.SOUND_GARGANTUAR_TUMP.play()
             self.attack_timer = self.current_time
