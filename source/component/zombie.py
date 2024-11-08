@@ -281,7 +281,7 @@ class Zombie(pg.sprite.Sprite):
             if hasattr(self, 'losthead_walk_frames') and self.checkToDie(self.losthead_walk_frames):
                 return
         else:
-            if self.losthead_attack_frames and self.checkToDie(self.losthead_attack_frames):
+            if hasattr(self, 'losthead_walk_frames')  and self.checkToDie(self.losthead_attack_frames):
                 return
 
         if (self.current_time - self.freeze_timer) >= c.MIN_FREEZE_TIME + random.randint(0, 2000):
@@ -1099,7 +1099,7 @@ class Zomboni(Zombie):
         pass
 
     def walking(self):
-        if self.losthead_walk_frames and self.checkToDie(self.losthead_walk_frames):
+        if hasattr(self, 'losthead_walk_frames') and self.checkToDie(self.losthead_walk_frames):
             return
 
         if self.health <= c.ZOMBONI_DAMAGED2_HEALTH:
@@ -1188,7 +1188,7 @@ class SnorkelZombie(Zombie):
         self.frames = self.walk_frames
 
     def walking(self):
-        if self.checkToDie(self.losthead_walk_frames):
+        if hasattr(self, 'losthead_walk_frames') and self.checkToDie(self.losthead_walk_frames):
             return
 
         # 在水池范围内
