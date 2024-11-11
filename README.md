@@ -15,9 +15,6 @@
 
 [僵尸](https://pvz.fandom.com/zh/wiki/%E5%83%B5%E5%B0%B8%EF%BC%88%E7%BB%9F%E7%A7%B0%EF%BC%89)、[植物](https://pvz.fandom.com/zh/wiki/%E6%A4%8D%E7%89%A9)名称参见图鉴
 
-## 游戏规则
-
-
 ## 游戏界面
 
 主界面
@@ -38,7 +35,6 @@
 其中从左到右第一个卡槽为可种植植物卡槽，第二个卡槽为可部署僵尸卡槽，第三个卡槽为礼物卡槽。
 
 ## 食用方法
-
 下载压缩包解压到本地或者
 ```shell
 git clone git@github.com:Komorebie1/PZ-VS-ZP.git
@@ -46,6 +42,7 @@ cd PZ-VS-ZP
 ```
 与小伙伴一起运行 `pypzvszp.py` 即可。
 
+可执行文件（.exe）的build目前存在bug，暂未加入仓库，后续优化后加入release中。
 ## 环境需求
 - python3 >= 3.10
 - pygame >= 2.0
