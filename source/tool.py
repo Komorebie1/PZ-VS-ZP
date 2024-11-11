@@ -65,44 +65,13 @@ class Control():
         self.state_dict = {}
         self.state_name = None
         self.state = None
-        # try:
-        #     # 存在存档即导入
-        #     # 先自动修复读写权限(Python权限规则和Unix不一样，420表示unix的644，Windows自动忽略不支持项)
-        #     os.chmod(c.USERDATA_PATH, 420)
-        #     with open(c.USERDATA_PATH, encoding="utf-8") as f:
-        #         userdata = json.load(f)
-        # except FileNotFoundError:
-        #     self.setupUserData()
-        # except json.JSONDecodeError:
-        #     logger.warning("用户存档解码错误！程序将新建初始存档！\n")
-        #     self.setupUserData()
-        # else:   # 没有引发异常才执行
         self.game_info = {}
-        # 导入数据，保证了可运行性，但是放弃了数据向后兼容性，即假如某些变量在以后改名，在导入时可能会被重置
-        need_to_rewrite = False
         for key in c.INIT_USERDATA:
-            # if key in userdata:
-            #     self.game_info[key] = userdata[key]
-            # else:
             self.game_info[key] = c.INIT_USERDATA[key]
-            need_to_rewrite = True
-        # if need_to_rewrite:
-        #     with open(c.USERDATA_PATH, "w", encoding="utf-8") as f:
-        #         savedata = json.dumps(self.game_info, sort_keys=True, indent=4)
-        #         f.write(savedata)
-        # 存档内不包含即时游戏时间信息，需要新建
         self.game_info[c.CURRENT_TIME] = 0
 
         # 50为目前的基础帧率，乘以倍率即是游戏帧率
         self.fps = 50 * self.game_info[c.GAME_RATE]
-
-    def setupUserData(self):
-        if not os.path.exists(os.path.dirname(c.USERDATA_PATH)):
-            os.makedirs(os.path.dirname(c.USERDATA_PATH))
-        with open(c.USERDATA_PATH, "w", encoding="utf-8") as f:
-            savedata = json.dumps(c.INIT_USERDATA, sort_keys=True, indent=4)
-            f.write(savedata)
-        self.game_info = c.INIT_USERDATA.copy() # 内部全是不可变对象，浅拷贝即可
 
     def setup_states(self, state_dict:dict, start_state):
         self.state_dict = state_dict
@@ -260,7 +229,7 @@ def load_all_gfx(   directory:str, colorkey:tuple[int]=c.WHITE,
 pg.display.set_caption(c.ORIGINAL_CAPTION)  # 设置标题
 SCREEN = pg.display.set_mode(c.SCREEN_SIZE) # 设置初始屏幕
 pg.mixer.set_num_channels(255)  # 设置可以同时播放的音频数量，默认为8，经常不够用
-if os.path.exists(c.ORIGINAL_LOGO):    # 设置窗口图标，仅对非Nuitka时生效，Nuitka不需要包括额外的图标文件，自动跳过这一过程即可
-    pg.display.set_icon(pg.image.load(c.ORIGINAL_LOGO))
+# if os.path.exists(c.ORIGINAL_LOGO):    # 设置窗口图标，仅对非Nuitka时生效，Nuitka不需要包括额外的图标文件，自动跳过这一过程即可
+#     pg.display.set_icon(pg.image.load(c.ORIGINAL_LOGO))
 
 GFX = load_all_gfx(c.PATH_IMG_DIR)

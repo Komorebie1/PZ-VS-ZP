@@ -1,7 +1,6 @@
 import os
 import pygame as pg
 import random
-import logging
 from .. import tool
 from .. import constants as c
 from ..component import map, plant, zombie, menubar
