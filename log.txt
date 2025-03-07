@@ -1,0 +1,1147 @@
+commit 5eda70737e000997b50e0c276d417939202e3b87
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 11 20:35:39 2024 +0800
+
+    删除冗余
+
+commit 7e7d4480dd7c8ade68468a230a87092c42206f60
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 11 20:21:55 2024 +0800
+
+    更新README
+
+commit be8c1fe63b24231e52f2a032bc1c5713602df32b
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 11 20:17:23 2024 +0800
+
+    更新README
+
+commit 3c42f08d24dd99ca8b33ab339678ad2de5205740
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 11 20:16:57 2024 +0800
+
+    tiny modify
+
+commit 6aceebbb1f42b1342ab6d8a1f94bc626af02f4f7
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 11 19:59:00 2024 +0800
+
+    变量更名
+
+commit ae84901b94d3954c20f9a47a1cafbb4fb4c46587
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 11 19:58:26 2024 +0800
+
+    更新README
+
+commit 8b53e711906eb9c33fb506f103c3fb9dea24153c
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 20:38:27 2024 +0800
+
+    编译可执行文件
+
+commit ac47b2fcf27d85ffa328da809ebf76457e9e8fe4
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 18:38:56 2024 +0800
+
+    两个巨人一起死
+
+commit 6ee6196acd57c339aebcc567130ac63db721a841
+Merge: 5d929fc ceb5690
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 18:37:04 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 5d929fc3ce18f8b1f7b7ac600f2807f37ba845dd
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 18:35:47 2024 +0800
+
+    修复巨人僵尸打坑洞的问题
+
+commit ceb56904b4ba20604942a40c8cfdff90eb27dda0
+Merge: 967ce26 1a87d1a
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 18:23:33 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 967ce265749b248d55ab31f5fb7753670e474b76
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 18:23:19 2024 +0800
+
+    重设僵尸生命值
+
+commit 1a87d1ab6aa436e3df97f52fc936747b3b9aa9e3
+Author: wxy <2099143442@qq.com>
+Date:   Fri Nov 8 18:21:35 2024 +0800
+
+    修改开始游戏音bug
+
+commit aac6597a398b1aebdfc934034f603f02db18956b
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 18:06:52 2024 +0800
+
+    修改道具僵尸类
+
+commit a5dca5c7276a14673db8a535565a22940ca61287
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 18:00:27 2024 +0800
+
+    获取名字方式
+
+commit f22d9f0f5b42bd506c587e043c5077f58ae605de
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 17:56:35 2024 +0800
+
+    逗号
+
+commit 659390fff7c6531e26615c4c455c86451e4a1be7
+Merge: e11f382 ba2bd7f
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 17:54:23 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit ba2bd7fafb40bb463b661b5ca2bfdacf924a73e8
+Author: wxy <2099143442@qq.com>
+Date:   Fri Nov 8 17:53:34 2024 +0800
+
+    加入开始游戏音效提示
+
+commit 65e1319b4f5267a2bf5b90f81448ff0b85bf5711
+Merge: b8734bf 429879e
+Author: wxy <2099143442@qq.com>
+Date:   Fri Nov 8 17:51:54 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit b8734bf2f984655794a9a7d409f2eafd9d6b2271
+Author: wxy <2099143442@qq.com>
+Date:   Fri Nov 8 17:51:27 2024 +0800
+
+    修改游戏开始提示bug
+
+commit e11f3827c6da4b451b7021919081eab633a4dbeb
+Merge: 6ef1fba 429879e
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 17:50:41 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 429879eba3123c8a1523d177cfe31ab7696957b8
+Merge: ad5eddf d3a0b97
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 17:49:50 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit ad5eddf436f61e9047435827f092f535653e2c62
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 17:49:40 2024 +0800
+
+    一堆参数修改
+
+commit 6ef1fbae38d5cdfc635b3e2f819c52ea2430bd7b
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 17:49:38 2024 +0800
+
+    调整道具的放置范围
+
+commit d3a0b977f08d1d7b5b5cf656ec439ae0e0eac2fc
+Author: wxy <2099143442@qq.com>
+Date:   Fri Nov 8 17:43:09 2024 +0800
+
+    修改游戏开始提示
+
+commit 469eb21f11fb78b84871e514db05c290e337bdee
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 17:32:00 2024 +0800
+
+    巨人僵尸未定义修复
+
+commit bf23733e2ca08a37477bbbf17bb4b0f16faf4d4e
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 17:24:00 2024 +0800
+
+    修改消息类型
+
+commit f7cfe8927652893c1450b11ff44ec8cc49d73f2e
+Merge: 49a33df 0b212dc
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 17:22:10 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 49a33df33f788c27e1dc9418429de4697f944a52
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 17:21:54 2024 +0800
+
+    结算界面同步
+
+commit 0b212dc5797b5aab2fec9975048b64c70d41f15d
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 17:21:43 2024 +0800
+
+    盒子少点
+
+commit a5ae06ca059289e73ac58899ac782f905e2ea02a
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 17:20:16 2024 +0800
+
+    巨人不能出现在随机卡片池子里面
+
+commit c0ebb86f509dc6aaf64628b4cfce899291264b98
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 17:05:32 2024 +0800
+
+    巨人僵尸bug2
+
+commit 95e87df3ceab44f28a7a5a30a86621a3d199488f
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 16:57:24 2024 +0800
+
+    文件更名
+
+commit d57da518f4826e5b0e69160beb52b77031bfeda0
+Merge: 5e42654 7f9f5db
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 16:54:50 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 5e426549282bbc7c0a9ee71820deb9a938e64dfe
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 16:54:30 2024 +0800
+
+    巨人僵尸优化
+
+commit 7f9f5dbeb6d8557dbaaae3c4ccbc16a14afd1344
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 16:53:59 2024 +0800
+
+    添加巨人僵尸砸地音效
+
+commit 0d60e99830959000c1b195ff9fa7dc2e28bd6cec
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 16:44:59 2024 +0800
+
+    更新README
+
+commit 3707e119e476161ac8a198d863850c784ab1e608
+Merge: a2ad752 f9a4d9c
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 12:36:03 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit f9a4d9cda09a810b9e4ca463ed35ae781c758073
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 12:34:27 2024 +0800
+
+    修改README
+
+commit a2ad75261c2c2adab5f9db99f37b62be8f69b6e8
+Merge: 85eefb3 9431384
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 12:25:24 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 85eefb3a3ebeea7919d77c5965ffabd0a9ce48fa
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 12:24:20 2024 +0800
+
+    巨人僵尸
+
+commit 943138420c33127675057ddf8cf59e693221106d
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 12:22:50 2024 +0800
+
+    添加巨人僵尸卡片
+
+commit b723ab51764138bc2a23ea08a7b2162f0e30e9c0
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 11:59:26 2024 +0800
+
+    修改可放置范围
+
+commit 62a99c95b0834a1f9e46f2238227f459cd597de4
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 11:39:34 2024 +0800
+
+    修改初始阳光数为5k
+
+commit dad0594fc60c80449e88ddc50bc49c4cf17f89ad
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 11:28:11 2024 +0800
+
+    修改卡槽使能方法
+
+commit eb13e8ca20283c3a1c389ed6d75f12272db3f629
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 11:19:32 2024 +0800
+
+    设置卡牌权限
+
+commit 8c779ad4b57c2a2072870fa511e56db10dc6a1e5
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 11:09:26 2024 +0800
+
+    添加撑杆跳僵尸和铁门僵尸的素材
+
+commit 6b8946e854f9d3887d46eab2d13fb447b244b32e
+Merge: 64829f0 e1acec1
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 10:59:06 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 64829f09c69ef28d0543e9637d5a1c4d9b2474cc
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 10:58:52 2024 +0800
+
+    修改僵尸开牌生成概率
+
+commit e1acec166035da7cb28899f4af8fd8575e84f274
+Author: wxy <2099143442@qq.com>
+Date:   Fri Nov 8 10:56:52 2024 +0800
+
+    改道具生成时间
+
+commit faca4d00824095fe161f50e2a5a5a9af30a075c5
+Merge: cc257c7 641b7be
+Author: wxy <2099143442@qq.com>
+Date:   Fri Nov 8 10:55:27 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit cc257c70a6430c2f6524d9ec8c618d3403067370
+Author: wxy <2099143442@qq.com>
+Date:   Fri Nov 8 10:53:53 2024 +0800
+
+    倒计时
+
+commit 641b7bef3eedeba13159238d20bb36e4e3bf6943
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 10:42:37 2024 +0800
+
+    删除冗余文件
+
+commit a911b838d4f69bcd31f2b678d70dcb5f9f4f25da
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 10:32:54 2024 +0800
+
+    修改属性错误
+
+commit e96aba34e633c8b0030fe8e5af5cd9a5257e175d
+Merge: a60e522 14d707b
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 10:28:48 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit a60e52211f27a2058009e80f8f9d54ddca91cd43
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 10:28:37 2024 +0800
+
+    冰车僵尸bug agagin
+
+commit 14d707bbd5704b4cabfb6839e4a964ae456e9476
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 10:27:50 2024 +0800
+
+    更改客户端获取IP地址的方式
+
+commit 1b6587803601491d376ef8b3da84f1ab7b5ae729
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 10:08:24 2024 +0800
+
+    冰车僵尸bug
+
+commit 0a11aa6f3dbcdf04ddc1af8021d170d6413d504f
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 10:02:14 2024 +0800
+
+    变量名写错
+
+commit cd815aec745ff61f992f66d8e8c5cb3d0675c808
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 09:59:05 2024 +0800
+
+    添加奖励卡槽
+
+commit 896dcf0d0db29cd4a6da6a95a20558baf8eb16e3
+Merge: a21c32a 29bec99
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 01:15:01 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit a21c32a4ae5b4d931e6d87401863220a2e172018
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 01:14:55 2024 +0800
+
+    添加GiftBar
+
+commit 29bec99cd445808d9562d19fd199a534d936ddec
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 01:13:18 2024 +0800
+
+    constant
+
+commit 2ad4542f1f3b98a643e34a17a7773b3f61e85a5d
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 01:06:37 2024 +0800
+
+    toolreward
+
+commit 349f3423555b72f1b3e568b5e72dc7e6cc2d4207
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 00:43:23 2024 +0800
+
+    修改僵尸偏移bug
+
+commit 297e5ccadefdbf71a6baab5ed302a4d48f08acc6
+Merge: a4fb6e9 bbf2bd0
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 00:34:29 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit a4fb6e97e7e664069bbc8fb73bf05904605ba9b4
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 00:34:13 2024 +0800
+
+    僵尸卡片添加冷却
+
+commit 2c8fe25d5f762c4f48333bbe17689ea24ed1b878
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Fri Nov 8 00:33:46 2024 +0800
+
+    限制僵尸和植物的放置范围
+
+commit bbf2bd0ce248f737b341a7dadf3947973b6c07e2
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 8 00:11:47 2024 +0800
+
+    修复二爷bug
+
+commit 4d9ae9009d0c5f248549648f6ed331335a2636a7
+Author: yyx <2385788689@qq.com>
+Date:   Thu Nov 7 23:42:16 2024 +0800
+
+    tool同步更新
+
+commit b6d6e2c577323f11f4b4371c3367a36a4f491175
+Merge: c0f9f8b 53a8820
+Author: yyx <2385788689@qq.com>
+Date:   Thu Nov 7 23:27:57 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit c0f9f8bae35bd2cbb3d86ab59776332ca45ddbe4
+Author: yyx <2385788689@qq.com>
+Date:   Thu Nov 7 23:27:38 2024 +0800
+
+    道具掉落时代
+
+commit 53a8820712aa60d7f15fad84ab0af6d43e40953d
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 22:28:10 2024 +0800
+
+    联机最终版
+
+commit d524223a27c6f1f7726dffc4d39adb21265ccdd9
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 21:55:21 2024 +0800
+
+    自动获取联机IP
+
+commit d39d8dfeccbdc5c17f6315ac8e2acd0aa985822d
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 21:25:53 2024 +0800
+
+    修改胜利判断逻辑
+
+commit 5d69a118bd47d2b1791a6de92a76d463a08be853
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 21:13:23 2024 +0800
+
+    修改右边小车bug
+
+commit 9341345148629ca2e701fba2a7438a00a51dee77
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 20:53:39 2024 +0800
+
+    完善联机退出界面
+
+commit 66e8fe8f70ea5ef024b46fd30c72ef0dd2fade95
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 20:42:19 2024 +0800
+
+    修改胜利界面bug
+
+commit 90d7ff6016c63fa065ed2f19c3f060566aa610c2
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 20:17:06 2024 +0800
+
+    小车位置bug
+
+commit 76090341f46e2ef22a652e06eab14ed92d278cdc
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 20:14:46 2024 +0800
+
+    上次bug没改干净
+
+commit d95337234636c9a8c58a0a0974d5be477a0501ae
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 20:10:59 2024 +0800
+
+    修改检查胜利的bug
+
+commit 613968216f8b25f5a5f235602bb4a3ddbd9a753c
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 20:06:00 2024 +0800
+
+    修复Car的bug
+
+commit e65f57d7a8f773947354449bde6a7c711b59162e
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 20:01:08 2024 +0800
+
+    两边都有小推车
+
+commit 0d33cdc50d13184b6fab41f43abdc07323c8cce0
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Nov 7 19:46:58 2024 +0800
+
+    结算界面
+
+commit aa71528bf35ae66dc5651abb09781582139648cc
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 23:21:02 2024 +0800
+
+    修改主机屏幕尺寸异常bug
+
+commit 83957215bbb46baca075c73526c55681ae29a5ac
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 23:17:42 2024 +0800
+
+    完善联机v2
+
+commit a5804cd419d350c91d27e4153fa529de0356bc19
+Merge: 123fa3c d596e7d
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 23:10:59 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 123fa3c6fb4971fb31a27b22ad55abd7a3438264
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 23:10:24 2024 +0800
+
+    完善联机
+
+commit d596e7dd4cda30ad38e5265fa776be7e05b85bcf
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 23:07:58 2024 +0800
+
+    修改README
+
+commit 5326536ec011869539a9ad13b203a63c619f95e1
+Merge: f7535d5 698c036
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 22:19:40 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit f7535d5b5d764c4339f78e9e646e13c8285d5d22
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 22:19:29 2024 +0800
+
+    。
+
+commit 698c0363cda65ba41bcf0a2de93413d3d3028451
+Merge: 7f35079 73ae930
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 22:18:21 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 73ae9301bc6d7e0d5034240d450869c644137ff3
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 22:15:17 2024 +0800
+
+    倭瓜bug
+
+commit 7f350790abb2e974f7c7c6cb726a1d58afe8a8b1
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 22:12:03 2024 +0800
+
+    多人链接界面实现
+
+commit 4fa3e830aabe0d2bcdc56366dee65cf316a00120
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 22:04:35 2024 +0800
+
+    僵尸冷却
+
+commit 77761a7c22da0671638343ff4bfb633af0823758
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 22:04:00 2024 +0800
+
+    僵尸冷却
+
+commit e445061a7dfb8909a044f01d39c8dc22b4751f93
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 21:53:56 2024 +0800
+
+    僵尸对打，世纪之战王二爷加强
+
+commit 98b0e7fd24bdbfc499bdf426a97da60510f0bba9
+Merge: 313da6e 9952985
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 21:12:16 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 313da6e92daef3e26dc324cab3eb39eb8584b55e
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 21:11:45 2024 +0800
+
+    整合联机
+
+commit 99529856b8e68ab0007086eb358720680ce3778f
+Merge: 0ef91b3 99c11a5
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 20:32:44 2024 +0800
+
+    Merge branches 'main' and 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 0ef91b39e37a4cdcd3ae4df4b6dbe79a75a6a1a8
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 20:32:30 2024 +0800
+
+    僵尸咬僵尸
+
+commit 99c11a55d5c706eef9e4b7385131cbbd0d7be4be
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 11:54:56 2024 +0800
+
+    将植物的冷却时间全部置零
+
+commit fac3a0097a981614bc4b2a1acbcb70b01fd3efc1
+Merge: 72eeabe 1f47b37
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 11:51:50 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 72eeabe5571fba930236e8889539cd428657e693
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 11:51:18 2024 +0800
+
+    多人联机同步进入
+
+commit 1f47b375258b127fd7b8ad20b28b116d3cadc2b4
+Merge: 36f48a2 4e5f616
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 11:28:58 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 36f48a2eb93bfa5db7dab1dc252934b32366e5a9
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 11:28:47 2024 +0800
+
+    cache
+
+commit 4e5f616001f1999c193216d6e60d093876dd6b46
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 11:28:12 2024 +0800
+
+    修改mode2bug
+
+commit 65b9152c04b77cc3bde840496871d7c2d4f85ae5
+Merge: 7dc04c8 d6a9302
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 11:09:56 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 7dc04c8236f5dd0a5b9e57b137aa550b1e337d43
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 11:09:24 2024 +0800
+
+    我是wxy
+
+commit d6a9302147400e4f41f4607432526285cc4072e1
+Merge: 5e2d5a1 14bd335
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 11:08:34 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 5e2d5a11e060f0912ef9bc23d2db5c9694efca68
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 11:07:47 2024 +0800
+
+    联机bug
+
+commit 14bd335ed12ce452a59eb9fec7028486b4003ac7
+Merge: 7975d66 bd4915e
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 10:28:26 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 7975d6615a7ede406655f3a447ea36fc8fb18a1e
+Author: wxy <2099143442@qq.com>
+Date:   Wed Nov 6 10:27:13 2024 +0800
+
+    王学扬的合并
+
+commit bd4915e535a1e769794284177598b8f2d38e5cc1
+Merge: 5c0e3ec 92f2876
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 10:24:34 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 5c0e3eca31b6f41427e7dedceea9287af95940d3
+Author: yyx <2385788689@qq.com>
+Date:   Wed Nov 6 10:23:50 2024 +0800
+
+    。
+
+commit 92f2876e759045c3458166fa50a3021f5993125b
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 10:06:24 2024 +0800
+
+    多复制了一行
+
+commit 4740cb829f868615063f30a4122039d63a1f384e
+Merge: fb4b0be eb14b62
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 10:05:34 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit fb4b0be031d9fc73b80d7ac39c5e12e1a3f13e4d
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 10:03:59 2024 +0800
+
+    最新level，修复了大喷菇子弹偏移的bug
+
+commit d49e911c330e3eac47b117af1edb1fb1f577739a
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Nov 6 09:33:53 2024 +0800
+
+    多人联机的代码重构（修改文件名，可复用类）
+
+commit eb14b624d84678d9c5afa9a6f59037ff485ad9f7
+Merge: 16d52a2 ee5e03c
+Author: yyx <2385788689@qq.com>
+Date:   Tue Nov 5 23:07:24 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 16d52a29feb4dce0e7a4bfed68b686752fffb1a4
+Author: yyx <2385788689@qq.com>
+Date:   Tue Nov 5 23:06:17 2024 +0800
+
+    植物的阵营攻击识别
+
+commit ee5e03c1de0d4946b88a5a782b9add2f62236024
+Merge: 2daf577 a50034b
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Tue Nov 5 21:29:30 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 2daf5773cba3a79f68d99e8cf61770c147168a28
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Tue Nov 5 21:29:01 2024 +0800
+
+    for test
+
+commit a50034b3a452d60c661fb15915948a1458c507db
+Author: wxy <2099143442@qq.com>
+Date:   Tue Nov 5 21:27:57 2024 +0800
+
+    傻逼
+
+commit 8265c57fc029a4a8c31c4fc680778cf1bd09ef96
+Merge: b63e341 6aa616c
+Author: wxy <2099143442@qq.com>
+Date:   Tue Nov 5 21:27:21 2024 +0800
+
+    Merge remote-tracking branch 'origin/main'
+
+commit b63e341c3a328f9b2fdf5e6eb923b958d9b15f2b
+Author: wxy <2099143442@qq.com>
+Date:   Tue Nov 5 21:24:55 2024 +0800
+
+    修改联机无法显示bug
+
+commit 6aa616cb6b0534fdf0bb23908e2fd5b9eebff632
+Merge: 4355371 2b5f60f
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Tue Nov 5 21:03:51 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 4355371a1c068fb371b09c0fba2c440c9e6494c8
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Tue Nov 5 21:02:28 2024 +0800
+
+    修改冰车僵尸的bug
+
+commit 28bddf6151ba7bbfaf7a1a44cf4e54a98b712dc8
+Author: wxy <2099143442@qq.com>
+Date:   Tue Nov 5 20:57:29 2024 +0800
+
+    修复王学扬的bug
+
+commit 2b5f60fbf61a54f6e52511b01ea1defcee19d714
+Merge: cb81aef 9fe841b
+Author: wxy <2099143442@qq.com>
+Date:   Tue Nov 5 20:49:10 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit cb81aeff8e79735a6c0e66a66427d860cac15001
+Author: wxy <2099143442@qq.com>
+Date:   Tue Nov 5 20:46:14 2024 +0800
+
+    多人联机实现
+
+commit 9fe841be44481292eb4c64111c8ec3b72e732c90
+Author: yyx <2385788689@qq.com>
+Date:   Mon Nov 4 22:09:04 2024 +0800
+
+    豌豆类植物攻击
+
+commit 8dc9609cd48da9fd19e27d859a37bb2e1b7e444c
+Merge: c9040b7 8b129a7
+Author: yyx <2385788689@qq.com>
+Date:   Mon Nov 4 21:41:52 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit c9040b707770a3cd389c351f2aea4916c5eb4aa9
+Author: yyx <2385788689@qq.com>
+Date:   Mon Nov 4 21:41:35 2024 +0800
+
+    植物发射豌豆其实位置变化
+
+commit 8b129a75f4d6c6086f9aefb5969a1e0ec59ad017
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 4 21:40:45 2024 +0800
+
+    给所有僵尸添加left属性
+
+commit 24b001eba87703192a2935dd6391b3b0d9d921f3
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 4 20:53:52 2024 +0800
+
+    修复bullet穿过火炬反向的bug
+
+commit d081232b24033ebc651f6993527ac0bf2434f87b
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 4 20:35:40 2024 +0800
+
+    为Spikerock添加left属性
+
+commit e80e4154f392f645463a86e1294e0d8d58dc06c8
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 4 20:34:25 2024 +0800
+
+    同步更改
+
+commit 9d8f3ba4e55da3a4ae16caa4a7f21a1cefbc9d3c
+Merge: 571eab7 b2a5147
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 4 20:32:26 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 571eab77d293c0abcc0663815aac412b2f08ab07
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 4 20:29:26 2024 +0800
+
+    左右阵营调试
+
+commit f6e08bb299ec849eab8a4624988bd3c27118fec6
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Nov 4 20:27:59 2024 +0800
+
+    修复菜单未能居中的bug
+
+commit b2a5147f16b1d91c927378e0db48e7be3d6a1354
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 1 15:58:52 2024 +0800
+
+    自定义设置僵尸概率
+
+commit f7382c68b8e27dffa8a681ba6d697fb46bd149c7
+Author: yyx <2385788689@qq.com>
+Date:   Fri Nov 1 15:41:15 2024 +0800
+
+    spikerock
+
+commit 2e1e2fd6ab9579ddc8736b848193cc74da010720
+Merge: 77aa978 af8035e
+Author: yyx <2385788689@qq.com>
+Date:   Thu Oct 31 16:43:03 2024 +0800
+
+    Merge branches 'main' and 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 77aa9789cc9ef4cfe376c4705c550b458e4c3265
+Author: yyx <2385788689@qq.com>
+Date:   Thu Oct 31 16:42:45 2024 +0800
+
+    。
+
+commit af8035e3b42062a0436937fb6d534e9dd4602cc5
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 16:06:04 2024 +0800
+
+    扩大地图
+
+commit 80a109a74b99e9e1a7c93f3727056b5387f7c58a
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 11:18:12 2024 +0800
+
+    删除部分调试信息
+
+commit 4355752be1c97c4049fae0b8f4bf2f7d9030f271
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 11:13:39 2024 +0800
+
+    删除无用pyc
+
+commit 8516103889ffa60a6d7dff50d661fcb2a6977877
+Merge: 293a5b2 d7407fa
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 11:05:21 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 293a5b235325298dfa6fa772a05c8dcd01e45655
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 11:05:09 2024 +0800
+
+    修复了子弹bug
+
+commit d7407fab74dbae53432e549f0794c4ee66b93e41
+Author: yyx <2385788689@qq.com>
+Date:   Thu Oct 31 11:04:30 2024 +0800
+
+    cache
+
+commit 799e52b82102dbbbf6f03c7c9a02f8280f522242
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 08:42:39 2024 +0800
+
+    修改了无法右键取消僵尸放置的bug
+
+commit 8ff7c35fb0f71699e1b90475e0bea6f424ae17f1
+Merge: b655580 4e249fb
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 08:21:06 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit b655580ff4223b340d0ba8bb1a55ff491ebbc2db
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 08:20:11 2024 +0800
+
+    some __pycache__
+
+commit 4e249fb8846572afcd219362b4ffb1dec26c4ac9
+Author: yyx <2385788689@qq.com>
+Date:   Thu Oct 31 00:38:34 2024 +0800
+
+    .
+
+commit 0c7b57302f5829d00dab71364b503cf97265dfa4
+Merge: 4a57062 6914290
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 00:34:17 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 4a5706228d2110a0c28bd8088c1a0f4a87edb015
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 00:33:31 2024 +0800
+
+    卡片尺寸统一调整为 100x140
+
+commit 691429030ff21f95d99e486081f31c88862bab31
+Merge: e91ab88 978edd1
+Author: yyx <2385788689@qq.com>
+Date:   Thu Oct 31 00:28:04 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit e91ab888d72352b20040c81984ee9fe3d918787d
+Author: yyx <2385788689@qq.com>
+Date:   Thu Oct 31 00:27:43 2024 +0800
+
+    gloomshroom
+
+commit 978edd1c596c7216c0d76017cb5f1fdc9c2f9276
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Thu Oct 31 00:17:20 2024 +0800
+
+    添加放置僵尸功能
+
+commit de6e1882e03d26470df1d57bffa192930dfbe116
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Oct 30 14:43:58 2024 +0800
+
+    新增僵尸卡牌图片
+
+commit 1cdb54512027524fad0e9e1b1897e33f957df31b
+Merge: 06159ce c30696b
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Oct 30 14:43:09 2024 +0800
+
+    为plant类增加left属性
+
+commit 06159ce274336c74311f7e2b5a0751a97ce95d1e
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Wed Oct 30 08:45:50 2024 +0800
+
+    __pycache__
+
+commit c30696bc71eb8ca16d81253085f17f31fc6bd327
+Merge: ae6a658 d828183
+Author: wxy <2099143442@qq.com>
+Date:   Mon Oct 28 23:54:30 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit d828183c3284944f03bc2758492a7de262b02cbf
+Author: yyx <2385788689@qq.com>
+Date:   Mon Oct 28 23:50:02 2024 +0800
+
+    冷却变少
+
+commit ae6a658762e76961d4e41ce8c26fd47839ebbb58
+Author: wxy <2099143442@qq.com>
+Date:   Mon Oct 28 23:49:07 2024 +0800
+
+    联机和UI界面文件创建
+
+commit 3f8375df73911e14f8974c90a429bdc696a438bb
+Merge: 962e624 54353f8
+Author: yyx <2385788689@qq.com>
+Date:   Mon Oct 28 23:45:34 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 962e624bce77d4a12f5d6b3abdd9849b6214ab0b
+Author: yyx <2385788689@qq.com>
+Date:   Mon Oct 28 23:43:09 2024 +0800
+
+    twinsunflower
+
+commit 54353f8accc6f3293874653c57223e0ac2a9f1ae
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Oct 28 23:43:04 2024 +0800
+
+    删除用户本地保存
+
+commit bc7826bcc29cb8cbbe4bd7284f7845a53cc822fb
+Author: yyx <2385788689@qq.com>
+Date:   Mon Oct 28 23:13:26 2024 +0800
+
+    machinegunner
+
+commit ea7e769d454c8ef9437883538bc9c1fb7764bd22
+Author: yyx <2385788689@qq.com>
+Date:   Mon Oct 28 22:45:08 2024 +0800
+
+    yyx
+
+commit 0c54afbb86eb3266126e181bba31d395fdb895e9
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Oct 28 22:34:39 2024 +0800
+
+    大量重构
+
+commit 8bd3866da047a50f1c06098d04e2897d9b269a57
+Author: wxy <2099143442@qq.com>
+Date:   Mon Oct 28 20:17:46 2024 +0800
+
+    联机初步和简单的UI界面
+
+commit 0ce6397c9804870a757b076a67cb9c15065cd384
+Author: wxy <2099143442@qq.com>
+Date:   Sun Oct 20 15:53:15 2024 +0800
+
+    联机和UI界面文件创建
+
+commit 47d956cdc50680e2a5f1ca3711560f206c1657ee
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Oct 14 22:31:55 2024 +0800
+
+    modify some objs
+
+commit c72b02bf53ba6c2ee76f111d5e3fcce502019093
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Oct 14 22:31:42 2024 +0800
+
+    add pictures
+
+commit 97bdebf6864efe903e73980f8919663ccff2bb02
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Oct 14 18:02:23 2024 +0800
+
+    add objs
+
+commit 9007da74ca3e58c9a437aa8d55905ae9378481db
+Merge: 44a548d 24533e6
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Oct 14 18:01:21 2024 +0800
+
+    Merge branch 'main' of github.com:Komorebie1/PZ-VS-ZP
+
+commit 44a548de5c78b8e1d84f35d4e609870f9be392fb
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Mon Oct 14 18:00:50 2024 +0800
+
+    add pictures
+
+commit 24533e62d5ba31b86d57b2ab42471503ac1d8b81
+Author: wxy <2099143442@qq.com>
+Date:   Sun Oct 13 16:50:38 2024 +0800
+
+    test
+
+commit 808fdaea5f94ee6af967ae934c03fc4c52b9cd03
+Author: yyx <2385788689@qq.com>
+Date:   Sun Oct 13 16:42:06 2024 +0800
+
+    yyx
+
+commit 729bb6c30435dc1fc45004b5e9330c0734f73ac5
+Author: yyx <2385788689@qq.com>
+Date:   Sun Oct 13 16:41:07 2024 +0800
+
+    xiugai readmme
+
+commit 0939a51f853aa1f083f522835d038750458890ac
+Author: Zheng Zhixin <1160151650@qq.com>
+Date:   Sun Oct 13 16:30:32 2024 +0800
+
+    origin
+
+commit 7e7a12e197235feb94c06f343c1833e0e49c776d
+Author: Zheng Zhixin <138191135+Komorebie1@users.noreply.github.com>
+Date:   Sun Oct 13 16:28:18 2024 +0800
+
+    Initial commit

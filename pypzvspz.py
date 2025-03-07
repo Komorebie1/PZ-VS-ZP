@@ -13,7 +13,7 @@ from source.state import mainmenu, screen, level, multiplayer
 
 if __name__ == "__main__":
     game = tool.Control()
-    state_dict = {  
+    state_dict = {
                     c.MAIN_MENU:    mainmenu.Menu(),
                     c.GAME_VICTORY: screen.GameVictoryScreen(),
                     c.GAME_LOSE:    screen.GameLoseScreen(),

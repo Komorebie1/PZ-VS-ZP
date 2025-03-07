@@ -1451,7 +1451,6 @@ class Level(tool.State):
                     continue
                 collided_func = pg.sprite.collide_mask
                 if bullet.state == c.FLY:
-                    # 利用循环而非内建精灵组碰撞判断函数，处理更加灵活，可排除已死亡僵尸
                     for zombie in self.zombie_groups[i]:
                         if bullet.left == zombie.left:
                             continue

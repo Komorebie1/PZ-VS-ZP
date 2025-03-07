@@ -259,7 +259,6 @@ class StarBullet(Bullet):
             if (self.current_time - self.explode_timer) >= 250:
                 self.kill()
 
-    # 这里用的是坚果保龄球的代码改一下，实现子弹换行
     def handleMapYPosition(self):
         if self.direction == c.STAR_UPWARD:
             map_y1 = self.level.map.getMapIndex(self.rect.x, self.rect.centery + 40)[1]
