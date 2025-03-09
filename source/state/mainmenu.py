@@ -2,7 +2,7 @@ import pygame as pg
 import os
 from .. import tool
 from .. import constants as c
-from .. import getboardcastIPv4, boardcastIPv4, server
+from .. import getboardcastIPv4
 import socket
 import subprocess
 
@@ -152,8 +152,8 @@ class Menu(tool.State):
 
     # 按到小游戏
     def respondLittleGameClick(self):
-        subprocess.Popen(["python", "source/server.py"])
-        subprocess.Popen(["python", "source/boardcastIPv4.py"])
+        subprocess.Popen(["python", "source/state/server.py"])
+        subprocess.Popen(["python", "source/state/boardcastIPv4.py"])
         hostname = socket.gethostname()
         self.IPv4 = socket.gethostbyname(hostname)
         self.online_clicked = True
