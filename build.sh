@@ -1,11 +1,1 @@
-nuitka --mingw64 --standalone --onefile --show-progress --show-memory \
---output-dir=release --windows-icon-from-ico=pypvz.ico \
---include-data-dir=resources=resources \
---include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll \
---include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libjpeg-9.dll=libjpeg-9.dll \
---include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll \
---include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll \
---include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll \
---include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll \
---windows-product-name=pypzvszp --windows-company-name=komorebie.dev \
---windows-file-description="pypzvszp" --windows-product-version=0.0.1.0 pypzvszp.py
+nuitka --mingw64 --standalone --onefile --show-progress --show-memory --output-dir=release --windows-icon-from-ico=pypzvszp.ico --include-data-dir=resources=resources --include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libogg-0.dll=libogg-0.dll --include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libjpeg-9.dll=libjpeg-9.dll --include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libopus-0.dll=libopus-0.dll --include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll --include-data-file=D:\Anaconda3\envs\py311\Lib\site-packages\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-product-name=pypzvszp --windows-company-name=komorebie.dev --windows-file-description="pypzvszp" --windows-product-version=0.0.1.0 pypzvszp.py
